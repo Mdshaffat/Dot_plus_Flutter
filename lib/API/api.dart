@@ -1,0 +1,9 @@
+const String ROOT = "https://192.168.0.110:5001/api";
+const String LOGIN = "$ROOT/account/login";
+const String HOSPITALURI = "$ROOT/hospital/hospitallistsortbyname";
+const String DIVISIONURI = "$ROOT/upazilaanddistrict/division";
+const String DISTRICTURI = "$ROOT/upazilaanddistrict/divisionwisedistrict/";
+const String UPAZILAURI = "$ROOT/upazilaanddistrict/districtwiseupazila/";
+const String ALLDISTRICTURI = "$ROOT/upazilaanddistrict/district";
+const String ALLUPAZILAURI = "$ROOT/upazilaanddistrict/upazila";
+const String PATIENTURI = "$ROOT/patient";
