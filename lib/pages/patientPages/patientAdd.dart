@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/hospital.dart';
 import 'package:hospital_app/Models/upazila.dart';
+import 'package:hospital_app/Models/vaccine.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -39,35 +39,42 @@ class _PatientAddState extends State<PatientAdd> {
 
   final _formKey = GlobalKey<FormState>();
   // late String email, password;
+  NewVaccine vaccine = NewVaccine();
   bool isLoading = false;
   TextEditingController _firstNameController = new TextEditingController();
   TextEditingController _lastNameController = new TextEditingController();
+  Hospital? hospitalValue;
+  int? hospitalDropdownValue;
+  int? branchDropdownValue;
   TextEditingController _addressController = new TextEditingController();
-  TextEditingController _divisionController = new TextEditingController();
-  TextEditingController _districtController = new TextEditingController();
-  TextEditingController _upazilaController = new TextEditingController();
+  int? divisionDropdownValue;
+  int? districtDropdownValue;
+  int? upazilaDropdownValue;
   TextEditingController _nidController = new TextEditingController();
   TextEditingController _mobilenumberController = new TextEditingController();
-  TextEditingController _genderController = new TextEditingController();
-  TextEditingController _ageYearController = new TextEditingController();
-  TextEditingController _ageMonthController = new TextEditingController();
+  String? genderDropdownValue;
   TextEditingController _ageDayController = new TextEditingController();
-  DateTime currentDate = DateTime.now();
-  TextEditingController _maritalStatusController = new TextEditingController();
-  TextEditingController _bloodGroupController = new TextEditingController();
-  TextEditingController _covid19VaccinationController =
-      new TextEditingController();
-  TextEditingController _vaccineNameController = new TextEditingController();
-  TextEditingController _vaccineDoseController = new TextEditingController();
+  TextEditingController _ageMonthController = new TextEditingController();
+  TextEditingController _ageYearController = new TextEditingController();
+  DateTime? dateOfBirth;
+  String? meritalStatusValue;
+  String? bloodGroupValue;
+  int? covidVaccine;
+  int? vaccineBrand;
+  int? vaccineDose;
+  DateTime? firstDoseDate;
+  DateTime? secondDoseDate;
+  DateTime? bosterDoseDate;
   TextEditingController _noteController = new TextEditingController();
-  TextEditingController _primaryMenberController = new TextEditingController();
-  TextEditingController _RegistrationNumberController =
+  bool primaryMember = false;
+  TextEditingController _membershipRegistrationNumberController =
       new TextEditingController();
+  bool isActive = true;
   TextEditingController _bodyTemparatureController =
       new TextEditingController();
   TextEditingController _weightController = new TextEditingController();
-  TextEditingController _heightFeetController = new TextEditingController();
-  TextEditingController _heightInchController = new TextEditingController();
+  String? heightFeetValue;
+  String? heightInchValue;
   TextEditingController _pulseRateController = new TextEditingController();
   TextEditingController _spo2Controller = new TextEditingController();
   TextEditingController _systolicController = new TextEditingController();
@@ -80,31 +87,54 @@ class _PatientAddState extends State<PatientAdd> {
   TextEditingController _cyanosisController = new TextEditingController();
   TextEditingController _rbsController = new TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  String dropdownValue = 'One';
-  int hospitalDropdownValue = 1;
-  int divisionDropdownValue = 1;
-  int? districtDropdownValue;
-  int upazilaDropdownValue = 1;
-  String genderDropdownValue = "Male";
-  String meritalStatusValue = "Single";
-  String bloodGroupValue = "O+";
-  String vaccinationValue = "Yes";
-  String vaccineValue = "Pfizer";
-  String vaccineDoseValue = "1st Dose";
-  String? heightFeetValue;
-  String? heightInchValue;
   var myFormat = DateFormat('d-MM-yyyy');
   late ScaffoldMessengerState scaffoldMessenger;
 //
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(2015),
-        lastDate: DateTime(2050));
-    if (pickedDate != null && pickedDate != currentDate)
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (pickedDate != null && pickedDate != dateOfBirth)
       setState(() {
-        currentDate = pickedDate;
+        dateOfBirth = pickedDate;
+      });
+  }
+
+  Future<void> _selectDateForFirstDose(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (pickedDate != null && pickedDate != firstDoseDate)
+      setState(() {
+        firstDoseDate = pickedDate;
+      });
+  }
+
+  Future<void> _selectDateForSecondDose(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (pickedDate != null && pickedDate != secondDoseDate)
+      setState(() {
+        secondDoseDate = pickedDate;
+      });
+  }
+
+  Future<void> _selectDateForBosterDose(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (pickedDate != null && pickedDate != bosterDoseDate)
+      setState(() {
+        bosterDoseDate = pickedDate;
       });
   }
 
@@ -124,7 +154,7 @@ class _PatientAddState extends State<PatientAdd> {
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
-            // width: MediaQuery.of(context).size.width,
+            //width: 100,
             // height: MediaQuery.of(context).size.height,
             child: Stack(
               children: <Widget>[
@@ -188,123 +218,96 @@ class _PatientAddState extends State<PatientAdd> {
                               Row(
                                 children: [
                                   if (_hospitals.length > 1)
-                                    Flexible(
+                                    Expanded(
                                       flex: 1,
                                       child: Padding(
-                                        padding:
-                                            EdgeInsets.only(left: 0, right: 5),
-                                        child: DropdownButton(
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 5),
+                                        child: DropdownButton<Hospital>(
                                           style: const TextStyle(
                                               color: Colors.deepPurple),
                                           underline: Container(
                                             height: 2,
                                             color: Colors.deepPurpleAccent,
                                           ),
-                                          onChanged: (int? newValue) {
+                                          onChanged: (Hospital? newValue) {
                                             setState(() {
-                                              hospitalDropdownValue = newValue!;
+                                              hospitalDropdownValue =
+                                                  newValue!.Id;
+                                              branchDropdownValue =
+                                                  newValue.BranchId;
+                                              hospitalValue = newValue;
                                             });
                                           },
-                                          items: _hospitals.map((item) {
-                                            return DropdownMenuItem(
+                                          items: _hospitals
+                                              .map<DropdownMenuItem<Hospital>>(
+                                                  (Hospital item) {
+                                            return DropdownMenuItem<Hospital>(
                                               child: Text(item.Name),
-                                              value: item.Id,
+                                              value: item,
                                             );
                                           }).toList(),
-                                          value: hospitalDropdownValue,
+                                          value: hospitalValue,
                                           hint: const Text("Hospital Name"),
                                         ),
                                       ),
                                     ),
-                                  // Expanded(
-                                  //   flex: 1,
-                                  //   child: Padding(
-                                  //     padding:
-                                  //         EdgeInsets.only(left: 1, right: 0),
-                                  //     child: DropdownButton<String>(
-                                  //       value: dropdownValue,
-                                  //       icon: const Icon(Icons.arrow_downward),
-                                  //       elevation: 16,
-                                  //       style: const TextStyle(
-                                  //           color: Colors.deepPurple),
-                                  //       underline: Container(
-                                  //         height: 2,
-                                  //         color: Colors.deepPurpleAccent,
-                                  //       ),
-                                  //       onChanged: (String? newValue) {
-                                  //         setState(() {
-                                  //           dropdownValue = newValue!;
-                                  //         });
-                                  //       },
-                                  //       items: <String>[
-                                  //         'One',
-                                  //         'Two',
-                                  //         'Free',
-                                  //         'Four'
-                                  //       ].map<DropdownMenuItem<String>>(
-                                  //           (String value) {
-                                  //         return DropdownMenuItem<String>(
-                                  //           value: value,
-                                  //           child: Text(value),
-                                  //         );
-                                  //       }).toList(),
-                                  //       hint: Text("Branch Name"),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                               //Address
-                              TextFormField(
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                                controller: _addressController,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                  hintText: "Address",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
                               Row(
                                 children: [
                                   Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton(
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          print("Method Called");
-                                          print(newValue);
-                                          fetchDistrict(newValue);
-                                          setState(() {
-                                            divisionDropdownValue = newValue!;
-                                          });
-                                        },
-                                        items: _divisions.map((item) {
-                                          return DropdownMenuItem(
-                                            child: Text(item.Name),
-                                            value: item.Id,
-                                          );
-                                        }).toList(),
-                                        value: divisionDropdownValue,
-                                        hint: const Text("Division Name"),
+                                    child: TextFormField(
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      controller: _addressController,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Address",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 13),
                                       ),
                                     ),
                                   ),
+                                ],
+                              ),
+                              Row(children: <Widget>[
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 0, right: 0),
+                                    child: DropdownButton(
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        fetchDistrict(newValue);
+                                        setState(() {
+                                          divisionDropdownValue = newValue!;
+                                        });
+                                      },
+                                      items: _divisions.map((item) {
+                                        return DropdownMenuItem(
+                                          child: Text(item.Name),
+                                          value: item.Id,
+                                        );
+                                      }).toList(),
+                                      value: divisionDropdownValue,
+                                      hint: const Text("Division Name"),
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                              Row(
+                                children: [
                                   Expanded(
                                     //flex: 1,
                                     child: Padding(
@@ -318,9 +321,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           color: Colors.deepPurpleAccent,
                                         ),
                                         onChanged: (int? newValue) {
-                                          // if (newValue != null) {
-                                          //   fetchUpazila(newValue);
-                                          // }
+                                          fetchUpazila(newValue);
                                           setState(() {
                                             districtDropdownValue = newValue!;
                                           });
@@ -390,16 +391,22 @@ class _PatientAddState extends State<PatientAdd> {
                                       color: Colors.black54, fontSize: 15),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 30,
+                              ),
                               // Date Of Birth
                               Row(
                                 children: [
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
-                                      Text('${myFormat.format(currentDate)}'),
+                                      Text(dateOfBirth != null
+                                          ? myFormat.format(
+                                              dateOfBirth ?? DateTime.now())
+                                          : 'Pick a Date'),
                                       TextButton(
                                         onPressed: () => _selectDate(context),
-                                        child: Text('Date Of Birth'),
+                                        child: const Text('Date Of Birth'),
                                       ),
                                     ],
                                   ),
@@ -579,6 +586,7 @@ class _PatientAddState extends State<PatientAdd> {
                                   ),
                                 ],
                               ),
+
                               // Covid 19 Vaccination
                               Row(
                                 children: [
@@ -587,8 +595,8 @@ class _PatientAddState extends State<PatientAdd> {
                                     child: Padding(
                                       padding:
                                           EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton<String>(
-                                        value: vaccinationValue,
+                                      child: DropdownButton(
+                                        value: covidVaccine,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
                                         style: const TextStyle(
@@ -597,21 +605,19 @@ class _PatientAddState extends State<PatientAdd> {
                                           height: 2,
                                           color: Colors.deepPurpleAccent,
                                         ),
-                                        onChanged: (String? newValue) {
+                                        onChanged: (int? newValue) {
                                           setState(() {
-                                            vaccinationValue = newValue!;
+                                            covidVaccine = newValue!;
                                           });
                                         },
-                                        items: <String>[
-                                          'Yes',
-                                          'No',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
+                                        items: vaccine.covidVaccine
+                                            .map((Vaccine value) {
+                                          return DropdownMenuItem(
+                                            value: value.Value,
+                                            child: Text(value.Name),
                                           );
                                         }).toList(),
+                                        hint: Text("Vaccination"),
                                       ),
                                     ),
                                   ),
@@ -620,8 +626,8 @@ class _PatientAddState extends State<PatientAdd> {
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                           left: 5.0, right: 5.0),
-                                      child: DropdownButton<String>(
-                                        value: vaccineValue,
+                                      child: DropdownButton(
+                                        value: vaccineBrand,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
                                         style: const TextStyle(
@@ -630,23 +636,19 @@ class _PatientAddState extends State<PatientAdd> {
                                           height: 2,
                                           color: Colors.deepPurpleAccent,
                                         ),
-                                        onChanged: (String? newValue) {
+                                        onChanged: (int? newValue) {
                                           setState(() {
-                                            vaccineValue = newValue!;
+                                            vaccineBrand = newValue!;
                                           });
                                         },
-                                        items: <String>[
-                                          "Pfizer",
-                                          "Astrazeneca",
-                                          "Moderna",
-                                          "Sinopharm"
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
+                                        items: vaccine.vaccineBrand
+                                            .map((Vaccine value) {
+                                          return DropdownMenuItem(
+                                            value: value.Value,
+                                            child: Text(value.Name),
                                           );
                                         }).toList(),
+                                        hint: Text("Brand"),
                                       ),
                                     ),
                                   ),
@@ -655,8 +657,8 @@ class _PatientAddState extends State<PatientAdd> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           left: 5.0, right: 5.0),
-                                      child: DropdownButton<String>(
-                                        value: vaccineDoseValue,
+                                      child: DropdownButton(
+                                        value: vaccineDose,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
                                         style: const TextStyle(
@@ -665,33 +667,97 @@ class _PatientAddState extends State<PatientAdd> {
                                           height: 2,
                                           color: Colors.deepPurpleAccent,
                                         ),
-                                        onChanged: (String? newValue) {
+                                        onChanged: (int? newValue) {
                                           setState(() {
-                                            vaccineDoseValue = newValue!;
+                                            vaccineDose = newValue!;
                                           });
                                         },
-                                        items: <String>[
-                                          "1st Dose",
-                                          "2nd Dose",
-                                          "Boster Dose"
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
+                                        items: vaccine.vaccineDose
+                                            .map((Vaccine value) {
+                                          return DropdownMenuItem(
+                                            value: value.Value,
+                                            child: Text(value.Name),
                                           );
                                         }).toList(),
+                                        hint: Text("Dose"),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              // Date
+                              Row(
+                                children: [
+                                  if (vaccineDose == 1 ||
+                                      vaccineDose == 2 ||
+                                      vaccineDose == 3)
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text(firstDoseDate != null
+                                              ? myFormat.format(firstDoseDate ??
+                                                  DateTime.now())
+                                              : 'Pick a Date'),
+                                          TextButton(
+                                            onPressed: () =>
+                                                _selectDateForFirstDose(
+                                                    context),
+                                            child: const Text('1st Dose'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if (vaccineDose == 3 || vaccineDose == 2)
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text(secondDoseDate != null
+                                              ? myFormat.format(
+                                                  secondDoseDate ??
+                                                      DateTime.now())
+                                              : 'Pick a Date'),
+                                          TextButton(
+                                            onPressed: () =>
+                                                _selectDateForSecondDose(
+                                                    context),
+                                            child: const Text('2nd Dose'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  if (vaccineDose == 3)
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: <Widget>[
+                                          Text(bosterDoseDate != null
+                                              ? myFormat.format(
+                                                  bosterDoseDate ??
+                                                      DateTime.now())
+                                              : 'Pick a Date'),
+                                          TextButton(
+                                            onPressed: () =>
+                                                _selectDateForBosterDose(
+                                                    context),
+                                            child: const Text('Boster Dose'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                ],
+                              ),
+
                               //Note
                               TextFormField(
                                 style: const TextStyle(
                                   color: Colors.black,
                                 ),
-                                controller: _bloodGroupController,
+                                controller: _noteController,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -704,12 +770,38 @@ class _PatientAddState extends State<PatientAdd> {
                               const SizedBox(
                                 height: 30,
                               ),
+                              // Membership Registration Number Checkbox
+
+                              Row(
+                                children: [
+                                  // SizedBox(
+                                  //   width: 10,
+                                  // ),
+                                  Checkbox(
+                                    checkColor:
+                                        Color.fromARGB(255, 36, 71, 226),
+                                    activeColor: Colors.red,
+                                    value: this.primaryMember,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        primaryMember = value!;
+                                      });
+                                    },
+                                  ),
+                                  Text(
+                                    'Primary Member',
+                                    style: TextStyle(fontSize: 17.0),
+                                  ),
+                                ],
+                              ),
+
                               // Registration Number
                               TextFormField(
                                 style: const TextStyle(
                                   color: Colors.black,
                                 ),
-                                controller: _bloodGroupController,
+                                controller:
+                                    _membershipRegistrationNumberController,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -1068,7 +1160,7 @@ class _PatientAddState extends State<PatientAdd> {
                               ),
                               Row(
                                 children: [
-                                  Flexible(
+                                  Expanded(
                                     flex: 1,
                                     child: Padding(
                                       padding:
@@ -1091,37 +1183,6 @@ class _PatientAddState extends State<PatientAdd> {
                               ),
                               Padding(
                                 padding: EdgeInsets.only(top: 15, right: 0),
-                                /* 
-                                 hospitalId,
-      firstName,
-      lastName,
-      mobileNumber,
-      dob,
-      gender,
-      maritalStatus,
-      membershipRegistrationNumber,
-      address,
-      divisionId,
-      nid,
-      bloodGroup,
-      note,
-      vaccineBrand,
-      heightFeet,
-      heightInch,
-      weight,
-      bmi,
-      bodyTemparature,
-      appearance,
-      anemia,
-      jaundice,
-      dehydration,
-      edema,
-      cyanosis,
-      rbsfbs,
-      systolic,
-      diastolic,
-      spo2
-                                 */
                                 child: Stack(
                                   children: [
                                     GestureDetector(
@@ -1138,36 +1199,49 @@ class _PatientAddState extends State<PatientAdd> {
                                         //   return;
                                         // }
                                         addPatient(
-                                            hospitalDropdownValue.toInt(),
                                             _firstNameController.text,
                                             _lastNameController.text,
-                                            _mobilenumberController.text,
-                                            currentDate.toString(),
-                                            genderDropdownValue,
-                                            meritalStatusValue,
-                                            //
-
+                                            hospitalDropdownValue,
+                                            branchDropdownValue,
                                             _addressController.text,
-                                            divisionDropdownValue.toInt(),
+                                            divisionDropdownValue,
+                                            districtDropdownValue,
+                                            upazilaDropdownValue,
                                             _nidController.text,
+                                            _mobilenumberController.text,
+                                            genderDropdownValue,
+                                            _ageDayController.text,
+                                            _ageMonthController.text,
+                                            _ageYearController.text,
+                                            dateOfBirth.toString(),
+                                            meritalStatusValue,
                                             bloodGroupValue,
+                                            covidVaccine,
+                                            vaccineBrand,
+                                            vaccineDose,
+                                            firstDoseDate.toString(),
+                                            secondDoseDate.toString(),
+                                            bosterDoseDate.toString(),
                                             _noteController.text,
-                                            vaccineValue,
+                                            primaryMember,
+                                            _membershipRegistrationNumberController
+                                                .text,
+                                            isActive,
+                                            _bodyTemparatureController.text,
+                                            _weightController.text,
                                             heightFeetValue,
                                             heightInchValue,
-                                            _weightController.text,
-                                            //
-                                            _bodyTemparatureController.text,
+                                            _pulseRateController.text,
+                                            _spo2Controller.text,
+                                            _systolicController.text,
+                                            _diastolicController.text,
                                             _appearanceController.text,
                                             _anemiaController.text,
                                             _jaundiceController.text,
                                             _dehydrationController.text,
                                             _edemaController.text,
                                             _cyanosisController.text,
-                                            _rbsController.text,
-                                            _systolicController.text,
-                                            _diastolicController.text,
-                                            _spo2Controller.text);
+                                            _rbsController.text);
                                         setState(() {
                                           isLoading = true;
                                         });
@@ -1339,7 +1413,7 @@ class _PatientAddState extends State<PatientAdd> {
 
   fetchUpazila(id) async {
     List<Upazila> upazila = [];
-    final response = await http.get(Uri.parse(UPAZILAURI + id));
+    final response = await http.get(Uri.parse(UPAZILAURI + id.toString()));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -1349,6 +1423,7 @@ class _PatientAddState extends State<PatientAdd> {
         upazila.add(Upazila.fromJson(item));
       }
       _upazilas = upazila;
+      setState(() {});
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -1357,69 +1432,85 @@ class _PatientAddState extends State<PatientAdd> {
   }
 
   addPatient(
-      hospitalId,
-      firstName,
-      lastName,
-      mobileNumber,
-      dob,
-      gender,
-      maritalStatus,
-      // membershipRegistrationNumber,
-      address,
-      divisionId,
-      nid,
-      bloodGroup,
-      note,
-      vaccineBrand,
-      heightFeet,
-      heightInch,
-      weight,
-      // bmi,
-      bodyTemparature,
-      appearance,
-      anemia,
-      jaundice,
-      dehydration,
-      edema,
-      cyanosis,
-      rbsfbs,
-      systolic,
-      diastolic,
-      spo2) async {
+    firstName,
+    lastName,
+    hospitalId,
+    branchId,
+    address,
+    divisionId,
+    districtId,
+    upazilaId,
+    nid,
+    mobileNumber,
+    gender,
+    day,
+    month,
+    year,
+    dob,
+    maritalStatus,
+    bloodGroup,
+    covidVaccine,
+    vaccineBrand,
+    vaccineDose,
+    firstDoseDate,
+    secondDoseDate,
+    bosterDoseDate,
+    note,
+    primaryMember,
+    membershipRegistrationNumber,
+    isActive,
+    bodyTemparature,
+    weight,
+    heightFeet,
+    heightInch,
+    pulseRate,
+    spo2,
+    systolic,
+    diastolic,
+    appearance,
+    anemia,
+    jaundice,
+    dehydration,
+    edema,
+    cyanosis,
+    rbsfbs,
+  ) async {
+    print(dob);
+    print(firstDoseDate);
+    print(secondDoseDate);
+    print(bosterDoseDate);
+
     var data = jsonEncode({
       'hospitalId': hospitalId,
-      // 'branchId': 0,
+      'branchId': branchId,
       'firstName': firstName,
       'lastName': lastName,
-      // 'day': 0,
-      // 'month': 0,
-      // 'year': 0,
-      // 'age': 'string',
+      'day': day,
+      'month': month,
+      'year': year,
       'mobileNumber': mobileNumber,
       'doB': dob,
       'gender': gender,
       'maritalStatus': maritalStatus,
-      // 'primaryMember': true,
-      // 'membershipRegistrationNumber': membershipRegistrationNumber,
+      'primaryMember': primaryMember,
+      'membershipRegistrationNumber': membershipRegistrationNumber,
       'address': address,
       'divisionId': divisionId,
-      // 'division': 'string',
-      // 'upazilaId': 0,
-      // 'districtId': 0,
+      'upazilaId': upazilaId,
+      'districtId': districtId,
       'nid': nid,
       'bloodGroup': bloodGroup,
-      'isActive': true,
+      'isActive': isActive,
       'note': note,
-      // 'covidvaccine': 'string',
-      // 'vaccineBrand': 'string',
-      // 'vaccineDose': 'string',
-      // 'firstDoseDate': '2022-03-22T13:15:46.372Z',
-      // 'secondDoseDate': '2022-03-22T13:15:46.372Z',
-      // 'bosterDoseDate': '2022-03-22T13:15:46.372Z',
+      'covidvaccine': covidVaccine,
+      'vaccineBrand': vaccineBrand,
+      'vaccineDose': vaccineDose,
+      'firstDoseDate': firstDoseDate,
+      'secondDoseDate': secondDoseDate,
+      'bosterDoseDate': bosterDoseDate,
       'heightFeet': heightFeet,
-      'heightInches': heightInchValue,
+      'heightInches': heightInch,
       'weight': weight,
-      // 'bmi': bmi,
       'bodyTemparature': bodyTemparature,
       'appearance': appearance,
       'anemia': anemia,
@@ -1427,22 +1518,15 @@ class _PatientAddState extends State<PatientAdd> {
       'dehydration': dehydration,
       'edema': edema,
       'cyanosis': cyanosis,
-      // 'heart': '',
-      // 'lung': 'string',
-      // 'abdomen': 'string',
-      // 'kub': 'string',
       'rbsFbs': rbsfbs,
       'bloodPressureSystolic': systolic,
       'bloodPressureDiastolic': diastolic,
-      // 'heartRate': 'hea',
-      // 'pulseRate': '',
+      'pulseRate': pulseRate,
       'spO2': spo2,
-      // 'waist': '',
-      // 'hip': 'string'
     });
     SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? token = preferences.getString("token");
-    print(data.toString());
+    print(data);
     if (token != null) {
       final response = await http.post(Uri.parse(PATIENTURI),
           headers: {
@@ -1455,7 +1539,6 @@ class _PatientAddState extends State<PatientAdd> {
       // setState(() {
       //   isLoading = false;
       // });
-      print(token);
       if (response.statusCode == 200) {
         Map<String, dynamic> resposne = jsonDecode(response.body);
         if (resposne.isNotEmpty) {
@@ -1474,7 +1557,6 @@ class _PatientAddState extends State<PatientAdd> {
       } else {
         scaffoldMessenger.showSnackBar(
             const SnackBar(content: Text("{response.statusCode}")));
-        print(response.statusCode);
       }
     }
   }
