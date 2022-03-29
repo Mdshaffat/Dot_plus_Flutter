@@ -9,4 +9,7 @@ class Hospital {
     return Hospital(
         Id: json['id'], Name: json['name'], BranchId: json['branchId']);
   }
+
+  Map<String, dynamic> toJson() =>
+      {'id': Id, 'name': Name, 'branchId': BranchId};
 }

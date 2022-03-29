@@ -26,9 +26,8 @@ class MyApp extends StatelessWidget {
       ),
       // home: const Login(),
       routes: {
-        '/': (context) =>
-            getToken() != null ? const PatientList() : const Login(),
-        '/home': (context) => const Home(),
+        '/': (context) => getToken() == null ? const Login() : Home(),
+        '/home': (context) => Home(),
         '/datasync': (context) => const DataSync(),
         '/login': (context) => const Login(),
         '/patientlist': (context) => const PatientList(),

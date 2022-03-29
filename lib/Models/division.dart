@@ -6,4 +6,5 @@ class Division {
   factory Division.fromJson(Map<String, dynamic> json) {
     return Division(Id: json['id'], Name: json['name']);
   }
+  Map<String, dynamic> toJson() => {"id": Id, "name": Name};
 }

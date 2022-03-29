@@ -181,6 +181,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _firstNameController,
+                                        maxLength: 30,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -200,6 +201,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _lastNameController,
+                                        maxLength: 30,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -262,6 +264,7 @@ class _PatientAddState extends State<PatientAdd> {
                                       style: const TextStyle(
                                         color: Colors.black,
                                       ),
+                                      maxLength: 150,
                                       controller: _addressController,
                                       decoration: const InputDecoration(
                                         enabledBorder: UnderlineInputBorder(
@@ -370,6 +373,7 @@ class _PatientAddState extends State<PatientAdd> {
                               //NID
                               TextFormField(
                                 controller: _nidController,
+                                maxLength: 20,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -382,6 +386,7 @@ class _PatientAddState extends State<PatientAdd> {
                               //Mobile Number
                               TextFormField(
                                 controller: _mobilenumberController,
+                                maxLength: 11,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -417,6 +422,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 25, right: 25),
                                       child: TextFormField(
                                         controller: _ageDayController,
+                                        maxLength: 2,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -436,6 +442,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 5, right: 5),
                                       child: TextFormField(
                                         controller: _ageMonthController,
+                                        maxLength: 2,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -455,6 +462,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 5, right: 5),
                                       child: TextFormField(
                                         controller: _ageYearController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -758,6 +766,7 @@ class _PatientAddState extends State<PatientAdd> {
                                   color: Colors.black,
                                 ),
                                 controller: _noteController,
+                                maxLength: 100,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -802,6 +811,7 @@ class _PatientAddState extends State<PatientAdd> {
                                 ),
                                 controller:
                                     _membershipRegistrationNumberController,
+                                maxLength: 20,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide:
@@ -826,6 +836,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _bodyTemparatureController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -845,6 +856,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _weightController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -956,6 +968,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _pulseRateController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -975,6 +988,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _spo2Controller,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -998,6 +1012,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _systolicController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1017,6 +1032,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _diastolicController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1041,6 +1057,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _appearanceController,
+                                        maxLength: 10,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1060,6 +1077,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _anemiaController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1083,6 +1101,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _jaundiceController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1102,6 +1121,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _dehydrationController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1125,6 +1145,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _edemaController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1144,6 +1165,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _cyanosisController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1167,6 +1189,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _rbsController,
+                                        maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
@@ -1190,14 +1213,23 @@ class _PatientAddState extends State<PatientAdd> {
                                         if (isLoading) {
                                           return;
                                         }
-                                        // if (_emailController.text.isEmpty ||
-                                        //     _passwordController.text.isEmpty) {
-                                        //   scaffoldMessenger.showSnackBar(
-                                        //       const SnackBar(
-                                        //           content: Text(
-                                        //               "Please Fill all fileds")));
-                                        //   return;
-                                        // }
+                                        if (hospitalDropdownValue == null ||
+                                            (_firstNameController
+                                                    .text.isEmpty &&
+                                                _lastNameController
+                                                    .text.isEmpty) ||
+                                            (_ageDayController.text.isEmpty &&
+                                                _ageMonthController
+                                                    .text.isEmpty &&
+                                                _ageYearController
+                                                    .text.isEmpty &&
+                                                dateOfBirth == null)) {
+                                          scaffoldMessenger.showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      "Please Fill Name , Hospital and (Date Of Birth or Age) Properly")));
+                                          return;
+                                        }
                                         addPatient(
                                             _firstNameController.text,
                                             _lastNameController.text,
@@ -1213,15 +1245,15 @@ class _PatientAddState extends State<PatientAdd> {
                                             _ageDayController.text,
                                             _ageMonthController.text,
                                             _ageYearController.text,
-                                            dateOfBirth.toString(),
+                                            dateOfBirth?.toString(),
                                             meritalStatusValue,
                                             bloodGroupValue,
                                             covidVaccine,
                                             vaccineBrand,
                                             vaccineDose,
-                                            firstDoseDate.toString(),
-                                            secondDoseDate.toString(),
-                                            bosterDoseDate.toString(),
+                                            firstDoseDate?.toString(),
+                                            secondDoseDate?.toString(),
+                                            bosterDoseDate?.toString(),
                                             _noteController.text,
                                             primaryMember,
                                             _membershipRegistrationNumberController
@@ -1475,11 +1507,6 @@ class _PatientAddState extends State<PatientAdd> {
     cyanosis,
     rbsfbs,
   ) async {
-    print(dob);
-    print(firstDoseDate);
-    print(secondDoseDate);
-    print(bosterDoseDate);
-
     var data = jsonEncode({
       'hospitalId': hospitalId,
       'branchId': branchId,
@@ -1526,7 +1553,7 @@ class _PatientAddState extends State<PatientAdd> {
     });
     SharedPreferences preferences = await SharedPreferences.getInstance();
     final String? token = preferences.getString("token");
-    print(data);
+
     if (token != null) {
       final response = await http.post(Uri.parse(PATIENTURI),
           headers: {
@@ -1536,9 +1563,9 @@ class _PatientAddState extends State<PatientAdd> {
           },
           body: data,
           encoding: Encoding.getByName("utf-8"));
-      // setState(() {
-      //   isLoading = false;
-      // });
+      setState(() {
+        isLoading = false;
+      });
       if (response.statusCode == 200) {
         Map<String, dynamic> resposne = jsonDecode(response.body);
         if (resposne.isNotEmpty) {
@@ -1551,12 +1578,20 @@ class _PatientAddState extends State<PatientAdd> {
           Navigator.pushReplacementNamed(context, "/patientlist");
         } else {
           print(" ${resposne['message']}");
+          setState(() {
+            isLoading = false;
+          });
         }
         scaffoldMessenger
             .showSnackBar(SnackBar(content: Text("${resposne['message']}")));
+        setState(() {
+          isLoading = false;
+        });
       } else {
-        scaffoldMessenger.showSnackBar(
-            const SnackBar(content: Text("{response.statusCode}")));
+        setState(() {
+          isLoading = false;
+        });
+        print(response.statusCode);
       }
     }
   }
