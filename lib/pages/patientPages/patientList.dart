@@ -22,7 +22,7 @@ class _PatientListState extends State<PatientList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadPatient();
+    // loadPatient();
     setState(() {});
   }
 

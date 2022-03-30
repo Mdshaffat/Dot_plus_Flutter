@@ -1,16 +1,17 @@
 // To parse this JSON data, do
 //
-//     final patientAdd = patientAddFromJson(jsonString);
+//     final patientAddModel = patientAddModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PatientAdd patientAddFromJson(String str) =>
-    PatientAdd.fromJson(json.decode(str));
+PatientAddModel patientAddModelFromJson(String str) =>
+    PatientAddModel.fromJson(json.decode(str));
 
-String patientAddToJson(PatientAdd data) => json.encode(data.toJson());
+String patientAddModelToJson(PatientAddModel data) =>
+    json.encode(data.toJson());
 
-class PatientAdd {
-  PatientAdd({
+class PatientAddModel {
+  PatientAddModel({
     required this.hospitalId,
     required this.branchId,
     this.firstName,
@@ -41,7 +42,6 @@ class PatientAdd {
     this.heightFeet,
     this.heightInches,
     this.weight,
-    this.bmi,
     this.bodyTemparature,
     this.appearance,
     this.anemia,
@@ -49,16 +49,11 @@ class PatientAdd {
     this.dehydration,
     this.edema,
     this.cyanosis,
-    this.heart,
-    this.lung,
-    this.abdomen,
     this.rbsFbs,
     this.bloodPressureSystolic,
     this.bloodPressureDiastolic,
-    this.heartRate,
     this.pulseRate,
     this.spO2,
-    this.isLatest,
   });
 
   int hospitalId;
@@ -91,7 +86,6 @@ class PatientAdd {
   int? heightFeet;
   int? heightInches;
   int? weight;
-  int? bmi;
   String? bodyTemparature;
   String? appearance;
   String? anemia;
@@ -99,18 +93,14 @@ class PatientAdd {
   String? dehydration;
   String? edema;
   String? cyanosis;
-  String? heart;
-  String? lung;
-  String? abdomen;
   String? rbsFbs;
   String? bloodPressureSystolic;
   String? bloodPressureDiastolic;
-  String? heartRate;
   int? pulseRate;
   int? spO2;
-  bool? isLatest;
 
-  factory PatientAdd.fromJson(Map<String, dynamic> json) => PatientAdd(
+  factory PatientAddModel.fromJson(Map<String, dynamic> json) =>
+      PatientAddModel(
         hospitalId: json["hospitalId"],
         branchId: json["branchId"],
         firstName: json["firstName"],
@@ -141,7 +131,6 @@ class PatientAdd {
         heightFeet: json["heightFeet"],
         heightInches: json["heightInches"],
         weight: json["weight"],
-        bmi: json["bmi"],
         bodyTemparature: json["bodyTemparature"],
         appearance: json["appearance"],
         anemia: json["anemia"],
@@ -149,16 +138,11 @@ class PatientAdd {
         dehydration: json["dehydration"],
         edema: json["edema"],
         cyanosis: json["cyanosis"],
-        heart: json["heart"],
-        lung: json["lung"],
-        abdomen: json["abdomen"],
         rbsFbs: json["rbsFbs"],
         bloodPressureSystolic: json["bloodPressureSystolic"],
         bloodPressureDiastolic: json["bloodPressureDiastolic"],
-        heartRate: json["heartRate"],
         pulseRate: json["pulseRate"],
         spO2: json["spO2"],
-        isLatest: json["isLatest"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -192,7 +176,6 @@ class PatientAdd {
         "heightFeet": heightFeet,
         "heightInches": heightInches,
         "weight": weight,
-        "bmi": bmi,
         "bodyTemparature": bodyTemparature,
         "appearance": appearance,
         "anemia": anemia,
@@ -200,15 +183,10 @@ class PatientAdd {
         "dehydration": dehydration,
         "edema": edema,
         "cyanosis": cyanosis,
-        "heart": heart,
-        "lung": lung,
-        "abdomen": abdomen,
         "rbsFbs": rbsFbs,
         "bloodPressureSystolic": bloodPressureSystolic,
         "bloodPressureDiastolic": bloodPressureDiastolic,
-        "heartRate": heartRate,
         "pulseRate": pulseRate,
         "spO2": spO2,
-        "isLatest": isLatest,
       };
 }

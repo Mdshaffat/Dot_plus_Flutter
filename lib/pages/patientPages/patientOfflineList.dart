@@ -5,6 +5,7 @@ import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
 import 'package:http/http.dart' as http;
 
+import '../../providers/db_provider.dart';
 import '../../utils/app_drawer.dart';
 
 class PatientOfflineList extends StatefulWidget {
@@ -17,11 +18,12 @@ class PatientOfflineList extends StatefulWidget {
 class _PatientOfflineListState extends State<PatientOfflineList> {
   Paginations? paginations;
   List<String> str = [];
-
+  DBProvider? dbProvider;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    dbProvider = DBProvider.db;
     loadPatient();
     setState(() {});
   }

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/hospital.dart';
+import 'package:hospital_app/Models/patientAdd.dart';
 import 'package:hospital_app/Models/upazila.dart';
 import 'package:hospital_app/Models/vaccine.dart';
 
@@ -13,7 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../API/api.dart';
-import '../../Models/Division.dart';
+import '../../Models/division.dart';
+import '../../providers/db_provider.dart';
 
 class PatientAdd extends StatefulWidget {
   const PatientAdd({Key? key}) : super(key: key);
@@ -27,9 +29,11 @@ class _PatientAddState extends State<PatientAdd> {
   List<Division> _divisions = [];
   List<District> _districts = [];
   List<Upazila> _upazilas = [];
+  DBProvider? dbProvider;
   @override
   void initState() {
     super.initState();
+    dbProvider = DBProvider.db;
     fetchHospitals();
     fetchDivision();
     // fetchAllDistrict();
@@ -292,7 +296,7 @@ class _PatientAddState extends State<PatientAdd> {
                                         color: Colors.deepPurpleAccent,
                                       ),
                                       onChanged: (int? newValue) {
-                                        fetchDistrict(newValue);
+                                        // fetchDistrict(newValue);
                                         setState(() {
                                           divisionDropdownValue = newValue!;
                                         });
@@ -1230,7 +1234,7 @@ class _PatientAddState extends State<PatientAdd> {
                                                       "Please Fill Name , Hospital and (Date Of Birth or Age) Properly")));
                                           return;
                                         }
-                                        addPatient(
+                                        addPatientToSqlte(
                                             _firstNameController.text,
                                             _lastNameController.text,
                                             hospitalDropdownValue,
@@ -1242,9 +1246,22 @@ class _PatientAddState extends State<PatientAdd> {
                                             _nidController.text,
                                             _mobilenumberController.text,
                                             genderDropdownValue,
-                                            _ageDayController.text,
-                                            _ageMonthController.text,
-                                            _ageYearController.text,
+                                            (_ageDayController.text != null && _ageDayController.text != "")
+                                                ? int.parse(
+                                                    _ageDayController.text)
+                                                : null,
+                                            (_ageMonthController.text != null &&
+                                                    _ageMonthController.text !=
+                                                        "")
+                                                ? int.parse(
+                                                    _ageMonthController.text)
+                                                : null,
+                                            (_ageYearController.text != null &&
+                                                    _ageYearController.text !=
+                                                        "")
+                                                ? int.parse(
+                                                    _ageYearController.text)
+                                                : null,
                                             dateOfBirth?.toString(),
                                             meritalStatusValue,
                                             bloodGroupValue,
@@ -1260,11 +1277,24 @@ class _PatientAddState extends State<PatientAdd> {
                                                 .text,
                                             isActive,
                                             _bodyTemparatureController.text,
-                                            _weightController.text,
+                                            (_weightController.text != null &&
+                                                    _weightController.text !=
+                                                        "")
+                                                ? int.parse(
+                                                    _weightController.text)
+                                                : null,
                                             heightFeetValue,
                                             heightInchValue,
-                                            _pulseRateController.text,
-                                            _spo2Controller.text,
+                                            (_pulseRateController.text != null &&
+                                                    _pulseRateController.text !=
+                                                        "")
+                                                ? int.parse(
+                                                    _pulseRateController.text)
+                                                : null,
+                                            (_spo2Controller.text != null &&
+                                                    _spo2Controller.text != "")
+                                                ? int.parse(_spo2Controller.text)
+                                                : null,
                                             _systolicController.text,
                                             _diastolicController.text,
                                             _appearanceController.text,
@@ -1341,22 +1371,13 @@ class _PatientAddState extends State<PatientAdd> {
   // fatch Hospital
   fetchHospitals() async {
     List<Hospital> hospitals = [];
-    final response = await http.get(Uri.parse(HOSPITALURI));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        hospitals.add(Hospital.fromJson(item));
-      }
-      _hospitals = hospitals;
-      if (_hospitals.length > 2) {
-        setState(() {});
-      }
+    // final response = await http.get(Uri.parse(HOSPITALURI));
+    List<Hospital> totalHospital = await dbProvider?.getAllHospital();
+    if (totalHospital.length > 1) {
+      setState(() {
+        _hospitals = totalHospital;
+      });
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       throw Exception('Failed to load album');
     }
   }
@@ -1364,17 +1385,13 @@ class _PatientAddState extends State<PatientAdd> {
   fetchDivision() async {
     List<Division> divisions = [];
     _divisions = [];
-    final response = await http.get(Uri.parse(DIVISIONURI));
+    // final response = await http.get(Uri.parse(DIVISIONURI));
 
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        divisions.add(Division.fromJson(item));
-      }
-      _divisions = divisions;
-      setState(() {});
+    List<Division> totalDivision = await dbProvider?.getAllDivision();
+    if (totalDivision.length > 1) {
+      setState(() {
+        _divisions = totalDivision;
+      });
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -1594,6 +1611,102 @@ class _PatientAddState extends State<PatientAdd> {
         print(response.statusCode);
       }
     }
+  }
+
+  addPatientToSqlte(
+    firstName,
+    lastName,
+    hospitalId,
+    branchId,
+    address,
+    divisionId,
+    districtId,
+    upazilaId,
+    nid,
+    mobileNumber,
+    gender,
+    day,
+    month,
+    year,
+    dob,
+    maritalStatus,
+    bloodGroup,
+    covidVaccine,
+    vaccineBrand,
+    vaccineDose,
+    firstDoseDate,
+    secondDoseDate,
+    bosterDoseDate,
+    note,
+    primaryMember,
+    membershipRegistrationNumber,
+    isActive,
+    bodyTemparature,
+    weight,
+    heightFeet,
+    heightInch,
+    pulseRate,
+    spo2,
+    systolic,
+    diastolic,
+    appearance,
+    anemia,
+    jaundice,
+    dehydration,
+    edema,
+    cyanosis,
+    rbsfbs,
+  ) async {
+    PatientAddModel newPatient = PatientAddModel(
+      hospitalId: hospitalId,
+      branchId: branchId,
+      firstName: firstName,
+      lastName: lastName,
+      day: day,
+      month: month,
+      year: year,
+      mobileNumber: mobileNumber,
+      doB: dob != null ? DateTime.parse(dob) : null,
+      gender: gender,
+      maritalStatus: maritalStatus,
+      primaryMember: primaryMember,
+      membershipRegistrationNumber: membershipRegistrationNumber,
+      address: address,
+      divisionId: divisionId,
+      upazilaId: upazilaId,
+      districtId: districtId,
+      nid: nid,
+      bloodGroup: bloodGroup,
+      isActive: isActive,
+      note: note,
+      covidvaccine: covidVaccine,
+      vaccineBrand: vaccineBrand,
+      vaccineDose: vaccineDose,
+      firstDoseDate:
+          firstDoseDate != null ? DateTime.parse(firstDoseDate) : null,
+      secondDoseDate:
+          secondDoseDate != null ? DateTime.parse(secondDoseDate) : null,
+      bosterDoseDate:
+          bosterDoseDate != null ? DateTime.parse(bosterDoseDate) : null,
+      heightFeet: heightFeet,
+      heightInches: heightInch,
+      weight: weight,
+      bodyTemparature: bodyTemparature,
+      appearance: appearance,
+      anemia: anemia,
+      jaundice: jaundice,
+      dehydration: dehydration,
+      edema: edema,
+      cyanosis: cyanosis,
+      rbsFbs: rbsfbs,
+      bloodPressureSystolic: systolic,
+      bloodPressureDiastolic: diastolic,
+      pulseRate: pulseRate,
+      spO2: spo2,
+    );
+
+    var patientadd = await dbProvider?.createPatient(newPatient);
+    print(patientadd);
   }
 
   savePref(

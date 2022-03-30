@@ -11,7 +11,7 @@ import 'package:sqflite/sqflite.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'hospital.db';
+  static const _databaseName = 'hospital_database.db';
   static const _databaseVersion = 1;
   static Database? _database;
   static final DBProvider db = DBProvider._();
@@ -55,6 +55,7 @@ class DBProvider {
         CREATE TABLE Patient(
                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                   hospitalId INTEGER NOT NULL,
+                  branchId INTEGER NOT NULL,
                   firstName TEXT,
                   lastName TEXT,
                   day TEXT,
@@ -252,5 +253,41 @@ class DBProvider {
   }
 
   //***************End Of Upazila *************//
+
+  // *********************** PATIENT **********************//
+
+  createPatient(PatientAddModel newPatiet) async {
+    // await deleteAllUpazila();
+    final db = await database;
+    final res = await db.insert('Patient', newPatiet.toJson());
+    return res;
+  }
+
+  Future<int> deleteAllPatient() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Patient');
+
+    return res;
+  }
+
+  Future getAllPatient() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Patient");
+    List<Upazila> list =
+        res.isNotEmpty ? res.map((c) => Upazila.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<int?> getPatietnCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Patient"));
+    var count = res;
+
+    return count;
+  }
+
+  //***************End Of Patient *************//
 
 }
