@@ -166,6 +166,15 @@ class DBProvider {
     return list;
   }
 
+  Future<int?> getDivisionCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Division"));
+    var count = res;
+
+    return count;
+  }
+
   //***************End Of Division *************//
 
   //*************District_SECTION*************//
@@ -185,7 +194,6 @@ class DBProvider {
     return res;
   }
 
-  //Get All Hospital
   Future getAllDistrict() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM District");
@@ -195,9 +203,18 @@ class DBProvider {
     return list;
   }
 
-  //***************End Of DIVISION *************//
+  Future<int?> getDistrictCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  District"));
+    var count = res;
 
-  //*************HOSPITAL_SECTION*************//
+    return count;
+  }
+
+  //***************End Of District *************//
+
+  //*************UPAZILA_SECTION*************//
 
   // Insert hospital on database
   createUpazila(Upazila newUpazila) async {
@@ -223,6 +240,15 @@ class DBProvider {
         res.isNotEmpty ? res.map((c) => Upazila.fromJson(c)).toList() : [];
 
     return list;
+  }
+
+  Future<int?> getUpazilaCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Upazila"));
+    var count = res;
+
+    return count;
   }
 
   //***************End Of Upazila *************//

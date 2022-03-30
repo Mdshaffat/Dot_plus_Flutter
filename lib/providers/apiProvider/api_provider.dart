@@ -26,7 +26,7 @@ class ApiProvider {
   }
 
   Future getAllDistrict() async {
-    Response response = await Dio().get(DISTRICTURI);
+    Response response = await Dio().get(ALLDISTRICTURI);
 
     return (response.data as List).map((district) {
       print('Inserting $district');
@@ -35,7 +35,7 @@ class ApiProvider {
   }
 
   Future getAllUpazila() async {
-    Response response = await Dio().get(UPAZILAURI);
+    Response response = await Dio().get(ALLUPAZILAURI);
 
     return (response.data as List).map((upazila) {
       print('Inserting $upazila');
