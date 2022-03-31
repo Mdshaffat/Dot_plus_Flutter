@@ -1262,15 +1262,23 @@ class _PatientAddState extends State<PatientAdd> {
                                                 ? int.parse(
                                                     _ageYearController.text)
                                                 : null,
-                                            dateOfBirth.toString(),
+                                            dateOfBirth == null
+                                                ? null
+                                                : dateOfBirth!.toString(),
                                             meritalStatusValue,
                                             bloodGroupValue,
                                             covidVaccine,
                                             vaccineBrand,
                                             vaccineDose,
-                                            firstDoseDate.toString(),
-                                            secondDoseDate.toString(),
-                                            bosterDoseDate.toString(),
+                                            firstDoseDate == null
+                                                ? null
+                                                : firstDoseDate!.toString(),
+                                            secondDoseDate == null
+                                                ? null
+                                                : secondDoseDate!.toString(),
+                                            bosterDoseDate == null
+                                                ? null
+                                                : bosterDoseDate!.toString(),
                                             _noteController.text,
                                             primaryMember,
                                             _membershipRegistrationNumberController
@@ -1291,8 +1299,7 @@ class _PatientAddState extends State<PatientAdd> {
                                                 ? int.parse(
                                                     _pulseRateController.text)
                                                 : null,
-                                            (_spo2Controller.text != null &&
-                                                    _spo2Controller.text != "")
+                                            (_spo2Controller.text != null && _spo2Controller.text != "")
                                                 ? int.parse(_spo2Controller.text)
                                                 : null,
                                             _systolicController.text,
@@ -1708,6 +1715,7 @@ class _PatientAddState extends State<PatientAdd> {
 
     var patientadd = await dbProvider?.createPatient(newPatient);
     print(patientadd);
+    Navigator.pushReplacementNamed(context, "/patientofflinelist");
   }
 
   savePref(

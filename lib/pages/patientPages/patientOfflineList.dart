@@ -6,8 +6,10 @@ import 'package:hospital_app/Models/patient.dart';
 import 'package:hospital_app/Models/patientAdd.dart';
 import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Models/patientOfflineModel.dart';
+import '../../Models/response.dart';
 import '../../providers/db_provider.dart';
 import '../../utils/app_drawer.dart';
 
@@ -23,6 +25,8 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   List<PatientOfflineModel> patients = [];
   List<String> str = [];
   DBProvider? dbProvider;
+  HasNetWork hasNetWork = HasNetWork();
+  late ScaffoldMessengerState scaffoldMessenger;
   @override
   void initState() {
     // TODO: implement initState
@@ -34,6 +38,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
 
   @override
   Widget build(BuildContext context) {
+    scaffoldMessenger = ScaffoldMessenger.of(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -81,14 +86,14 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
                             DataCell(Text(e.mobileNumber.toString())),
                             DataCell(
                               IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.send,
                                 ),
                                 iconSize: 25,
                                 color: Colors.blue,
                                 splashColor: Colors.purple,
                                 onPressed: () {
-                                  _showMyDialog();
+                                  _showMyDialog(e.id);
                                 },
                               ),
                             ),
@@ -117,7 +122,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
     // final response = await http.get(Uri.parse(DIVISIONURI));
 
     List<PatientOfflineModel> totalPatient = await dbProvider?.getAllPatient();
-    if (totalPatient.length > 1) {
+    if (totalPatient.isNotEmpty) {
       setState(() {
         patients = totalPatient;
       });
@@ -128,7 +133,77 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
     }
   }
 
-  Future<void> _showMyDialog() async {
+  deletePatient(int id) async {
+    var deletePatient = await dbProvider?.deletePatient(id);
+    loadPatient();
+    return deletePatient;
+  }
+
+  sendPatientToOnline(int id) async {
+    bool isOnline = await hasNetWork.hasNetwork();
+    if (isOnline) {
+      List<PatientOfflineModel> patientlist = [];
+      patients = [];
+      // final response = await http.get(Uri.parse(DIVISIONURI));
+
+      List<PatientOfflineModel> totalPatient = await dbProvider?.getPatient(id);
+
+      if (totalPatient.isNotEmpty) {
+        PatientOfflineModel patient = totalPatient[0];
+        var data = jsonEncode(patient);
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        final String? token = preferences.getString("token");
+        if (token == null) {
+          Navigator.pushReplacementNamed(context, "/login");
+          scaffoldMessenger
+              .showSnackBar(const SnackBar(content: Text("Please Login")));
+        } else {
+          if (token != null) {
+            final response = await http.post(Uri.parse(PATIENTURI),
+                headers: {
+                  "Accept": "application/json",
+                  "content-type": "application/json",
+                  "Authorization": 'Bearer $token',
+                },
+                body: data,
+                encoding: Encoding.getByName("utf-8"));
+            if (response.statusCode == 200) {
+              Map<String, dynamic> resposne = jsonDecode(response.body);
+              var responseData = ResponseData.fromJson(resposne);
+              if (responseData.Message == "success") {
+                await deletePatient(id);
+              }
+              if (resposne.isNotEmpty) {
+                scaffoldMessenger.showSnackBar(
+                    SnackBar(content: Text("${resposne['message']}")));
+                //delete Patient from Offline
+                Navigator.pushReplacementNamed(context, "/patientlist");
+                setState(() {});
+              } else {
+                print(" ${resposne['message']}");
+              }
+              scaffoldMessenger.showSnackBar(
+                  SnackBar(content: Text("${resposne['message']}")));
+            } else {
+              print(response.statusCode);
+            }
+          }
+          setState(() {
+            patients = totalPatient;
+          });
+        }
+      } else {
+        setState(() {
+          List<PatientOfflineModel> patientlist = [];
+        });
+      }
+    } else {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text(" Please check Your Connection !")));
+    }
+  }
+
+  Future<void> _showMyDialog(int id) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -145,8 +220,15 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Approve'),
+              child: const Text('Cancel'),
               onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Send'),
+              onPressed: () {
+                sendPatientToOnline(id);
                 Navigator.of(context).pop();
               },
             ),

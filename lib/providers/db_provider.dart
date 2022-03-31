@@ -290,6 +290,23 @@ class DBProvider {
     return count;
   }
 
+  Future<int> deletePatient(int id) async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Patient WHERE id = $id');
+
+    return res;
+  }
+
+  Future getPatient(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Patient WHERE id = $id");
+    List<PatientOfflineModel> list = res.isNotEmpty
+        ? res.map((c) => PatientOfflineModel.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
   //***************End Of Patient *************//
 
 }
