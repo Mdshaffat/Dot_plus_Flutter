@@ -1,17 +1,18 @@
 // To parse this JSON data, do
-//
-//     final patientAddModel = patientAddModelFromJson(jsonString);
+
+//     final patientOfflineModel = patientOfflineModelFromJson(jsonString);
 
 import 'dart:convert';
 
-PatientAddModel patientAddModelFromJson(String str) =>
-    PatientAddModel.fromJson(json.decode(str));
+PatientOfflineModel patientOfflineModelFromJson(String str) =>
+    PatientOfflineModel.fromJson(json.decode(str));
 
-String patientAddModelToJson(PatientAddModel data) =>
+String patientOfflineModelToJson(PatientOfflineModel data) =>
     json.encode(data.toJson());
 
-class PatientAddModel {
-  PatientAddModel({
+class PatientOfflineModel {
+  PatientOfflineModel({
+    required this.id,
     required this.hospitalId,
     required this.branchId,
     this.firstName,
@@ -56,6 +57,7 @@ class PatientAddModel {
     this.spO2,
   });
 
+  int id;
   int hospitalId;
   int branchId;
   String? firstName;
@@ -67,7 +69,7 @@ class PatientAddModel {
   String? doB;
   String? gender;
   String? maritalStatus;
-  bool? primaryMember;
+  int? primaryMember;
   String? membershipRegistrationNumber;
   String? address;
   int? divisionId;
@@ -75,7 +77,7 @@ class PatientAddModel {
   int? districtId;
   String? nid;
   String? bloodGroup;
-  bool? isActive;
+  int? isActive;
   String? note;
   String? covidvaccine;
   String? vaccineBrand;
@@ -99,8 +101,9 @@ class PatientAddModel {
   int? pulseRate;
   int? spO2;
 
-  factory PatientAddModel.fromJson(Map<String, dynamic> json) =>
-      PatientAddModel(
+  factory PatientOfflineModel.fromJson(Map<String, dynamic> json) =>
+      PatientOfflineModel(
+        id: json["id"],
         hospitalId: json["hospitalId"],
         branchId: json["branchId"],
         firstName: json["firstName"],
@@ -146,6 +149,7 @@ class PatientAddModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "hospitalId": hospitalId,
         "branchId": branchId,
         "firstName": firstName,

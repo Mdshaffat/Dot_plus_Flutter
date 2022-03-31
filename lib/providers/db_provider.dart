@@ -8,6 +8,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
@@ -273,8 +274,9 @@ class DBProvider {
   Future getAllPatient() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Patient");
-    List<Upazila> list =
-        res.isNotEmpty ? res.map((c) => Upazila.fromJson(c)).toList() : [];
+    List<PatientOfflineModel> list = res.isNotEmpty
+        ? res.map((c) => PatientOfflineModel.fromJson(c)).toList()
+        : [];
 
     return list;
   }

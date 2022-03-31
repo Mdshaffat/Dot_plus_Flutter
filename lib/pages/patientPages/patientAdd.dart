@@ -1262,15 +1262,15 @@ class _PatientAddState extends State<PatientAdd> {
                                                 ? int.parse(
                                                     _ageYearController.text)
                                                 : null,
-                                            dateOfBirth?.toString(),
+                                            dateOfBirth.toString(),
                                             meritalStatusValue,
                                             bloodGroupValue,
                                             covidVaccine,
                                             vaccineBrand,
                                             vaccineDose,
-                                            firstDoseDate?.toString(),
-                                            secondDoseDate?.toString(),
-                                            bosterDoseDate?.toString(),
+                                            firstDoseDate.toString(),
+                                            secondDoseDate.toString(),
+                                            bosterDoseDate.toString(),
                                             _noteController.text,
                                             primaryMember,
                                             _membershipRegistrationNumberController
@@ -1666,7 +1666,8 @@ class _PatientAddState extends State<PatientAdd> {
       month: month,
       year: year,
       mobileNumber: mobileNumber,
-      doB: dob != null ? DateTime.parse(dob) : null,
+      doB: dob,
+      // != null ? DateTime.parse(dob) : null,
       gender: gender,
       maritalStatus: maritalStatus,
       primaryMember: primaryMember,
@@ -1682,12 +1683,12 @@ class _PatientAddState extends State<PatientAdd> {
       covidvaccine: covidVaccine,
       vaccineBrand: vaccineBrand,
       vaccineDose: vaccineDose,
-      firstDoseDate:
-          firstDoseDate != null ? DateTime.parse(firstDoseDate) : null,
-      secondDoseDate:
-          secondDoseDate != null ? DateTime.parse(secondDoseDate) : null,
-      bosterDoseDate:
-          bosterDoseDate != null ? DateTime.parse(bosterDoseDate) : null,
+      firstDoseDate: firstDoseDate,
+      //  != null ? DateTime.parse(firstDoseDate) : null,
+      secondDoseDate: secondDoseDate,
+      // != null ? DateTime.parse(secondDoseDate) : null,
+      bosterDoseDate: bosterDoseDate,
+      // != null ? DateTime.parse(bosterDoseDate) : null,
       heightFeet: heightFeet,
       heightInches: heightInch,
       weight: weight,

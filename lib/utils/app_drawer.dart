@@ -32,6 +32,20 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               autofocus: true,
               title: const Text(
+                "Patient in Offline",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () => {
+                Navigator.pushReplacementNamed(context, "/patientofflinelist"),
+              },
+              hoverColor: Colors.red,
+            ),
+            ListTile(
+              autofocus: true,
+              title: const Text(
                 "Patient",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,

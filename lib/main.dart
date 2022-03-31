@@ -4,6 +4,7 @@ import 'package:hospital_app/pages/dataSyncPage/daraSync.dart';
 import 'package:hospital_app/pages/home.dart';
 import 'package:hospital_app/pages/login.dart';
 import 'package:hospital_app/pages/patientPages/patientAdd.dart';
+import 'package:hospital_app/pages/patientPages/patientOfflineList.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/patientPages/patientList.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => Home(),
         '/datasync': (context) => const DataSync(),
         '/login': (context) => const Login(),
+        '/patientofflinelist': (context) => const PatientOfflineList(),
         '/patientlist': (context) => const PatientList(),
         '/patientadd': (context) => const PatientAdd(),
       },
