@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/pages/dataSyncPage/daraSync.dart';
@@ -13,8 +14,38 @@ void main() {
   HttpOverrides.global = MyHttpOverrides();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    intGetToken();
+  }
+
+  bool isLogedIn = false;
+  getToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final String? token = preferences.getString("token");
+    if (token != null) {
+      if (mounted) {
+        setState(() {
+          isLogedIn = true;
+        });
+      }
+    } else {
+      isLogedIn = false;
+    }
+  }
+
+  intGetToken() async {
+    await getToken();
+  }
 
   // This widget is the root of your application.
   @override
@@ -27,7 +58,7 @@ class MyApp extends StatelessWidget {
       ),
       // home: const Login(),
       routes: {
-        '/': (context) => getToken() == null ? const Login() : Home(),
+        '/': (context) => isLogedIn ? const PatientList() : const Login(),
         '/home': (context) => Home(),
         '/datasync': (context) => const DataSync(),
         '/login': (context) => const Login(),
@@ -46,13 +77,4 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
   }
-}
-
-getToken() async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  final String? token = preferences.getString("token");
-  if (token != null) {
-    return token.toString();
-  }
-  return null;
 }

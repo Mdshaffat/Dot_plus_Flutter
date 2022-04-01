@@ -1,9 +1,8 @@
 class Hospital {
   final int Id;
-  final String Name;
-  final int BranchId;
-  const Hospital(
-      {required this.Id, required this.Name, required this.BranchId});
+  final String? Name;
+  final int? BranchId;
+  const Hospital({required this.Id, this.Name, this.BranchId});
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
     return Hospital(

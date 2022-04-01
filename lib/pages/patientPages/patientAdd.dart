@@ -77,8 +77,8 @@ class _PatientAddState extends State<PatientAdd> {
   TextEditingController _bodyTemparatureController =
       new TextEditingController();
   TextEditingController _weightController = new TextEditingController();
-  String? heightFeetValue;
-  String? heightInchValue;
+  int? heightFeetValue;
+  int? heightInchValue;
   TextEditingController _pulseRateController = new TextEditingController();
   TextEditingController _spo2Controller = new TextEditingController();
   TextEditingController _systolicController = new TextEditingController();
@@ -249,7 +249,8 @@ class _PatientAddState extends State<PatientAdd> {
                                               .map<DropdownMenuItem<Hospital>>(
                                                   (Hospital item) {
                                             return DropdownMenuItem<Hospital>(
-                                              child: Text(item.Name),
+                                              child:
+                                                  Text(item.Name ?? "Unknown"),
                                               value: item,
                                             );
                                           }).toList(),
@@ -377,6 +378,7 @@ class _PatientAddState extends State<PatientAdd> {
                               //NID
                               TextFormField(
                                 controller: _nidController,
+                                keyboardType: TextInputType.number,
                                 maxLength: 20,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
@@ -390,6 +392,7 @@ class _PatientAddState extends State<PatientAdd> {
                               //Mobile Number
                               TextFormField(
                                 controller: _mobilenumberController,
+                                keyboardType: TextInputType.number,
                                 maxLength: 11,
                                 decoration: const InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
@@ -426,6 +429,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 25, right: 25),
                                       child: TextFormField(
                                         controller: _ageDayController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 2,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -446,6 +450,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 5, right: 5),
                                       child: TextFormField(
                                         controller: _ageMonthController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 2,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -466,6 +471,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 5, right: 5),
                                       child: TextFormField(
                                         controller: _ageYearController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -840,6 +846,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _bodyTemparatureController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -860,6 +867,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _weightController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -882,7 +890,7 @@ class _PatientAddState extends State<PatientAdd> {
                                     child: Padding(
                                       padding:
                                           EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton(
+                                      child: DropdownButton<int>(
                                         value: heightFeetValue,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
@@ -892,25 +900,25 @@ class _PatientAddState extends State<PatientAdd> {
                                           height: 2,
                                           color: Colors.deepPurpleAccent,
                                         ),
-                                        onChanged: (String? newValue) {
+                                        onChanged: (int? newValue) {
                                           setState(() {
                                             heightFeetValue = newValue!;
                                           });
                                         },
-                                        items: <String>[
-                                          "1",
-                                          "2",
-                                          "3",
-                                          "4",
-                                          "5",
-                                          "6",
-                                          "7",
-                                          "8",
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
+                                        items: <int>[
+                                          1,
+                                          2,
+                                          3,
+                                          4,
+                                          5,
+                                          6,
+                                          7,
+                                          8,
+                                        ].map<DropdownMenuItem<int>>(
+                                            (int value) {
+                                          return DropdownMenuItem<int>(
                                             value: value,
-                                            child: Text(value),
+                                            child: Text(value.toString()),
                                           );
                                         }).toList(),
                                         hint: Text("Height Feet"),
@@ -922,7 +930,7 @@ class _PatientAddState extends State<PatientAdd> {
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           left: 5.0, right: 5.0),
-                                      child: DropdownButton(
+                                      child: DropdownButton<int>(
                                         value: heightInchValue,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
@@ -932,28 +940,28 @@ class _PatientAddState extends State<PatientAdd> {
                                           height: 2,
                                           color: Colors.deepPurpleAccent,
                                         ),
-                                        onChanged: (String? newValue) {
+                                        onChanged: (int? newValue) {
                                           setState(() {
                                             heightInchValue = newValue!;
                                           });
                                         },
-                                        items: <String>[
-                                          "1",
-                                          "2",
-                                          "3",
-                                          "4",
-                                          "5",
-                                          "6",
-                                          "7",
-                                          "8",
-                                          "9",
-                                          "10",
-                                          "11"
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
+                                        items: <int>[
+                                          1,
+                                          2,
+                                          3,
+                                          4,
+                                          5,
+                                          6,
+                                          7,
+                                          8,
+                                          9,
+                                          10,
+                                          11
+                                        ].map<DropdownMenuItem<int>>(
+                                            (int value) {
+                                          return DropdownMenuItem<int>(
                                             value: value,
-                                            child: Text(value),
+                                            child: Text(value.toString()),
                                           );
                                         }).toList(),
                                         hint: Text("Inch"),
@@ -972,6 +980,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _pulseRateController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -992,6 +1001,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _spo2Controller,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -1016,6 +1026,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           EdgeInsets.only(left: 0, right: 0),
                                       child: TextFormField(
                                         controller: _systolicController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -1036,6 +1047,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           left: 5.0, right: 5.0),
                                       child: TextFormField(
                                         controller: _diastolicController,
+                                        keyboardType: TextInputType.number,
                                         maxLength: 3,
                                         decoration: const InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -1267,9 +1279,9 @@ class _PatientAddState extends State<PatientAdd> {
                                                 : dateOfBirth!.toString(),
                                             meritalStatusValue,
                                             bloodGroupValue,
-                                            covidVaccine,
-                                            vaccineBrand,
-                                            vaccineDose,
+                                            covidVaccine.toString(),
+                                            vaccineBrand.toString(),
+                                            vaccineDose.toString(),
                                             firstDoseDate == null
                                                 ? null
                                                 : firstDoseDate!.toString(),
@@ -1330,7 +1342,7 @@ class _PatientAddState extends State<PatientAdd> {
                                               BorderRadius.circular(50),
                                         ),
                                         child: Text(
-                                          "SUBMIT",
+                                          "SAVE OFFLINE",
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.roboto(
                                               textStyle: const TextStyle(
@@ -1385,7 +1397,7 @@ class _PatientAddState extends State<PatientAdd> {
         _hospitals = totalHospital;
       });
     } else {
-      throw Exception('Failed to load album');
+      _hospitals = [];
     }
   }
 
@@ -1665,6 +1677,7 @@ class _PatientAddState extends State<PatientAdd> {
     cyanosis,
     rbsfbs,
   ) async {
+    // try {
     PatientAddModel newPatient = PatientAddModel(
       hospitalId: hospitalId,
       branchId: branchId,
@@ -1715,8 +1728,25 @@ class _PatientAddState extends State<PatientAdd> {
     );
 
     var patientadd = await dbProvider?.createPatient(newPatient);
-    print(patientadd);
-    Navigator.pushReplacementNamed(context, "/patientofflinelist");
+
+    if (patientadd > 0) {
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushReplacementNamed(context, "/patientofflinelist");
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      scaffoldMessenger
+          .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
+    }
+    // }
+    // catch(e)
+    // {
+    //   scaffoldMessenger
+    //       .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
+    // }
   }
 
   savePref(

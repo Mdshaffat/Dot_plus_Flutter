@@ -98,6 +98,7 @@ class _LoginState extends State<Login> {
                                 height: 16,
                               ),
                               TextFormField(
+                                obscureText: true,
                                 style: const TextStyle(
                                   color: Colors.black,
                                 ),

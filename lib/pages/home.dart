@@ -21,14 +21,14 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        splashColor: Colors.red,
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/patientadd");
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   backgroundColor: Colors.blue,
+      //   splashColor: Colors.red,
+      //   onPressed: () {
+      //     Navigator.pushReplacementNamed(context, "/patientadd");
+      //   },
+      // ),
       appBar: AppBar(
         title: const Text("HOME"),
       ),

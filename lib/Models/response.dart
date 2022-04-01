@@ -20,6 +20,8 @@ class HasNetWork {
       return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
     } on SocketException catch (_) {
       return false;
+    } catch (e) {
+      return false;
     }
   }
 

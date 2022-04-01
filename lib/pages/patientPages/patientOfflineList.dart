@@ -26,6 +26,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   List<String> str = [];
   DBProvider? dbProvider;
   HasNetWork hasNetWork = HasNetWork();
+  bool isLoading = false;
   late ScaffoldMessengerState scaffoldMessenger;
   @override
   void initState() {
@@ -54,66 +55,71 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: AppDrawer(),
       body: SingleChildScrollView(
-          child: DataTable(
-              columns: const <DataColumn>[
-            DataColumn(
-              label: Text(
-                'Name',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Mobile',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Action',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-          ],
-              rows: patients.length > 0
-                  ? patients
-                      .map(
-                        (e) => DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(e.firstName.toString() +
-                                " " +
-                                e.lastName.toString())),
-                            DataCell(Text(e.mobileNumber.toString())),
-                            DataCell(
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.send,
-                                ),
-                                iconSize: 25,
-                                color: Colors.blue,
-                                splashColor: Colors.purple,
-                                onPressed: () {
-                                  _showMyDialog(e.id);
-                                },
-                              ),
-                            ),
-                          ],
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : DataTable(
+                  columns: const <DataColumn>[
+                      DataColumn(
+                        label: Text(
+                          'Name',
+                          style: TextStyle(fontStyle: FontStyle.italic),
                         ),
-                      )
-                      .toList()
-                  : <DataRow>[
-                      const DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('0')),
-                          DataCell(Text('Unknown')),
-                          DataCell(Text('************')),
-                        ],
                       ),
-                    ])),
+                      DataColumn(
+                        label: Text(
+                          'Mobile',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      DataColumn(
+                        label: Text(
+                          'Action',
+                          style: TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                    ],
+                  rows: patients.length > 0
+                      ? patients
+                          .map(
+                            (e) => DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text(e.firstName.toString() +
+                                    " " +
+                                    e.lastName.toString())),
+                                DataCell(Text(e.mobileNumber.toString())),
+                                DataCell(
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.send,
+                                    ),
+                                    iconSize: 25,
+                                    color: Colors.blue,
+                                    splashColor: Colors.purple,
+                                    onPressed: () {
+                                      _showMyDialog(e.id);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                          .toList()
+                      : <DataRow>[
+                          const DataRow(
+                            cells: <DataCell>[
+                              DataCell(Text('0')),
+                              DataCell(Text('No Data')),
+                              DataCell(Text('************')),
+                            ],
+                          ),
+                        ])),
     );
   }
 
   loadPatient() async {
+    isLoading = true;
     // Paginations? pagination;
     // final response = await http.get(Uri.parse(PATIENTURI));
 
@@ -125,10 +131,12 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
     if (totalPatient.isNotEmpty) {
       setState(() {
         patients = totalPatient;
+        isLoading = false;
       });
     } else {
       setState(() {
         List<PatientOfflineModel> patientlist = [];
+        isLoading = false;
       });
     }
   }
@@ -142,6 +150,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   sendPatientToOnline(int id) async {
     bool isOnline = await hasNetWork.hasNetwork();
     if (isOnline) {
+      isLoading = true;
       List<PatientOfflineModel> patientlist = [];
       patients = [];
       // final response = await http.get(Uri.parse(DIVISIONURI));
@@ -177,24 +186,23 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
                 scaffoldMessenger.showSnackBar(
                     SnackBar(content: Text("${resposne['message']}")));
                 //delete Patient from Offline
-                Navigator.pushReplacementNamed(context, "/patientlist");
-                setState(() {});
+                // Navigator.pushReplacementNamed(context, "/patientlist");
+                // setState(() {});
               } else {
                 print(" ${resposne['message']}");
               }
-              scaffoldMessenger.showSnackBar(
-                  SnackBar(content: Text("${resposne['message']}")));
             } else {
-              print(response.statusCode);
+              scaffoldMessenger.showSnackBar(
+                  SnackBar(content: Text("${response.statusCode}")));
             }
           }
           setState(() {
-            patients = totalPatient;
+            isLoading = false;
           });
         }
       } else {
         setState(() {
-          List<PatientOfflineModel> patientlist = [];
+          isLoading = false;
         });
       }
     } else {

@@ -12,8 +12,8 @@ import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'dot_plus_database.db';
-  static const _databaseVersion = 1;
+  static const _databaseName = 'dot_plus_db_2.db';
+  static const _databaseVersion = 2;
   static Database? _database;
   static final DBProvider db = DBProvider._();
   DBProvider._();
@@ -61,9 +61,9 @@ class DBProvider {
                   branchId INTEGER NOT NULL,
                   firstName TEXT,
                   lastName TEXT,
-                  day TEXT,
-                  month TEXT,
-                  year TEXT,
+                  day INTEGER,
+                  month INTEGER,
+                  year INTEGER,
                   mobileNumber TEXT,
                   doB DATETIME,
                   gender TEXT,
@@ -78,15 +78,15 @@ class DBProvider {
                   bloodGroup TEXT,
                   isActive BOOLEAN,
                   note TEXT,
-                  covidvaccine INTEGER,
-                  vaccineBrand INTEGER,
-                  vaccineDose INTEGER,
+                  covidvaccine TEXT,
+                  vaccineBrand TEXT,
+                  vaccineDose TEXT,
                   firstDoseDate DATETIME,
                   secondDoseDate DATETIME,
                   bosterDoseDate DATETIME,
-                  heightFeet TEXT,
-                  heightInches TEXT,
-                  weight TEXT,
+                  heightFeet INTEGER,
+                  heightInches INTEGER,
+                  weight INTEGER,
                   bodyTemparature TEXT,
                   appearance TEXT,
                   anemia TEXT,
@@ -97,8 +97,8 @@ class DBProvider {
                   rbsFbs TEXT,
                   bloodPressureSystolic TEXT,
                   bloodPressureDiastolic TEXT,
-                  pulseRate TEXT,
-                  spO2 TEXT
+                  pulseRate INTEGER,
+                  spO2 INTEGER
                   )
           ''');
     });

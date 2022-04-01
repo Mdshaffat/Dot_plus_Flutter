@@ -5,6 +5,7 @@ import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
 import 'package:http/http.dart' as http;
 
+import '../../Models/response.dart';
 import '../../utils/app_drawer.dart';
 
 class PatientList extends StatefulWidget {
@@ -17,13 +18,26 @@ class PatientList extends StatefulWidget {
 class _PatientListState extends State<PatientList> {
   Paginations? paginations;
   List<String> str = [];
-
+  HasNetWork hasNetWork = HasNetWork();
+  bool isOnline = false;
   @override
-  void initState() {
+  initState() {
     // TODO: implement initState
     super.initState();
-    // loadPatient();
+    _isOnlineAwaiter();
     setState(() {});
+  }
+
+  _isOnline() async {
+    var _isOnline = await hasNetWork.hasNetwork();
+    isOnline = _isOnline;
+    if (isOnline) {
+      loadPatient();
+    }
+  }
+
+  _isOnlineAwaiter() async {
+    await _isOnline();
   }
 
   @override
@@ -82,7 +96,7 @@ class _PatientListState extends State<PatientList> {
                       const DataRow(
                         cells: <DataCell>[
                           DataCell(Text('0')),
-                          DataCell(Text('Unknown')),
+                          DataCell(Text('Offline')),
                           DataCell(Text('************')),
                         ],
                       ),
