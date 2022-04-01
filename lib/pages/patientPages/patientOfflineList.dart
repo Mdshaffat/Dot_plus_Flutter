@@ -217,12 +217,12 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('AlertDialog Title'),
+          title: const Text('Online'),
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
+                Text('Send To Online'),
+                Text('Are you sure send data to online ?'),
               ],
             ),
           ),
