@@ -68,7 +68,6 @@ class _DataSyncState extends State<DataSync> {
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
                         _loadHospital();
-                        _refreshCount();
                       },
                       child: SizedBox(
                         width: 100,
@@ -109,7 +108,6 @@ class _DataSyncState extends State<DataSync> {
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
                         _loadDivision();
-                        _refreshCount();
                       },
                       child: SizedBox(
                         width: 100,
@@ -150,7 +148,6 @@ class _DataSyncState extends State<DataSync> {
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
                         _loadDistrict();
-                        _refreshCount();
                       },
                       child: SizedBox(
                         width: 100,
@@ -191,7 +188,6 @@ class _DataSyncState extends State<DataSync> {
                       splashColor: Colors.blue.withAlpha(30),
                       onTap: () {
                         _loadUpazila();
-                        _refreshCount();
                       },
                       child: SizedBox(
                         width: 100,
@@ -202,47 +198,6 @@ class _DataSyncState extends State<DataSync> {
                           children: [
                             const Text(
                               "Sync Upazila",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              upazilaCount ?? '',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _deleteAllPatient();
-                        _refreshCount();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Delete Patient",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
@@ -278,7 +233,7 @@ class _DataSyncState extends State<DataSync> {
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));
-
+    await _refreshCount();
     setState(() {
       isLoading = false;
     });
@@ -294,7 +249,7 @@ class _DataSyncState extends State<DataSync> {
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));
-
+    await _refreshCount();
     setState(() {
       isLoading = false;
     });
@@ -310,7 +265,7 @@ class _DataSyncState extends State<DataSync> {
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));
-
+    await _refreshCount();
     setState(() {
       isLoading = false;
     });
@@ -326,24 +281,24 @@ class _DataSyncState extends State<DataSync> {
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));
-
+    await _refreshCount();
     setState(() {
       isLoading = false;
     });
   }
 
-  _deleteAllPatient() async {
-    setState(() {
-      isLoading = true;
-    });
+  // _deleteAllPatient() async {
+  //   setState(() {
+  //     isLoading = true;
+  //   });
 
-    var apiProvider = await dbProvider!.deleteAllPatient();
+  //   var apiProvider = await dbProvider!.deleteAllPatient();
 
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    setState(() {
-      isLoading = false;
-    });
-    return apiProvider;
-  }
+  //   // wait for 2 seconds to simulate loading of data
+  //   await Future.delayed(const Duration(seconds: 2));
+  //   setState(() {
+  //     isLoading = false;
+  //   });
+  //   return apiProvider;
+  // }
 }

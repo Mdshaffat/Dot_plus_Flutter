@@ -296,7 +296,7 @@ class _PatientAddState extends State<PatientAdd> {
                                         color: Colors.deepPurpleAccent,
                                       ),
                                       onChanged: (int? newValue) {
-                                        // fetchDistrict(newValue);
+                                        fetchDistrict(newValue);
                                         setState(() {
                                           divisionDropdownValue = newValue!;
                                         });
@@ -1390,8 +1390,13 @@ class _PatientAddState extends State<PatientAdd> {
   }
 
   fetchDivision() async {
-    List<Division> divisions = [];
+    //List<Division> divisions = [];
+    divisionDropdownValue = null;
+    districtDropdownValue = null;
+    upazilaDropdownValue = null;
     _divisions = [];
+    _districts = [];
+    _upazilas = [];
     // final response = await http.get(Uri.parse(DIVISIONURI));
 
     List<Division> totalDivision = await dbProvider?.getAllDivision();
@@ -1400,9 +1405,10 @@ class _PatientAddState extends State<PatientAdd> {
         _divisions = totalDivision;
       });
     } else {
+      _divisions = [];
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      //throw Exception('Failed to load division');
     }
   }
 
@@ -1448,42 +1454,37 @@ class _PatientAddState extends State<PatientAdd> {
   }
 
   fetchDistrict(id) async {
-    List<District> district = [];
-    final response = await http.get(Uri.parse(DISTRICTURI + id.toString()));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        district.add(District.fromJson(item));
-      }
-      _districts = district;
-      setState(() {});
+    districtDropdownValue = null;
+    upazilaDropdownValue = null;
+    _districts = [];
+    _upazilas = [];
+    //List<District> district = [];
+    // final response = await http.get(Uri.parse(DISTRICTURI + id.toString()));
+    List<District> totalDistrict = await dbProvider?.getAllDistrict(id);
+    if (totalDistrict.isNotEmpty) {
+      setState(() {
+        _districts = totalDistrict;
+      });
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      _districts = [];
+      //throw Exception('Failed to load album');
     }
   }
 
   fetchUpazila(id) async {
-    List<Upazila> upazila = [];
-    final response = await http.get(Uri.parse(UPAZILAURI + id.toString()));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        upazila.add(Upazila.fromJson(item));
-      }
-      _upazilas = upazila;
-      setState(() {});
+    upazilaDropdownValue = null;
+    //List<Upazila> upazila = [];
+    // final response = await http.get(Uri.parse(UPAZILAURI + id.toString()));
+    List<Upazila> totalUpazila = await dbProvider?.getAllUpazila(id);
+    if (totalUpazila.isNotEmpty) {
+      setState(() {
+        _upazilas = totalUpazila;
+      });
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      _upazilas = [];
+      // throw Exception('Failed to load Upazila');
     }
   }
 

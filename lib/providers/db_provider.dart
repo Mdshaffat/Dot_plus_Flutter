@@ -12,7 +12,7 @@ import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'hospital_database.db';
+  static const _databaseName = 'dot_plus_database.db';
   static const _databaseVersion = 1;
   static Database? _database;
   static final DBProvider db = DBProvider._();
@@ -46,11 +46,13 @@ class DBProvider {
           ')');
       await db.execute('CREATE TABLE District('
           'id INTEGER PRIMARY KEY,'
-          'name TEXT'
+          'name TEXT,'
+          'divisionId INTEGER'
           ')');
       await db.execute('CREATE TABLE Upazila('
           'id INTEGER PRIMARY KEY,'
-          'name TEXT'
+          'name TEXT,'
+          'districtId INTEGER'
           ')');
       await db.execute('''
         CREATE TABLE Patient(
@@ -196,9 +198,10 @@ class DBProvider {
     return res;
   }
 
-  Future getAllDistrict() async {
+  Future getAllDistrict(int id) async {
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM District");
+    final res = await db.rawQuery(
+        "SELECT * FROM District WHERE divisionId=$id ORDER BY name ASC");
     List<District> list =
         res.isNotEmpty ? res.map((c) => District.fromJson(c)).toList() : [];
 
@@ -235,9 +238,10 @@ class DBProvider {
   }
 
   //Get All Upazila
-  Future getAllUpazila() async {
+  Future getAllUpazila(int id) async {
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM Upazila");
+    final res = await db.rawQuery(
+        "SELECT * FROM Upazila WHERE districtId=$id ORDER BY name ASC");
     List<Upazila> list =
         res.isNotEmpty ? res.map((c) => Upazila.fromJson(c)).toList() : [];
 
