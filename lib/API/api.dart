@@ -9,3 +9,4 @@ const String UPAZILAURI = "$ROOT/upazilaanddistrict/districtwiseupazila/";
 const String ALLDISTRICTURI = "$ROOT/upazilaanddistrict/district";
 const String ALLUPAZILAURI = "$ROOT/upazilaanddistrict/upazila";
 const String PATIENTURI = "$ROOT/patient";
+const String USERS = "$ROOT/userManagement/userlist";

@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hospital_app/pages/Users/useList.dart';
 import 'package:hospital_app/pages/dataSyncPage/daraSync.dart';
 import 'package:hospital_app/pages/home.dart';
 import 'package:hospital_app/pages/login.dart';
@@ -65,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         '/patientofflinelist': (context) => const PatientOfflineList(),
         '/patientlist': (context) => const PatientList(),
         '/patientadd': (context) => const PatientAdd(),
+        '/users': (context) => const UserList(),
       },
     );
   }
