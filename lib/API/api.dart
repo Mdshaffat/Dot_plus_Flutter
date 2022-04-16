@@ -1,6 +1,6 @@
 const String ROOTURI = 'outreachhospitaltest.azurewebsites.net';
-const String ROOT = "https://192.168.0.103:5001/api";
-// const String ROOT = "https://hospitalapitest.azurewebsites.net/api";
+// const String ROOT = "https://192.168.0.104:5001/api";
+const String ROOT = "https://hospitalapitest.azurewebsites.net/api";
 const String LOGIN = "$ROOT/account/login";
 const String HOSPITALURI = "$ROOT/hospital/hospitallistsortbyname";
 const String DIVISIONURI = "$ROOT/upazilaanddistrict/division";
@@ -9,5 +9,5 @@ const String UPAZILAURI = "$ROOT/upazilaanddistrict/districtwiseupazila/";
 const String ALLDISTRICTURI = "$ROOT/upazilaanddistrict/district";
 const String ALLUPAZILAURI = "$ROOT/upazilaanddistrict/upazila";
 const String PATIENTURI = "$ROOT/patient";
-const String USERS = "$ROOT/userManagement/userlist";
+const String USERS = "$ROOT/userManagement/doctorlist";
 const String TELEMEDICINEURI = "$ROOT/telemedicine";

@@ -139,9 +139,8 @@ class _UserListState extends State<UserList> {
       for (var item in jsonresponse) {
         users.add(User.fromJson(item));
       }
-      setState(() {
-        _users = users;
-      });
+      _users = users;
+      setState(() {});
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
