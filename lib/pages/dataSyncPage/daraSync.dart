@@ -16,6 +16,7 @@ class _DataSyncState extends State<DataSync> {
   var divisionCount;
   var districtCount;
   var upazilaCount;
+  var userCount;
   DBProvider? dbProvider;
   @override
   void initState() {
@@ -31,11 +32,13 @@ class _DataSyncState extends State<DataSync> {
     var totalDivision = await dbProvider?.getDivisionCount();
     var totalDistrict = await dbProvider?.getDistrictCount();
     var totalUpazila = await dbProvider?.getUpazilaCount();
+    var totalUser = await dbProvider?.getUserCount();
     setState(() {
       hospitalcount = totalHospital.toString();
       divisionCount = totalDivision.toString();
       districtCount = totalDistrict.toString();
       upazilaCount = totalUpazila.toString();
+      userCount = totalUser.toString();
     });
   }
 
@@ -218,6 +221,46 @@ class _DataSyncState extends State<DataSync> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    child: InkWell(
+                      // focusColor: Colors.black,
+                      // highlightColor: Colors.black,
+                      // hoverColor: Colors.black,
+                      splashColor: Colors.blue.withAlpha(30),
+                      onTap: () {
+                        _loadUser();
+                      },
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Sync Doctor",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              userCount ?? '',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 0, 0, 0),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
     );
@@ -278,6 +321,22 @@ class _DataSyncState extends State<DataSync> {
 
     var apiProvider = ApiProvider();
     await apiProvider.getAllUpazila();
+
+    // wait for 2 seconds to simulate loading of data
+    await Future.delayed(const Duration(seconds: 2));
+    await _refreshCount();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  _loadUser() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    var apiProvider = ApiProvider();
+    await apiProvider.getAllUser();
 
     // wait for 2 seconds to simulate loading of data
     await Future.delayed(const Duration(seconds: 2));

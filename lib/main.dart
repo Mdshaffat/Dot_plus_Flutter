@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/pages/Users/useList.dart';
@@ -8,6 +7,7 @@ import 'package:hospital_app/pages/login.dart';
 import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:hospital_app/pages/patientPages/patientOfflineList.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'pages/CallingInformation/calling_information.dart';
 import 'pages/patientPages/patientList.dart';
 
 void main() {
@@ -67,6 +67,7 @@ class _MyAppState extends State<MyApp> {
         '/patientlist': (context) => const PatientList(),
         '/patientadd': (context) => const PatientAdd(),
         '/users': (context) => const UserList(),
+        '/callinfo': (context) => const CallingInformation(),
       },
     );
   }

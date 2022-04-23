@@ -10,7 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../Models/callinginfoofflinemodel.dart';
 import '../../Models/response.dart';
+import '../../providers/db_provider.dart';
 import '../../utils/app_drawer.dart';
 
 class UserList extends StatefulWidget {
@@ -27,26 +29,16 @@ class _UserListState extends State<UserList> {
   Paginations? paginations;
   List<String> str = [];
   List<User> _users = [];
+  DBProvider? dbProvider;
   HasNetWork hasNetWork = HasNetWork();
   bool isOnline = false;
   @override
   initState() {
     // TODO: implement initState
     super.initState();
-    _isOnlineAwaiter();
+    dbProvider = DBProvider.db;
+    loadUsers();
     setState(() {});
-  }
-
-  _isOnline() async {
-    var _isOnline = await hasNetWork.hasNetwork();
-    isOnline = _isOnline;
-    if (isOnline) {
-      loadUsers();
-    }
-  }
-
-  _isOnlineAwaiter() async {
-    await _isOnline();
   }
 
   @override
@@ -105,7 +97,10 @@ class _UserListState extends State<UserList> {
                                 color: Colors.blue,
                                 splashColor: Colors.purple,
                                 onPressed: () {
-                                  _showCallingDialog(e.userId.toString(),
+                                  _showCallingDialog(
+                                      e.userId.toString(),
+                                      e.firstName.toString(),
+                                      e.lastName.toString(),
                                       e.phoneNumber.toString());
                                   // _callNumber(e.phoneNumber.toString());
                                   // _showMyDialog(e.id);
@@ -130,21 +125,17 @@ class _UserListState extends State<UserList> {
 
   loadUsers() async {
     List<User> users = [];
-    final response = await http.get(Uri.parse(USERS));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        users.add(User.fromJson(item));
-      }
-      _users = users;
-      setState(() {});
+    _users = [];
+    // final response = await http.get(Uri.parse(USERS));
+    List<User> totaluser = await dbProvider?.getAllUser();
+    if (totaluser.isNotEmpty) {
+      setState(() {
+        _users = totaluser;
+      });
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
+      setState(() {
+        _users = [];
+      });
     }
   }
 
@@ -158,6 +149,8 @@ class _UserListState extends State<UserList> {
 
   _sendCallingInfo(
     String doctorId,
+    String firstName,
+    String lastName,
     String phoneNumber,
     int patientId,
     BuildContext context,
@@ -170,34 +163,35 @@ class _UserListState extends State<UserList> {
     } else {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       final String? userId = preferences.getString("id");
-      var data = jsonEncode(
-          {"patietnId": patientId, "callerId": userId, "receiverId": doctorId});
-
-      Response response;
-      var dio = Dio();
-      response = await dio.post(TELEMEDICINEURI, data: data);
-      if (response.statusCode == 200) {
-        var callSuccess = await _callNumber(phoneNumber);
-        if (callSuccess == false || callSuccess == null) {
-          scaffoldMessenger
-              .showSnackBar(const SnackBar(content: Text("Faild to call")));
-        } else {
-          scaffoldMessenger
-              .showSnackBar(const SnackBar(content: Text("Calling....")));
-          Navigator.of(context).pop();
-        }
+      CallingInfoOffline info = CallingInfoOffline(
+          callerId: userId,
+          receiverId: doctorId,
+          callingTime: DateTime.now().toString(),
+          patietnId: patientId,
+          receiverFirstName: firstName,
+          receiverLastName: lastName,
+          status: 0);
+      var callInfoadd = await dbProvider?.createCall(info);
+      if (callInfoadd > 0) {
+        await _callNumber(phoneNumber);
+        Navigator.pushReplacementNamed(context, "/users");
+      } else {
+        setState(() {});
+        scaffoldMessenger
+            .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
       }
     }
   }
 
-  Future<void> _showCallingDialog(String doctorId, String phoneNumber) async {
+  Future<void> _showCallingDialog(String doctorId, String firstName,
+      String lastName, String phoneNumber) async {
     _patientIdController = new TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Online'),
+          title: const Text(' '),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -244,7 +238,7 @@ class _UserListState extends State<UserList> {
                   scaffoldMessenger.showSnackBar(const SnackBar(
                       content: Text("Please Fill Patient ID Properly")));
                 } else {
-                  _sendCallingInfo(doctorId, phoneNumber,
+                  _sendCallingInfo(doctorId, firstName, lastName, phoneNumber,
                       int.parse(_patientIdController.text), context);
                 }
                 // _showMyDialog(e.id);
@@ -255,4 +249,21 @@ class _UserListState extends State<UserList> {
       },
     );
   }
+
+  // testmethos(String phoneNumber) async {
+  //   Response response;
+  //   var dio = Dio();
+  //   response = await dio.post(TELEMEDICINEURI, data: data);
+  //   if (response.statusCode == 200) {
+  //     var callSuccess = await _callNumber(phoneNumber);
+  //     if (callSuccess == false || callSuccess == null) {
+  //       scaffoldMessenger
+  //           .showSnackBar(const SnackBar(content: Text("Faild to call")));
+  //     } else {
+  //       scaffoldMessenger
+  //           .showSnackBar(const SnackBar(content: Text("Calling....")));
+  //       Navigator.of(context).pop();
+  //     }
+  //   }
+  // }
 }

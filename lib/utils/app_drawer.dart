@@ -74,6 +74,20 @@ class AppDrawer extends StatelessWidget {
             ListTile(
               autofocus: true,
               title: const Text(
+                "Calling Information",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              onTap: () => {
+                Navigator.pushReplacementNamed(context, "/callinfo"),
+              },
+              hoverColor: Colors.red,
+            ),
+            ListTile(
+              autofocus: true,
+              title: const Text(
                 "Logout",
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,

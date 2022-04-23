@@ -3,16 +3,19 @@ import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/division.dart';
 import 'package:hospital_app/Models/hospital.dart';
 import 'package:hospital_app/Models/patientAdd.dart';
+import 'package:hospital_app/Models/user.dart';
 import 'package:path/path.dart';
 
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../Models/callinginfo.dart';
+import '../Models/callinginfoofflinemodel.dart';
 import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'dot_plus_db_2.db';
+  static const _databaseName = 'dot_plus_db_4.db';
   static const _databaseVersion = 2;
   static Database? _database;
   static final DBProvider db = DBProvider._();
@@ -99,6 +102,26 @@ class DBProvider {
                   bloodPressureDiastolic TEXT,
                   pulseRate INTEGER,
                   spO2 INTEGER
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE CallerInfo(
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  patietnId INTEGER,
+                  callerId TEXT,
+                  receiverId TEXT,
+                  receiverFirstName TEXT,
+                  receiverLastName TEXT,
+                  callingTime DATETIME,
+                  status BOOLEAN
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE User(
+                  userId TEXT PRIMARY KEY,
+                  firstName TEXT,
+                  lastName TEXT,
+                  phoneNumber TEXT
                   )
           ''');
     });
@@ -262,7 +285,6 @@ class DBProvider {
   // *********************** PATIENT **********************//
 
   createPatient(PatientAddModel newPatiet) async {
-    // await deleteAllUpazila();
     final db = await database;
     final res = await db.insert('Patient', newPatiet.toJson());
     return res;
@@ -313,4 +335,101 @@ class DBProvider {
 
   //***************End Of Patient *************//
 
+  // *********************** CallerInfo **********************//
+
+  createCall(CallingInfoOffline newCall) async {
+    final db = await database;
+    final res = await db.insert('CallerInfo', newCall.toJson());
+    return res;
+  }
+
+  Future<int> deleteAllCallinginfo() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM CallerInfo');
+
+    return res;
+  }
+
+  Future getAllCallInfo() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM CallerInfo ORDER BY id DESC");
+    List<CallingInfoOffline> list = res.isNotEmpty
+        ? res.map((c) => CallingInfoOffline.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future<int> deleteSingleCalligInfo(int id) async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM CallerInfo WHERE id = $id');
+
+    return res;
+  }
+
+  Future getSingleCallInfo(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM CallerInfo WHERE id = $id");
+    List<CallingInfoOffline> list = res.isNotEmpty
+        ? res.map((c) => CallingInfoOffline.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future getUnSyncCallInfo() async {
+    final db = await database;
+    final res = await db.rawQuery(
+        "SELECT id,callerId,receiverId,patietnId,callingTime  FROM CallerInfo WHERE status = 0");
+    List<CallingInfo> list =
+        res.isNotEmpty ? res.map((c) => CallingInfo.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  updateCallStatus(int id) async {
+    final db = await database;
+    final res =
+        await db.rawUpdate("UPDATE CallerInfo SET status=1 WHERE id=$id");
+    return res;
+  }
+
+  //***************End Of CallerInfo *************//
+
+  //*************User_SECTION*************//
+
+  createUser(User newuser) async {
+    final db = await database;
+    final res = await db.insert('User', newuser.toJson());
+    return res;
+  }
+
+  // Delete all Upazila
+  Future<int> deleteAllUser() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM User');
+
+    return res;
+  }
+
+  //Get All Upazila
+  Future getAllUser() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM User ORDER BY firstName ASC");
+    List<User> list =
+        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<int?> getUserCount() async {
+    final db = await database;
+    final res =
+        Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM  User"));
+    var count = res;
+
+    return count;
+  }
+
+  //***************End Of User *************//
 }

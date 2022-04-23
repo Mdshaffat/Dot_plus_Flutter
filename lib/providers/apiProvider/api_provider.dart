@@ -4,6 +4,7 @@ import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/division.dart';
 import 'package:hospital_app/Models/hospital.dart';
 import 'package:hospital_app/Models/upazila.dart';
+import 'package:hospital_app/Models/user.dart';
 import '../db_provider.dart';
 
 class ApiProvider {
@@ -40,6 +41,15 @@ class ApiProvider {
     return (response.data as List).map((upazila) {
       print('Inserting $upazila');
       DBProvider.db.createUpazila(Upazila.fromJson(upazila));
+    }).toList();
+  }
+
+  Future getAllUser() async {
+    Response response = await Dio().get(USERS);
+
+    return (response.data as List).map((user) {
+      print('Inserting $user');
+      DBProvider.db.createUser(User.fromJson(user));
     }).toList();
   }
 }
