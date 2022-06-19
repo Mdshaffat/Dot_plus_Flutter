@@ -1,27 +1,27 @@
 class Vaccine {
-  final int Value;
-  final String Name;
-  Vaccine({required this.Value, required this.Name});
+  final int value;
+  final String name;
+  Vaccine({required this.value, required this.name});
 }
 
 class NewVaccine {
   NewVaccine();
   List<Vaccine> covidVaccine = [
-    Vaccine(Value: 1, Name: "Yes"),
-    Vaccine(Value: 2, Name: "No")
+    Vaccine(value: 1, name: "Yes"),
+    Vaccine(value: 2, name: "No")
   ];
 
   List<Vaccine> vaccineBrand = [
-    Vaccine(Value: 1, Name: "Pfizer"),
-    Vaccine(Value: 2, Name: "Astrazeneca"),
-    Vaccine(Value: 3, Name: "Moderna"),
-    Vaccine(Value: 4, Name: "Sinopharm"),
-    Vaccine(Value: 5, Name: "Others"),
+    Vaccine(value: 1, name: "Pfizer"),
+    Vaccine(value: 2, name: "Astrazeneca"),
+    Vaccine(value: 3, name: "Moderna"),
+    Vaccine(value: 4, name: "Sinopharm"),
+    Vaccine(value: 5, name: "Others"),
   ];
 
   List<Vaccine> vaccineDose = [
-    Vaccine(Value: 1, Name: "1st Dose"),
-    Vaccine(Value: 2, Name: "2nd Dose"),
-    Vaccine(Value: 3, Name: "Boster Dose"),
+    Vaccine(value: 1, name: "1st Dose"),
+    Vaccine(value: 2, name: "2nd Dose"),
+    Vaccine(value: 3, name: "Boster Dose"),
   ];
 }

@@ -1,13 +1,13 @@
 class District {
-  final int Id;
-  final String Name;
-  final int? DivisionId;
-  const District({required this.Id, required this.Name, this.DivisionId});
+  final int id;
+  final String name;
+  final int? divisionId;
+  const District({required this.id, required this.name, this.divisionId});
 
   factory District.fromJson(Map<String, dynamic> json) {
     return District(
-        Id: json['id'], Name: json['name'], DivisionId: json['divisionId']);
+        id: json['id'], name: json['name'], divisionId: json['divisionId']);
   }
   Map<String, dynamic> toJson() =>
-      {"id": Id, "name": Name, "divisionId": DivisionId};
+      {"id": id, "name": name, "divisionId": divisionId};
 }

@@ -1,14 +1,14 @@
 class Upazila {
-  final int Id;
-  final String Name;
-  final int? DistrictId;
+  final int id;
+  final String name;
+  final int? districtId;
 
-  const Upazila({required this.Id, required this.Name, this.DistrictId});
+  const Upazila({required this.id, required this.name, this.districtId});
 
   factory Upazila.fromJson(Map<String, dynamic> json) {
     return Upazila(
-        Id: json['id'], Name: json['name'], DistrictId: json['districtId']);
+        id: json['id'], name: json['name'], districtId: json['districtId']);
   }
   Map<String, dynamic> toJson() =>
-      {"id": Id, "name": Name, "districtId": DistrictId};
+      {"id": id, "name": name, "districtId": districtId};
 }

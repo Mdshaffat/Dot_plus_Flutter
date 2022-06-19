@@ -3,14 +3,14 @@ import 'dart:io';
 import '../API/api.dart';
 
 class ResponseData {
-  final String? Message;
-  final bool? IsValid;
-  const ResponseData({this.Message, this.IsValid});
+  final String? message;
+  final bool? isValid;
+  const ResponseData({this.message, this.isValid});
 
   factory ResponseData.fromJson(Map<String, dynamic> json) {
-    return ResponseData(Message: json['message'], IsValid: json['isValid']);
+    return ResponseData(message: json['message'], isValid: json['isValid']);
   }
-  Map<String, dynamic> toJson() => {"message": Message, "isValid": IsValid};
+  Map<String, dynamic> toJson() => {"message": message, "isValid": isValid};
 }
 
 class HasNetWork {

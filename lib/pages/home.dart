@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../providers/db_provider.dart';
 import '../utils/app_drawer.dart';
 
 class Home extends StatefulWidget {
@@ -11,11 +10,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  DBProvider? _dbProvider;
+  // DBProvider? _dbProvider;
   @override
   void initState() {
     super.initState();
-    _dbProvider = DBProvider.db;
+    // _dbProvider = DBProvider.db;
   }
 
   @override
@@ -34,9 +33,7 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: const AppDrawer(),
-      body: Container(
-        child: Text("HOME PAGE"),
-      ),
+      body: const Text("HOME PAGE"),
     );
   }
 }

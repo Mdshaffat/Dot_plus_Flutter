@@ -1,14 +1,14 @@
 class Hospital {
-  final int Id;
-  final String? Name;
-  final int? BranchId;
-  const Hospital({required this.Id, this.Name, this.BranchId});
+  final int id;
+  final String? name;
+  final int? branchId;
+  const Hospital({required this.id, this.name, this.branchId});
 
   factory Hospital.fromJson(Map<String, dynamic> json) {
     return Hospital(
-        Id: json['id'], Name: json['name'], BranchId: json['branchId']);
+        id: json['id'], name: json['name'], branchId: json['branchId']);
   }
 
   Map<String, dynamic> toJson() =>
-      {'id': Id, 'name': Name, 'branchId': BranchId};
+      {'id': id, 'name': name, 'branchId': branchId};
 }

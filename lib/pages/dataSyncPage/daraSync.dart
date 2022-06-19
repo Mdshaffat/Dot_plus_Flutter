@@ -12,15 +12,14 @@ class DataSync extends StatefulWidget {
 }
 
 class _DataSyncState extends State<DataSync> {
-  var hospitalcount;
-  var divisionCount;
-  var districtCount;
-  var upazilaCount;
-  var userCount;
+  var hospitalcount = "";
+  var divisionCount = "";
+  var districtCount = "";
+  var upazilaCount = "";
+  var userCount = "";
   DBProvider? dbProvider;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dbProvider = DBProvider.db;
     _refreshCount();
@@ -88,7 +87,7 @@ class _DataSyncState extends State<DataSync> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              hospitalcount ?? '',
+                              hospitalcount,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
@@ -128,7 +127,7 @@ class _DataSyncState extends State<DataSync> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              divisionCount ?? '',
+                              divisionCount,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
@@ -168,7 +167,7 @@ class _DataSyncState extends State<DataSync> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              districtCount ?? '',
+                              districtCount,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
@@ -208,7 +207,7 @@ class _DataSyncState extends State<DataSync> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              upazilaCount ?? '',
+                              upazilaCount,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),
@@ -248,7 +247,7 @@ class _DataSyncState extends State<DataSync> {
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              userCount ?? '',
+                              userCount,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color.fromARGB(255, 0, 0, 0),

@@ -45,21 +45,21 @@ class _PatientAddState extends State<PatientAdd> {
   // late String email, password;
   NewVaccine vaccine = NewVaccine();
   bool isLoading = false;
-  TextEditingController _firstNameController = new TextEditingController();
-  TextEditingController _lastNameController = new TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   Hospital? hospitalValue;
   int? hospitalDropdownValue;
   int? branchDropdownValue;
-  TextEditingController _addressController = new TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
   int? divisionDropdownValue;
   int? districtDropdownValue;
   int? upazilaDropdownValue;
-  TextEditingController _nidController = new TextEditingController();
-  TextEditingController _mobilenumberController = new TextEditingController();
+  final TextEditingController _nidController = TextEditingController();
+  final TextEditingController _mobilenumberController = TextEditingController();
   String? genderDropdownValue;
-  TextEditingController _ageDayController = new TextEditingController();
-  TextEditingController _ageMonthController = new TextEditingController();
-  TextEditingController _ageYearController = new TextEditingController();
+  final TextEditingController _ageDayController = TextEditingController();
+  final TextEditingController _ageMonthController = TextEditingController();
+  final TextEditingController _ageYearController = TextEditingController();
   DateTime? dateOfBirth;
   String? meritalStatusValue;
   String? bloodGroupValue;
@@ -69,28 +69,28 @@ class _PatientAddState extends State<PatientAdd> {
   DateTime? firstDoseDate;
   DateTime? secondDoseDate;
   DateTime? bosterDoseDate;
-  TextEditingController _noteController = new TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
   bool primaryMember = false;
-  TextEditingController _membershipRegistrationNumberController =
-      new TextEditingController();
+  final TextEditingController _membershipRegistrationNumberController =
+      TextEditingController();
   bool isActive = true;
-  TextEditingController _bodyTemparatureController =
-      new TextEditingController();
-  TextEditingController _weightController = new TextEditingController();
+  final TextEditingController _bodyTemparatureController =
+      TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
   int? heightFeetValue;
   int? heightInchValue;
-  TextEditingController _pulseRateController = new TextEditingController();
-  TextEditingController _spo2Controller = new TextEditingController();
-  TextEditingController _systolicController = new TextEditingController();
-  TextEditingController _diastolicController = new TextEditingController();
-  TextEditingController _appearanceController = new TextEditingController();
-  TextEditingController _anemiaController = new TextEditingController();
-  TextEditingController _jaundiceController = new TextEditingController();
-  TextEditingController _dehydrationController = new TextEditingController();
-  TextEditingController _edemaController = new TextEditingController();
-  TextEditingController _cyanosisController = new TextEditingController();
-  TextEditingController _rbsController = new TextEditingController();
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final TextEditingController _pulseRateController = TextEditingController();
+  final TextEditingController _spo2Controller = TextEditingController();
+  final TextEditingController _systolicController = TextEditingController();
+  final TextEditingController _diastolicController = TextEditingController();
+  final TextEditingController _appearanceController = TextEditingController();
+  final TextEditingController _anemiaController = TextEditingController();
+  final TextEditingController _jaundiceController = TextEditingController();
+  final TextEditingController _dehydrationController = TextEditingController();
+  final TextEditingController _edemaController = TextEditingController();
+  final TextEditingController _cyanosisController = TextEditingController();
+  final TextEditingController _rbsController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   var myFormat = DateFormat('d-MM-yyyy');
   late ScaffoldMessengerState scaffoldMessenger;
 //
@@ -100,10 +100,11 @@ class _PatientAddState extends State<PatientAdd> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
-    if (pickedDate != null && pickedDate != dateOfBirth)
+    if (pickedDate != null && pickedDate != dateOfBirth) {
       setState(() {
         dateOfBirth = pickedDate;
       });
+    }
   }
 
   Future<void> _selectDateForFirstDose(BuildContext context) async {
@@ -112,10 +113,11 @@ class _PatientAddState extends State<PatientAdd> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
-    if (pickedDate != null && pickedDate != firstDoseDate)
+    if (pickedDate != null && pickedDate != firstDoseDate) {
       setState(() {
         firstDoseDate = pickedDate;
       });
+    }
   }
 
   Future<void> _selectDateForSecondDose(BuildContext context) async {
@@ -124,10 +126,11 @@ class _PatientAddState extends State<PatientAdd> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
-    if (pickedDate != null && pickedDate != secondDoseDate)
+    if (pickedDate != null && pickedDate != secondDoseDate) {
       setState(() {
         secondDoseDate = pickedDate;
       });
+    }
   }
 
   Future<void> _selectDateForBosterDose(BuildContext context) async {
@@ -136,10 +139,11 @@ class _PatientAddState extends State<PatientAdd> {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime.now());
-    if (pickedDate != null && pickedDate != bosterDoseDate)
+    if (pickedDate != null && pickedDate != bosterDoseDate) {
       setState(() {
         bosterDoseDate = pickedDate;
       });
+    }
   }
 
 //
@@ -162,133 +166,163 @@ class _PatientAddState extends State<PatientAdd> {
             // height: MediaQuery.of(context).size.height,
             child: Stack(
               children: <Widget>[
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Form(
-                        key: _formKey,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 25),
-                          child: Column(
-                            children: <Widget>[
-                              //Name
-                              Row(
-                                children: [
-                                  // Name
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _firstNameController,
-                                        maxLength: 30,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "First Name",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _lastNameController,
-                                        maxLength: 30,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Last Name",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              //hospital --- Controller ---
-                              Row(
-                                children: [
-                                  if (_hospitals.length > 1)
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 5),
-                                        child: DropdownButton<Hospital>(
-                                          style: const TextStyle(
-                                              color: Colors.deepPurple),
-                                          underline: Container(
-                                            height: 2,
-                                            color: Colors.deepPurpleAccent,
-                                          ),
-                                          onChanged: (Hospital? newValue) {
-                                            setState(() {
-                                              hospitalDropdownValue =
-                                                  newValue!.Id;
-                                              branchDropdownValue =
-                                                  newValue.BranchId;
-                                              hospitalValue = newValue;
-                                            });
-                                          },
-                                          items: _hospitals
-                                              .map<DropdownMenuItem<Hospital>>(
-                                                  (Hospital item) {
-                                            return DropdownMenuItem<Hospital>(
-                                              child:
-                                                  Text(item.Name ?? "Unknown"),
-                                              value: item,
-                                            );
-                                          }).toList(),
-                                          value: hospitalValue,
-                                          hint: const Text("Hospital Name"),
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              //Address
-                              Row(
-                                children: [
-                                  Expanded(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Form(
+                      key: _formKey,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 25),
+                        child: Column(
+                          children: <Widget>[
+                            //Name
+                            Row(
+                              children: [
+                                // Name
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
                                     child: TextFormField(
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                      ),
-                                      maxLength: 150,
-                                      controller: _addressController,
+                                      controller: _firstNameController,
+                                      maxLength: 30,
                                       decoration: const InputDecoration(
                                         enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Colors.black)),
-                                        hintText: "Address",
+                                        hintText: "First Name",
                                         hintStyle: TextStyle(
                                             color: Colors.black54,
-                                            fontSize: 13),
+                                            fontSize: 15),
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(children: <Widget>[
-                                Expanded(
+                                ),
+                                Flexible(
                                   flex: 1,
                                   child: Padding(
-                                    padding: EdgeInsets.only(left: 0, right: 0),
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _lastNameController,
+                                      maxLength: 30,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Last Name",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //hospital --- Controller ---
+                            Row(
+                              children: [
+                                if (_hospitals.length > 1)
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0, right: 5),
+                                      child: DropdownButton<Hospital>(
+                                        style: const TextStyle(
+                                            color: Colors.deepPurple),
+                                        underline: Container(
+                                          height: 2,
+                                          color: Colors.deepPurpleAccent,
+                                        ),
+                                        onChanged: (Hospital? newValue) {
+                                          setState(() {
+                                            hospitalDropdownValue =
+                                                newValue!.id;
+                                            branchDropdownValue =
+                                                newValue.branchId;
+                                            hospitalValue = newValue;
+                                          });
+                                        },
+                                        items: _hospitals
+                                            .map<DropdownMenuItem<Hospital>>(
+                                                (Hospital item) {
+                                          return DropdownMenuItem<Hospital>(
+                                            child: Text(item.name ?? "Unknown"),
+                                            value: item,
+                                          );
+                                        }).toList(),
+                                        value: hospitalValue,
+                                        hint: const Text("Hospital Name"),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            //Address
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                    maxLength: 150,
+                                    controller: _addressController,
+                                    decoration: const InputDecoration(
+                                      enabledBorder: UnderlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.black)),
+                                      hintText: "Address",
+                                      hintStyle: TextStyle(
+                                          color: Colors.black54, fontSize: 13),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 0, right: 0),
+                                  child: DropdownButton(
+                                    style: const TextStyle(
+                                        color: Colors.deepPurple),
+                                    underline: Container(
+                                      height: 2,
+                                      color: Colors.deepPurpleAccent,
+                                    ),
+                                    onChanged: (int? newValue) {
+                                      fetchDistrict(newValue);
+                                      setState(() {
+                                        divisionDropdownValue = newValue!;
+                                      });
+                                    },
+                                    items: _divisions.map((item) {
+                                      return DropdownMenuItem(
+                                        child: Text(item.name),
+                                        value: item.id,
+                                      );
+                                    }).toList(),
+                                    value: divisionDropdownValue,
+                                    hint: const Text("Division Name"),
+                                  ),
+                                ),
+                              ),
+                            ]),
+                            Row(
+                              children: [
+                                Expanded(
+                                  //flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
                                     child: DropdownButton(
                                       style: const TextStyle(
                                           color: Colors.deepPurple),
@@ -297,1089 +331,1043 @@ class _PatientAddState extends State<PatientAdd> {
                                         color: Colors.deepPurpleAccent,
                                       ),
                                       onChanged: (int? newValue) {
-                                        fetchDistrict(newValue);
+                                        fetchUpazila(newValue);
                                         setState(() {
-                                          divisionDropdownValue = newValue!;
+                                          districtDropdownValue = newValue!;
                                         });
                                       },
-                                      items: _divisions.map((item) {
+                                      items: _districts.map((item) {
                                         return DropdownMenuItem(
-                                          child: Text(item.Name),
-                                          value: item.Id,
+                                          child: Text(item.name),
+                                          value: item.id,
                                         );
                                       }).toList(),
-                                      value: divisionDropdownValue,
-                                      hint: const Text("Division Name"),
+                                      value: districtDropdownValue,
+                                      hint: const Text("District Name"),
                                     ),
                                   ),
                                 ),
-                              ]),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    //flex: 1,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton(
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          fetchUpazila(newValue);
-                                          setState(() {
-                                            districtDropdownValue = newValue!;
-                                          });
-                                        },
-                                        items: _districts.map((item) {
-                                          return DropdownMenuItem(
-                                            child: Text(item.Name),
-                                            value: item.Id,
-                                          );
-                                        }).toList(),
-                                        value: districtDropdownValue,
-                                        hint: const Text("District Name"),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton(
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
                                       ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton(
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            upazilaDropdownValue = newValue!;
-                                          });
-                                        },
-                                        items: _upazilas.map((item) {
-                                          return DropdownMenuItem(
-                                            child: Text(item.Name),
-                                            value: item.Id,
-                                          );
-                                        }).toList(),
-                                        value: upazilaDropdownValue,
-                                        hint: const Text("Upazila"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              //NID
-                              TextFormField(
-                                controller: _nidController,
-                                keyboardType: TextInputType.number,
-                                maxLength: 20,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                  hintText: "NID",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                ),
-                              ),
-                              //Mobile Number
-                              TextFormField(
-                                controller: _mobilenumberController,
-                                keyboardType: TextInputType.number,
-                                maxLength: 11,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                  hintText: "Mobile Number",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              // Date Of Birth
-                              Row(
-                                children: [
-                                  Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text(dateOfBirth != null
-                                          ? myFormat.format(
-                                              dateOfBirth ?? DateTime.now())
-                                          : 'Pick a Date'),
-                                      TextButton(
-                                        onPressed: () => _selectDate(context),
-                                        child: const Text('Date Of Birth'),
-                                      ),
-                                    ],
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 25, right: 25),
-                                      child: TextFormField(
-                                        controller: _ageDayController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 2,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Day",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      child: TextFormField(
-                                        controller: _ageMonthController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 2,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Month",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 5, right: 5),
-                                      child: TextFormField(
-                                        controller: _ageYearController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Year",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              //Gender + Blood Group + Narital status
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton<String>(
-                                        value: genderDropdownValue,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            genderDropdownValue = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Male',
-                                          'Female',
-                                          'Others',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Gender"),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 0),
-                                      child: DropdownButton<String>(
-                                        value: meritalStatusValue,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            meritalStatusValue = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'Married',
-                                          'Single',
-                                          'Widowed',
-                                          'Separated',
-                                          'Divorced'
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Marital Status"),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton<String>(
-                                        value: bloodGroupValue,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (String? newValue) {
-                                          setState(() {
-                                            bloodGroupValue = newValue!;
-                                          });
-                                        },
-                                        items: <String>[
-                                          'O+',
-                                          'O-',
-                                          'A+',
-                                          'A-',
-                                          'B+',
-                                          'B-',
-                                          'AB+',
-                                          'AB-',
-                                        ].map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Blood Group"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              // Covid 19 Vaccination
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton(
-                                        value: covidVaccine,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            covidVaccine = newValue!;
-                                          });
-                                        },
-                                        items: vaccine.covidVaccine
-                                            .map((Vaccine value) {
-                                          return DropdownMenuItem(
-                                            value: value.Value,
-                                            child: Text(value.Name),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Vaccination"),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton(
-                                        value: vaccineBrand,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            vaccineBrand = newValue!;
-                                          });
-                                        },
-                                        items: vaccine.vaccineBrand
-                                            .map((Vaccine value) {
-                                          return DropdownMenuItem(
-                                            value: value.Value,
-                                            child: Text(value.Name),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Brand"),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton(
-                                        value: vaccineDose,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            vaccineDose = newValue!;
-                                          });
-                                        },
-                                        items: vaccine.vaccineDose
-                                            .map((Vaccine value) {
-                                          return DropdownMenuItem(
-                                            value: value.Value,
-                                            child: Text(value.Name),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Dose"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              // Date
-                              Row(
-                                children: [
-                                  if (vaccineDose == 1 ||
-                                      vaccineDose == 2 ||
-                                      vaccineDose == 3)
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(firstDoseDate != null
-                                              ? myFormat.format(firstDoseDate ??
-                                                  DateTime.now())
-                                              : 'Pick a Date'),
-                                          TextButton(
-                                            onPressed: () =>
-                                                _selectDateForFirstDose(
-                                                    context),
-                                            child: const Text('1st Dose'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  if (vaccineDose == 3 || vaccineDose == 2)
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(secondDoseDate != null
-                                              ? myFormat.format(
-                                                  secondDoseDate ??
-                                                      DateTime.now())
-                                              : 'Pick a Date'),
-                                          TextButton(
-                                            onPressed: () =>
-                                                _selectDateForSecondDose(
-                                                    context),
-                                            child: const Text('2nd Dose'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  if (vaccineDose == 3)
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: <Widget>[
-                                          Text(bosterDoseDate != null
-                                              ? myFormat.format(
-                                                  bosterDoseDate ??
-                                                      DateTime.now())
-                                              : 'Pick a Date'),
-                                          TextButton(
-                                            onPressed: () =>
-                                                _selectDateForBosterDose(
-                                                    context),
-                                            child: const Text('Boster Dose'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                ],
-                              ),
-
-                              //Note
-                              TextFormField(
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                                controller: _noteController,
-                                maxLength: 100,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                  hintText: "Note",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              // Membership Registration Number Checkbox
-
-                              Row(
-                                children: [
-                                  // SizedBox(
-                                  //   width: 10,
-                                  // ),
-                                  Checkbox(
-                                    checkColor:
-                                        Color.fromARGB(255, 36, 71, 226),
-                                    activeColor: Colors.red,
-                                    value: this.primaryMember,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        primaryMember = value!;
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    'Primary Member',
-                                    style: TextStyle(fontSize: 17.0),
-                                  ),
-                                ],
-                              ),
-
-                              // Registration Number
-                              TextFormField(
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                                controller:
-                                    _membershipRegistrationNumberController,
-                                maxLength: 20,
-                                decoration: const InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.black)),
-                                  hintText: "Membership Registration Number",
-                                  hintStyle: TextStyle(
-                                      color: Colors.black54, fontSize: 15),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-
-                              // vITALS
-
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _bodyTemparatureController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Body Temperature",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _weightController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Weight",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: DropdownButton<int>(
-                                        value: heightFeetValue,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            heightFeetValue = newValue!;
-                                          });
-                                        },
-                                        items: <int>[
-                                          1,
-                                          2,
-                                          3,
-                                          4,
-                                          5,
-                                          6,
-                                          7,
-                                          8,
-                                        ].map<DropdownMenuItem<int>>(
-                                            (int value) {
-                                          return DropdownMenuItem<int>(
-                                            value: value,
-                                            child: Text(value.toString()),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Height Feet"),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: DropdownButton<int>(
-                                        value: heightInchValue,
-                                        icon: const Icon(Icons.arrow_downward),
-                                        elevation: 16,
-                                        style: const TextStyle(
-                                            color: Colors.deepPurple),
-                                        underline: Container(
-                                          height: 2,
-                                          color: Colors.deepPurpleAccent,
-                                        ),
-                                        onChanged: (int? newValue) {
-                                          setState(() {
-                                            heightInchValue = newValue!;
-                                          });
-                                        },
-                                        items: <int>[
-                                          1,
-                                          2,
-                                          3,
-                                          4,
-                                          5,
-                                          6,
-                                          7,
-                                          8,
-                                          9,
-                                          10,
-                                          11
-                                        ].map<DropdownMenuItem<int>>(
-                                            (int value) {
-                                          return DropdownMenuItem<int>(
-                                            value: value,
-                                            child: Text(value.toString()),
-                                          );
-                                        }).toList(),
-                                        hint: Text("Inch"),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _pulseRateController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Pulse Rate",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _spo2Controller,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "SpO2",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _systolicController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Systolic",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _diastolicController,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Diastolic",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _appearanceController,
-                                        maxLength: 10,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Appearance",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _anemiaController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Anemia",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _jaundiceController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Jaundice",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _dehydrationController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Dehydration",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _edemaController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Edema",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: TextFormField(
-                                        controller: _cyanosisController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "Cyanosis",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 0, right: 0),
-                                      child: TextFormField(
-                                        controller: _rbsController,
-                                        maxLength: 3,
-                                        decoration: const InputDecoration(
-                                          enabledBorder: UnderlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Colors.black)),
-                                          hintText: "RBS/FBS",
-                                          hintStyle: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 15, right: 0),
-                                child: Stack(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (isLoading) {
-                                          return;
-                                        }
-                                        if (hospitalDropdownValue == null ||
-                                            (_firstNameController
-                                                    .text.isEmpty &&
-                                                _lastNameController
-                                                    .text.isEmpty) ||
-                                            (_ageDayController.text.isEmpty &&
-                                                _ageMonthController
-                                                    .text.isEmpty &&
-                                                _ageYearController
-                                                    .text.isEmpty &&
-                                                dateOfBirth == null)) {
-                                          scaffoldMessenger.showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      "Please Fill Name , Hospital and (Date Of Birth or Age) Properly")));
-                                          return;
-                                        }
-                                        addPatientToSqlte(
-                                            _firstNameController.text,
-                                            _lastNameController.text,
-                                            hospitalDropdownValue,
-                                            branchDropdownValue,
-                                            _addressController.text,
-                                            divisionDropdownValue,
-                                            districtDropdownValue,
-                                            upazilaDropdownValue,
-                                            _nidController.text,
-                                            _mobilenumberController.text,
-                                            genderDropdownValue,
-                                            (_ageDayController.text != null && _ageDayController.text != "")
-                                                ? int.parse(
-                                                    _ageDayController.text)
-                                                : null,
-                                            (_ageMonthController.text != null &&
-                                                    _ageMonthController.text !=
-                                                        "")
-                                                ? int.parse(
-                                                    _ageMonthController.text)
-                                                : null,
-                                            (_ageYearController.text != null &&
-                                                    _ageYearController.text !=
-                                                        "")
-                                                ? int.parse(
-                                                    _ageYearController.text)
-                                                : null,
-                                            dateOfBirth == null
-                                                ? null
-                                                : dateOfBirth!.toString(),
-                                            meritalStatusValue,
-                                            bloodGroupValue,
-                                            covidVaccine.toString(),
-                                            vaccineBrand.toString(),
-                                            vaccineDose.toString(),
-                                            firstDoseDate == null
-                                                ? null
-                                                : firstDoseDate!.toString(),
-                                            secondDoseDate == null
-                                                ? null
-                                                : secondDoseDate!.toString(),
-                                            bosterDoseDate == null
-                                                ? null
-                                                : bosterDoseDate!.toString(),
-                                            _noteController.text,
-                                            primaryMember,
-                                            _membershipRegistrationNumberController
-                                                .text,
-                                            isActive,
-                                            _bodyTemparatureController.text,
-                                            (_weightController.text != null &&
-                                                    _weightController.text !=
-                                                        "")
-                                                ? int.parse(
-                                                    _weightController.text)
-                                                : null,
-                                            heightFeetValue,
-                                            heightInchValue,
-                                            (_pulseRateController.text != null &&
-                                                    _pulseRateController.text !=
-                                                        "")
-                                                ? int.parse(
-                                                    _pulseRateController.text)
-                                                : null,
-                                            (_spo2Controller.text != null && _spo2Controller.text != "")
-                                                ? int.parse(_spo2Controller.text)
-                                                : null,
-                                            _systolicController.text,
-                                            _diastolicController.text,
-                                            _appearanceController.text,
-                                            _anemiaController.text,
-                                            _jaundiceController.text,
-                                            _dehydrationController.text,
-                                            _edemaController.text,
-                                            _cyanosisController.text,
-                                            _rbsController.text);
+                                      onChanged: (int? newValue) {
                                         setState(() {
-                                          isLoading = true;
+                                          upazilaDropdownValue = newValue!;
                                         });
-                                        // Navigator.pushReplacementNamed(
-                                        //     context, "/home");
                                       },
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 0),
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.black),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                        ),
-                                        child: Text(
-                                          "SAVE OFFLINE",
-                                          textAlign: TextAlign.center,
-                                          style: GoogleFonts.roboto(
-                                              textStyle: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 16,
-                                                  letterSpacing: 1)),
-                                        ),
-                                      ),
+                                      items: _upazilas.map((item) {
+                                        return DropdownMenuItem(
+                                          child: Text(item.name),
+                                          value: item.id,
+                                        );
+                                      }).toList(),
+                                      value: upazilaDropdownValue,
+                                      hint: const Text("Upazila"),
                                     ),
-                                    Positioned(
-                                      child: (isLoading)
-                                          ? Center(
-                                              child: Container(
-                                                  height: 26,
-                                                  width: 26,
-                                                  child:
-                                                      const CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Colors.green,
-                                                  )))
-                                          : Container(),
-                                      right: 30,
-                                      bottom: 0,
-                                      top: 0,
-                                    )
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //NID
+                            TextFormField(
+                              controller: _nidController,
+                              keyboardType: TextInputType.number,
+                              maxLength: 20,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                                hintText: "NID",
+                                hintStyle: TextStyle(
+                                    color: Colors.black54, fontSize: 15),
+                              ),
+                            ),
+                            //Mobile Number
+                            TextFormField(
+                              controller: _mobilenumberController,
+                              keyboardType: TextInputType.number,
+                              maxLength: 11,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                                hintText: "Mobile Number",
+                                hintStyle: TextStyle(
+                                    color: Colors.black54, fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            // Date Of Birth
+                            Row(
+                              children: [
+                                Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: <Widget>[
+                                    Text(dateOfBirth != null
+                                        ? myFormat.format(
+                                            dateOfBirth ?? DateTime.now())
+                                        : 'Pick a Date'),
+                                    TextButton(
+                                      onPressed: () => _selectDate(context),
+                                      child: const Text('Date Of Birth'),
+                                    ),
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 25, right: 25),
+                                    child: TextFormField(
+                                      controller: _ageDayController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 2,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Day",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5),
+                                    child: TextFormField(
+                                      controller: _ageMonthController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 2,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Month",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5),
+                                    child: TextFormField(
+                                      controller: _ageYearController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Year",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            //Gender + Blood Group + Narital status
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: DropdownButton<String>(
+                                      value: genderDropdownValue,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          genderDropdownValue = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        'Male',
+                                        'Female',
+                                        'Others',
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Gender"),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 0),
+                                    child: DropdownButton<String>(
+                                      value: meritalStatusValue,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          meritalStatusValue = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        'Married',
+                                        'Single',
+                                        'Widowed',
+                                        'Separated',
+                                        'Divorced'
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Marital Status"),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton<String>(
+                                      value: bloodGroupValue,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          bloodGroupValue = newValue!;
+                                        });
+                                      },
+                                      items: <String>[
+                                        'O+',
+                                        'O-',
+                                        'A+',
+                                        'A-',
+                                        'B+',
+                                        'B-',
+                                        'AB+',
+                                        'AB-',
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Blood Group"),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            // Covid 19 Vaccination
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: DropdownButton(
+                                      value: covidVaccine,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          covidVaccine = newValue!;
+                                        });
+                                      },
+                                      items: vaccine.covidVaccine
+                                          .map((Vaccine value) {
+                                        return DropdownMenuItem(
+                                          value: value.value,
+                                          child: Text(value.name),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Vaccination"),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton(
+                                      value: vaccineBrand,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          vaccineBrand = newValue!;
+                                        });
+                                      },
+                                      items: vaccine.vaccineBrand
+                                          .map((Vaccine value) {
+                                        return DropdownMenuItem(
+                                          value: value.value,
+                                          child: Text(value.name),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Brand"),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton(
+                                      value: vaccineDose,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          vaccineDose = newValue!;
+                                        });
+                                      },
+                                      items: vaccine.vaccineDose
+                                          .map((Vaccine value) {
+                                        return DropdownMenuItem(
+                                          value: value.value,
+                                          child: Text(value.name),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Dose"),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            // Date
+                            Row(
+                              children: [
+                                if (vaccineDose == 1 ||
+                                    vaccineDose == 2 ||
+                                    vaccineDose == 3)
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(firstDoseDate != null
+                                            ? myFormat.format(
+                                                firstDoseDate ?? DateTime.now())
+                                            : 'Pick a Date'),
+                                        TextButton(
+                                          onPressed: () =>
+                                              _selectDateForFirstDose(context),
+                                          child: const Text('1st Dose'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (vaccineDose == 3 || vaccineDose == 2)
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(secondDoseDate != null
+                                            ? myFormat.format(secondDoseDate ??
+                                                DateTime.now())
+                                            : 'Pick a Date'),
+                                        TextButton(
+                                          onPressed: () =>
+                                              _selectDateForSecondDose(context),
+                                          child: const Text('2nd Dose'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                if (vaccineDose == 3)
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        Text(bosterDoseDate != null
+                                            ? myFormat.format(bosterDoseDate ??
+                                                DateTime.now())
+                                            : 'Pick a Date'),
+                                        TextButton(
+                                          onPressed: () =>
+                                              _selectDateForBosterDose(context),
+                                          child: const Text('Boster Dose'),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+
+                            //Note
+                            TextFormField(
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                              controller: _noteController,
+                              maxLength: 100,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                                hintText: "Note",
+                                hintStyle: TextStyle(
+                                    color: Colors.black54, fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            // Membership Registration Number Checkbox
+
+                            Row(
+                              children: [
+                                // SizedBox(
+                                //   width: 10,
+                                // ),
+                                Checkbox(
+                                  checkColor: Color.fromARGB(255, 36, 71, 226),
+                                  activeColor: Colors.red,
+                                  value: primaryMember,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      primaryMember = value!;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Primary Member',
+                                  style: TextStyle(fontSize: 17.0),
+                                ),
+                              ],
+                            ),
+
+                            // Registration Number
+                            TextFormField(
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),
+                              controller:
+                                  _membershipRegistrationNumberController,
+                              maxLength: 20,
+                              decoration: const InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.black)),
+                                hintText: "Membership Registration Number",
+                                hintStyle: TextStyle(
+                                    color: Colors.black54, fontSize: 15),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 30,
+                            ),
+
+                            // vITALS
+
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _bodyTemparatureController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Body Temperature",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _weightController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Weight",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: DropdownButton<int>(
+                                      value: heightFeetValue,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          heightFeetValue = newValue!;
+                                        });
+                                      },
+                                      items: <int>[
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5,
+                                        6,
+                                        7,
+                                        8,
+                                      ].map<DropdownMenuItem<int>>((int value) {
+                                        return DropdownMenuItem<int>(
+                                          value: value,
+                                          child: Text(value.toString()),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Height Feet"),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton<int>(
+                                      value: heightInchValue,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (int? newValue) {
+                                        setState(() {
+                                          heightInchValue = newValue!;
+                                        });
+                                      },
+                                      items: <int>[
+                                        1,
+                                        2,
+                                        3,
+                                        4,
+                                        5,
+                                        6,
+                                        7,
+                                        8,
+                                        9,
+                                        10,
+                                        11
+                                      ].map<DropdownMenuItem<int>>((int value) {
+                                        return DropdownMenuItem<int>(
+                                          value: value,
+                                          child: Text(value.toString()),
+                                        );
+                                      }).toList(),
+                                      hint: const Text("Inch"),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _pulseRateController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Pulse Rate",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _spo2Controller,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "SpO2",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _systolicController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Systolic",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _diastolicController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Diastolic",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _appearanceController,
+                                      maxLength: 10,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Appearance",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _anemiaController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Anemia",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _jaundiceController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Jaundice",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _dehydrationController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Dehydration",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _edemaController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Edema",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: TextFormField(
+                                      controller: _cyanosisController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "Cyanosis",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 0, right: 0),
+                                    child: TextFormField(
+                                      controller: _rbsController,
+                                      maxLength: 3,
+                                      decoration: const InputDecoration(
+                                        enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.black)),
+                                        hintText: "RBS/FBS",
+                                        hintStyle: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 15),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15, right: 0),
+                              child: Stack(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (isLoading) {
+                                        return;
+                                      }
+                                      if (hospitalDropdownValue == null ||
+                                          (_firstNameController.text.isEmpty &&
+                                              _lastNameController
+                                                  .text.isEmpty) ||
+                                          (_ageDayController.text.isEmpty &&
+                                              _ageMonthController
+                                                  .text.isEmpty &&
+                                              _ageYearController.text.isEmpty &&
+                                              dateOfBirth == null)) {
+                                        scaffoldMessenger.showSnackBar(
+                                            const SnackBar(
+                                                content: Text(
+                                                    "Please Fill Name , Hospital and (Date Of Birth or Age) Properly")));
+                                        return;
+                                      }
+                                      addPatientToSqlte(
+                                          _firstNameController.text,
+                                          _lastNameController.text,
+                                          hospitalDropdownValue,
+                                          branchDropdownValue,
+                                          _addressController.text,
+                                          divisionDropdownValue,
+                                          districtDropdownValue,
+                                          upazilaDropdownValue,
+                                          _nidController.text,
+                                          _mobilenumberController.text,
+                                          genderDropdownValue,
+                                          (_ageDayController.text != null &&
+                                                  _ageDayController.text != "")
+                                              ? int.parse(
+                                                  _ageDayController.text)
+                                              : null,
+                                          (_ageMonthController.text != null &&
+                                                  _ageMonthController.text !=
+                                                      "")
+                                              ? int.parse(
+                                                  _ageMonthController.text)
+                                              : null,
+                                          (_ageYearController.text != null &&
+                                                  _ageYearController.text != "")
+                                              ? int.parse(
+                                                  _ageYearController.text)
+                                              : null,
+                                          dateOfBirth == null
+                                              ? null
+                                              : dateOfBirth!.toString(),
+                                          meritalStatusValue,
+                                          bloodGroupValue,
+                                          covidVaccine.toString(),
+                                          vaccineBrand.toString(),
+                                          vaccineDose.toString(),
+                                          firstDoseDate == null
+                                              ? null
+                                              : firstDoseDate!.toString(),
+                                          secondDoseDate == null
+                                              ? null
+                                              : secondDoseDate!.toString(),
+                                          bosterDoseDate == null
+                                              ? null
+                                              : bosterDoseDate!.toString(),
+                                          _noteController.text,
+                                          primaryMember,
+                                          _membershipRegistrationNumberController
+                                              .text,
+                                          isActive,
+                                          _bodyTemparatureController.text,
+                                          (_weightController.text != null &&
+                                                  _weightController.text != "")
+                                              ? int.parse(
+                                                  _weightController.text)
+                                              : null,
+                                          heightFeetValue,
+                                          heightInchValue,
+                                          (_pulseRateController.text != null &&
+                                                  _pulseRateController.text !=
+                                                      "")
+                                              ? int.parse(
+                                                  _pulseRateController.text)
+                                              : null,
+                                          (_spo2Controller.text != null &&
+                                                  _spo2Controller.text != "")
+                                              ? int.parse(_spo2Controller.text)
+                                              : null,
+                                          _systolicController.text,
+                                          _diastolicController.text,
+                                          _appearanceController.text,
+                                          _anemiaController.text,
+                                          _jaundiceController.text,
+                                          _dehydrationController.text,
+                                          _edemaController.text,
+                                          _cyanosisController.text,
+                                          _rbsController.text);
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      // Navigator.pushReplacementNamed(
+                                      //     context, "/home");
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 0),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.black),
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: Text(
+                                        "SAVE OFFLINE",
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.roboto(
+                                            textStyle: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                                letterSpacing: 1)),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    child: (isLoading)
+                                        ? Center(
+                                            child: Container(
+                                                height: 26,
+                                                width: 26,
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  backgroundColor: Colors.green,
+                                                )))
+                                        : Container(),
+                                    right: 30,
+                                    bottom: 0,
+                                    top: 0,
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
                 ),
               ],
             ),

@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
-import 'package:hospital_app/Models/patientAdd.dart';
-import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -179,7 +177,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
             if (response.statusCode == 200) {
               Map<String, dynamic> resposne = jsonDecode(response.body);
               var responseData = ResponseData.fromJson(resposne);
-              if (responseData.Message == "success") {
+              if (responseData.message == "success") {
                 await deletePatient(id);
               }
               if (resposne.isNotEmpty) {

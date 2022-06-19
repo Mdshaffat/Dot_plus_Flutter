@@ -1,12 +1,12 @@
 class Branch {
-  final int Id;
-  final String BranchCode;
-  final String Name;
+  final int id;
+  final String branchCode;
+  final String name;
   const Branch(
-      {required this.Id, required this.Name, required this.BranchCode});
+      {required this.id, required this.name, required this.branchCode});
 
   factory Branch.fromJson(Map<String, dynamic> json) {
     return Branch(
-        Id: json['id'], Name: json['name'], BranchCode: json['branchCode']);
+        id: json['id'], name: json['name'], branchCode: json['branchCode']);
   }
 }

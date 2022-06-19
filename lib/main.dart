@@ -6,6 +6,7 @@ import 'package:hospital_app/pages/home.dart';
 import 'package:hospital_app/pages/login.dart';
 import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:hospital_app/pages/patientPages/patientOfflineList.dart';
+import 'package:hospital_app/pages/prescriptionpages/prescription_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/CallingInformation/calling_information.dart';
 import 'pages/patientPages/patientList.dart';
@@ -57,9 +58,9 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const Login(),
+      home: const PrescriptionPage(),
       routes: {
-        '/': (context) => isLogedIn ? const PatientList() : const Login(),
+        // '/': (context) => isLogedIn ? const PatientList() : const Login(),
         '/home': (context) => Home(),
         '/datasync': (context) => const DataSync(),
         '/login': (context) => const Login(),

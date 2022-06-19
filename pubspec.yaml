@@ -45,6 +45,7 @@ dependencies:
   dio: ^4.0.5
   flutter_phone_direct_caller: ^2.1.0
   flutter_launcher_icons: ^0.9.2
+  flutter_typeahead: ^4.0.0
 
 flutter_icons:
   image_path: "icon/icon.png"
@@ -75,6 +76,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/logo/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
