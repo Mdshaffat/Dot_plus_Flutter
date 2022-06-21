@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:hospital_app/API/api.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/disease.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/diseaseCategory.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/medicine.dart';
 import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/division.dart';
 import 'package:hospital_app/Models/hospital.dart';
@@ -50,6 +53,33 @@ class ApiProvider {
     return (response.data as List).map((user) {
       print('Inserting $user');
       DBProvider.db.createUser(User.fromJson(user));
+    }).toList();
+  }
+
+  Future getAllMedicine() async {
+    Response response = await Dio().get(MEDICINEURI);
+
+    return (response.data as List).map((med) {
+      print('Inserting $med');
+      DBProvider.db.createMedicine(Medicine.fromJson(med));
+    }).toList();
+  }
+
+  Future getAllDiseaseCategory() async {
+    Response response = await Dio().get(DISEASECATEGORYURI);
+
+    return (response.data as List).map((discat) {
+      print('Inserting $discat');
+      DBProvider.db.createDiseaseCategory(DiseaseCategory.fromJson(discat));
+    }).toList();
+  }
+
+  Future getAllDisease() async {
+    Response response = await Dio().get(DISEASEURI);
+
+    return (response.data as List).map((dis) {
+      print('Inserting $dis');
+      DBProvider.db.createDisease(Disease.fromJson(dis));
     }).toList();
   }
 }

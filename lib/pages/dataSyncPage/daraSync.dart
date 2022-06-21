@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../providers/apiProvider/api_provider.dart';
 import '../../providers/db_provider.dart';
 import '../../utils/app_drawer.dart';
+import '../../widgets/data_sync_wid.dart';
 
 class DataSync extends StatefulWidget {
   const DataSync({Key? key}) : super(key: key);
@@ -17,6 +18,9 @@ class _DataSyncState extends State<DataSync> {
   var districtCount = "";
   var upazilaCount = "";
   var userCount = "";
+  var diseaseCategoryCount = "";
+  var diseaseCount = "";
+  var medicineCount = "";
   DBProvider? dbProvider;
   @override
   void initState() {
@@ -32,12 +36,19 @@ class _DataSyncState extends State<DataSync> {
     var totalDistrict = await dbProvider?.getDistrictCount();
     var totalUpazila = await dbProvider?.getUpazilaCount();
     var totalUser = await dbProvider?.getUserCount();
+
+    var totaldiseaseCategory = await dbProvider?.getDiseaseCategoryCount();
+    var totalDisease = await dbProvider?.getDiseaseCount();
+    var totalMedicine = await dbProvider?.getMedicineCount();
     setState(() {
       hospitalcount = totalHospital.toString();
       divisionCount = totalDivision.toString();
       districtCount = totalDistrict.toString();
       upazilaCount = totalUpazila.toString();
       userCount = totalUser.toString();
+      diseaseCategoryCount = totaldiseaseCategory.toString();
+      diseaseCount = totalDisease.toString();
+      medicineCount = totalMedicine.toString();
     });
   }
 
@@ -60,206 +71,54 @@ class _DataSyncState extends State<DataSync> {
             )
           : Wrap(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _loadHospital();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sync Hospital",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              hospitalcount,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _loadDivision();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sync Division",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              divisionCount,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _loadDistrict();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sync District",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              districtCount,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _loadUpazila();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sync Upazila",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              upazilaCount,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: InkWell(
-                      // focusColor: Colors.black,
-                      // highlightColor: Colors.black,
-                      // hoverColor: Colors.black,
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () {
-                        _loadUser();
-                      },
-                      child: SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "Sync Doctor",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              userCount,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                DataSyncWidget(
+                    count: hospitalcount,
+                    title: "Hospital",
+                    loadData: () {
+                      _loadHospital();
+                    }),
+                DataSyncWidget(
+                    count: divisionCount,
+                    title: "Division",
+                    loadData: () {
+                      _loadDivision();
+                    }),
+                DataSyncWidget(
+                    count: districtCount,
+                    title: "District",
+                    loadData: () {
+                      _loadDistrict();
+                    }),
+                DataSyncWidget(
+                    count: upazilaCount,
+                    title: "Upazila",
+                    loadData: () {
+                      _loadUpazila();
+                    }),
+                DataSyncWidget(
+                    count: userCount,
+                    title: "Doctor",
+                    loadData: () {
+                      _loadUser();
+                    }),
+                DataSyncWidget(
+                    count: diseaseCategoryCount,
+                    title: "Disease Category",
+                    loadData: () {
+                      _loadDiseaseCategory();
+                    }),
+                DataSyncWidget(
+                    count: diseaseCount,
+                    title: "Disease",
+                    loadData: () {
+                      _loadDisease();
+                    }),
+                DataSyncWidget(
+                    count: medicineCount,
+                    title: "Medicine",
+                    loadData: () {
+                      _loadMedicine();
+                    }),
               ],
             ),
     );
@@ -345,18 +204,51 @@ class _DataSyncState extends State<DataSync> {
     });
   }
 
-  // _deleteAllPatient() async {
-  //   setState(() {
-  //     isLoading = true;
-  //   });
+  _loadDiseaseCategory() async {
+    setState(() {
+      isLoading = true;
+    });
 
-  //   var apiProvider = await dbProvider!.deleteAllPatient();
+    var apiProvider = ApiProvider();
+    await apiProvider.getAllDiseaseCategory();
 
-  //   // wait for 2 seconds to simulate loading of data
-  //   await Future.delayed(const Duration(seconds: 2));
-  //   setState(() {
-  //     isLoading = false;
-  //   });
-  //   return apiProvider;
-  // }
+    // wait for 2 seconds to simulate loading of data
+    await Future.delayed(const Duration(seconds: 2));
+    await _refreshCount();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  _loadDisease() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    var apiProvider = ApiProvider();
+    await apiProvider.getAllDisease();
+
+    // wait for 2 seconds to simulate loading of data
+    await Future.delayed(const Duration(seconds: 2));
+    await _refreshCount();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  _loadMedicine() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    var apiProvider = ApiProvider();
+    await apiProvider.getAllMedicine();
+
+    // wait for 2 seconds to simulate loading of data
+    await Future.delayed(const Duration(seconds: 2));
+    await _refreshCount();
+    setState(() {
+      isLoading = false;
+    });
+  }
 }

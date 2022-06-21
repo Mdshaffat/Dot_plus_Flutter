@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:hospital_app/Models/diseaseAndMedicine/disease.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/diseaseCategory.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/medicine.dart';
 import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/division.dart';
 import 'package:hospital_app/Models/hospital.dart';
@@ -15,8 +18,8 @@ import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'dot_plus_db_4.db';
-  static const _databaseVersion = 2;
+  static const _databaseName = 'xxtaxtrm.db';
+  static const _databaseVersion = 4;
   static Database? _database;
   static final DBProvider db = DBProvider._();
   DBProvider._();
@@ -122,6 +125,27 @@ class DBProvider {
                   firstName TEXT,
                   lastName TEXT,
                   phoneNumber TEXT
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE Medicine(
+                  id INTEGER PRIMARY KEY,
+                  medicineType TEXT,
+                  brandName TEXT,
+                  genericName TEXT
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE DiseaseCategory(
+                  id TEXT PRIMARY KEY,
+                  name TEXT
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE Disease(
+                  id TEXT PRIMARY KEY,
+                  name TEXT,
+                  diseasesCategoryId INTEGER
                   )
           ''');
     });
@@ -426,6 +450,129 @@ class DBProvider {
     final db = await database;
     final res =
         Sqflite.firstIntValue(await db.rawQuery("SELECT COUNT(*) FROM  User"));
+    var count = res;
+
+    return count;
+  }
+
+  //***************End Of User *************//
+
+  //*************Medicine_SECTION*************//
+
+  createMedicine(Medicine newmedicine) async {
+    await deleteAllMedicine();
+    final db = await database;
+    final res = await db.insert('Medicine', newmedicine.toJson());
+    return res;
+  }
+
+  Future<int> deleteAllMedicine() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Medicine');
+
+    return res;
+  }
+
+  Future<int?> getMedicineCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Medicine"));
+    var count = res;
+
+    return count;
+  }
+
+  Future searchMedicine(String? query) async {
+    try {
+      final db = await database;
+      final res = await db.rawQuery(
+          "SELECT * FROM Medicine WHERE brandName LIKE '$query%' LIMIT 20");
+      List<Medicine> list =
+          res.isNotEmpty ? res.map((c) => Medicine.fromJson(c)).toList() : [];
+
+      return list;
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  //***************End Of Medicine *************//
+
+  //*************Disease_Category_SECTION*************//
+
+  createDiseaseCategory(DiseaseCategory newdiseaseCategory) async {
+    await deleteDiseaseCategory();
+    final db = await database;
+    final res = await db.insert('DiseaseCategory', newdiseaseCategory.toJson());
+    return res;
+  }
+
+  Future<int> deleteDiseaseCategory() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM DiseaseCategory');
+
+    return res;
+  }
+
+  Future getAllDiseaseCategory() async {
+    final db = await database;
+    final res =
+        await db.rawQuery("SELECT * FROM DiseaseCategory ORDER BY id ASC");
+    List<User> list =
+        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<int?> getDiseaseCategoryCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  DiseaseCategory"));
+    var count = res;
+
+    return count;
+  }
+
+  //***************End Of Disease Category *************//
+
+  //*************Disease_SECTION*************//
+
+  createDisease(Disease newdisease) async {
+    await deleteAllDisease();
+    final db = await database;
+    final res = await db.insert('Disease', newdisease.toJson());
+    return res;
+  }
+
+  Future<int> deleteAllDisease() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Disease');
+
+    return res;
+  }
+
+  Future getAllDisease() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Disease ORDER BY id ASC");
+    List<User> list =
+        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future getDiseasesAccordinToDiseaseCategory(int id) async {
+    final db = await database;
+    final res = await db.rawQuery(
+        "SELECT * FROM Disease WHERE diseasesCategoryId=$id ORDER BY name ASC");
+    List<Disease> list =
+        res.isNotEmpty ? res.map((c) => Disease.fromJson(c)).toList() : [];
+    return list;
+  }
+
+  Future<int?> getDiseaseCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Disease"));
     var count = res;
 
     return count;

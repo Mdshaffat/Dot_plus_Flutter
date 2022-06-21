@@ -12,3 +12,6 @@ const String ALLUPAZILAURI = "$ROOT/upazilaanddistrict/upazila";
 const String PATIENTURI = "$ROOT/patient";
 const String USERS = "$ROOT/userManagement/doctorlist";
 const String TELEMEDICINEURI = "$ROOT/telemedicine";
+const String MEDICINEURI = "$ROOT/medicine/medicinesync";
+const String DISEASECATEGORYURI = "$ROOT/diagnoses/diseasescategory";
+const String DISEASEURI = "$ROOT/diagnoses/diseases";
