@@ -49,7 +49,7 @@ class _UserListState extends State<UserList> {
       appBar: AppBar(
         title: const Text("Telemedicine"),
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: SingleChildScrollView(
           child: DataTable(
               columns: const <DataColumn>[

@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
-import 'package:hospital_app/Models/patient.dart';
 import 'package:http/http.dart' as http;
 
+import '../../Models/prescription_model/prescription.dart';
 import '../../Models/response.dart';
 import '../../utils/app_drawer.dart';
+import 'add_prescription.dart';
 
-class PatientList extends StatefulWidget {
-  const PatientList({Key? key}) : super(key: key);
+class PrescriptionOnline extends StatefulWidget {
+  const PrescriptionOnline({Key? key}) : super(key: key);
 
   @override
-  State<PatientList> createState() => _PatientListState();
+  State<PrescriptionOnline> createState() => _PrescriptionOnlineState();
 }
 
-class _PatientListState extends State<PatientList> {
-  Paginations? paginations;
+class _PrescriptionOnlineState extends State<PrescriptionOnline> {
+  PrescriptionForList? paginations;
   List<String> str = [];
   HasNetWork hasNetWork = HasNetWork();
   bool isOnline = false;
@@ -31,7 +32,7 @@ class _PatientListState extends State<PatientList> {
     var _isOnline = await hasNetWork.hasNetwork();
     isOnline = _isOnline;
     if (isOnline) {
-      loadPatient();
+      loadPrescription();
     }
   }
 
@@ -47,11 +48,14 @@ class _PatientListState extends State<PatientList> {
         backgroundColor: Colors.blue,
         splashColor: Colors.red,
         onPressed: () {
-          Navigator.pushReplacementNamed(context, "/patientadd");
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: ((context) => const AddPrescription())));
         },
       ),
       appBar: AppBar(
-        title: const Text("Patient List"),
+        title: const Text("Prescription List"),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: AppDrawer(),
@@ -83,10 +87,10 @@ class _PatientListState extends State<PatientList> {
                         (e) => DataRow(
                           cells: <DataCell>[
                             DataCell(Text(e.id.toString())),
-                            DataCell(Text(e.firstName.toString() +
+                            DataCell(Text(e.patientFirstName.toString() +
                                 " " +
-                                e.lastName.toString())),
-                            DataCell(Text(e.mobileNumber.toString())),
+                                e.patientLastName.toString())),
+                            DataCell(Text(e.patientMobile.toString())),
                           ],
                         ),
                       )
@@ -103,15 +107,15 @@ class _PatientListState extends State<PatientList> {
     );
   }
 
-  loadPatient() async {
-    Paginations? pagination;
-    final response = await http.get(Uri.parse(PATIENTURI));
+  loadPrescription() async {
+    PrescriptionForList? pagination;
+    final response = await http.get(Uri.parse(PRESCRIPTIONURI));
 
     if (response.statusCode == 200) {
       var jsonresponse = jsonDecode(response.body);
       // print(jsonresponse);
       if (jsonresponse != null) {
-        pagination = Paginations.fromJson(jsonresponse);
+        pagination = PrescriptionForList.fromJson(jsonresponse);
         paginations = pagination;
         setState(() {});
       }

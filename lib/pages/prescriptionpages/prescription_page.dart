@@ -1,34 +1,135 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/diagnosis.dart';
 import 'package:hospital_app/Models/diseaseAndMedicine/medicine.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/medicine_for_prescription.dart';
+import 'package:hospital_app/Models/prescription_model/prescription_dto.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../API/api.dart';
+import '../../Models/diseaseAndMedicine/disease.dart';
+import '../../Models/diseaseAndMedicine/diseaseCategory.dart';
 import '../../providers/db_provider.dart';
+import '../../widgets/RoundedButton.dart';
 import '../../widgets/multiline_text_field.dart';
 
+import 'package:http/http.dart' as http;
+
 class PrescriptionPage extends StatefulWidget {
-  const PrescriptionPage({Key? key}) : super(key: key);
+  final int patientId;
+  final int hospitalId;
+  final int branchId;
+  const PrescriptionPage(
+      {Key? key,
+      required this.patientId,
+      required this.hospitalId,
+      required this.branchId})
+      : super(key: key);
 
   @override
   State<PrescriptionPage> createState() => _PrescriptionPageState();
 }
 
 class _PrescriptionPageState extends State<PrescriptionPage> {
+  //TextEditingController
+  //* CC */
+  final TextEditingController _cc =
+      TextEditingController(); // doctors observation
+  final TextEditingController _systemicExamination = TextEditingController();
+  final TextEditingController _obgynHistory = TextEditingController(); //oh
+  final TextEditingController _historyofPastIllness = TextEditingController();
+  final TextEditingController _familyHistory = TextEditingController();
+  final TextEditingController _allergicHistory = TextEditingController();
+  final TextEditingController _investigation = TextEditingController();
+
+  //* Rx */
+  final TextEditingController _medicineName = TextEditingController();
+  final TextEditingController _comment = TextEditingController();
+  final TextEditingController _advice = TextEditingController(); //note
+
+  //DropDown
+  DiseaseCategory? diseaseCategory;
+  Disease? disease;
   String? medicineDose;
   String? medicinetakingtime;
-  DateTime? dateOfBirth;
-  bool primaryMember = false;
+  Medicine? medicine;
 
+  //DateTime
+  DateTime? nextVisit;
+
+  //checkbox
+  bool isTelemedicine = false;
+  bool isAfternoon = false;
+
+  //Pre inputed data
+  int? patientId;
+  int? hospitalId;
+  int? branchId;
   late String? doctorfirstName = ' ';
   late String? doctorLastName = '';
-  String sometext = '';
 
+  //List of *
+  List<Diagnosis> diagnosis = [];
+  List<Disease> diseases = [];
+  List<DiseaseCategory> diseaseCategories = [];
+  List<MedicineForPrescription> medicineForPrescription = [];
+
+  // formkey
+  final _formKey = GlobalKey<FormState>();
+
+  //* Database Provider */
   DBProvider? dbProvider;
+  late ScaffoldMessengerState scaffoldMessenger;
+  bool isLoading = false;
   @override
   initState() {
     super.initState();
+    patientId = widget.patientId;
+    hospitalId = widget.hospitalId;
+    branchId = widget.branchId;
     dbProvider = DBProvider.db;
     getdata();
+    _getDisease();
+  }
+
+  @override
+  void dispose() {
+    _cc.dispose();
+    _systemicExamination.dispose();
+    _obgynHistory.dispose();
+    _historyofPastIllness.dispose();
+    _familyHistory.dispose();
+    _allergicHistory.dispose();
+    _investigation.dispose();
+    _medicineName.dispose();
+    _comment.dispose();
+    _advice.dispose();
+    super.dispose();
+  }
+
+  _getDiseaseCategoryAndDisease() async {
+    // var dis = await dbProvider!.getAllDisease();
+    var diseasecat = await dbProvider!.getAllDiseaseCategory();
+    setState(() {
+      // diseases = dis;
+      diseaseCategories = diseasecat;
+    });
+  }
+
+  _getDiseaseByCategoryId(int id) async {
+    var dis = await dbProvider!.getDiseasesAccordinToDiseaseCategory(id);
+    setState(() {
+      diseases = dis;
+    });
+  }
+
+  _getDisease() {
+    Future.delayed(Duration.zero, () {
+      _getDiseaseCategoryAndDisease();
+    });
   }
 
   getdata() async {
@@ -43,62 +144,239 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
     final DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime.now());
-    if (pickedDate != null && pickedDate != dateOfBirth) {
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(const Duration(days: 365)));
+
+    if (pickedDate != null && pickedDate != nextVisit) {
       setState(() {
-        dateOfBirth = pickedDate;
+        nextVisit = pickedDate;
       });
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
+  // Preacription Add To Local Db
+
+  _addPrescriptionToLocalDb() async {
+    setState(() {
+      isLoading = true;
+    });
+    PrescriptionDto prescription = PrescriptionDto(
+        patientId: widget.patientId,
+        hospitalId: widget.hospitalId,
+        branchId: widget.branchId,
+        adviceTest: _advice.text,
+        allergicHistory: _allergicHistory.text,
+        doctorsObservation: _cc.text,
+        familyHistory: _familyHistory.text,
+        historyOfPastIllness: _historyofPastIllness.text,
+        isTelimedicine: (isTelemedicine = true) ? 1 : 0,
+        isAfternoon: (isAfternoon = true) ? 1 : 0,
+        nextVisit: nextVisit == null ? null : nextVisit!.toIso8601String(),
+        note: _advice.text,
+        oh: _obgynHistory.text,
+        systemicExamination: _systemicExamination.text);
+
+    int prescriptionId = await dbProvider?.createPrescription(prescription);
+    print(prescriptionId);
+    if (prescriptionId > 0) {
+      for (var item in diagnosis) {
+        Map<String, dynamic> data = {
+          'diseasesName': item.diseasesName,
+          'diseasesId': item.diseasesId,
+          'diseasesCategoryId': item.diseasesCategoryId,
+          'prescriptionId': prescriptionId
+        };
+
+        int did = await dbProvider!.createDiagnosis(data);
+        print(did);
+      }
+
+      for (var item in medicineForPrescription) {
+        Map<String, dynamic> medicinedata = {
+          'brandName': item.brandName,
+          'comment': item.comment,
+          'dose': item.dose,
+          'medicineId': item.medicineId,
+          'medicineType': item.medicineType,
+          'time': item.time,
+          'prescriptionId': prescriptionId
+        };
+
+        int mfid =
+            await dbProvider!.createMedicineForPrescription(medicinedata);
+        print(mfid);
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.pushReplacementNamed(context, "/prescription");
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      scaffoldMessenger
+          .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    scaffoldMessenger = ScaffoldMessenger.of(context);
     var leftsideScrollView = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
         children: <Widget>[
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _cc,
             hintText: 'Cc',
             minLines: 6,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _systemicExamination,
             hintText: 'Systemic Examination',
             minLines: 5,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _obgynHistory,
             hintText: 'OB-gyn/H',
             minLines: 4,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _historyofPastIllness,
             hintText: 'History of Past Illness',
             minLines: 3,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _familyHistory,
             hintText: 'Family History',
             minLines: 3,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _allergicHistory,
             hintText: 'Allergic History',
             minLines: 2,
           ),
-          const MultilineTextField(
-            controller: null,
+          MultilineTextField(
+            controller: _investigation,
             hintText: 'Investigation',
             minLines: 5,
           ),
-          // dropdown(),
-          // dropdown()
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text('Disease Category'),
+              SizedBox(
+                height: 50,
+                width: 190,
+                child: DropdownButton<DiseaseCategory>(
+                  isExpanded: true,
+                  value: diseaseCategory,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (DiseaseCategory? newValue) {
+                    diseaseCategory = newValue!;
+                    setState(() {
+                      disease = null;
+                      diseases = [];
+                      _getDiseaseByCategoryId(newValue.id);
+                    });
+                  },
+                  items: <DiseaseCategory>[...diseaseCategories]
+                      .map<DropdownMenuItem<DiseaseCategory>>(
+                          (DiseaseCategory value) {
+                    return DropdownMenuItem<DiseaseCategory>(
+                      value: value,
+                      child: Text(
+                        value.name,
+                        overflow: TextOverflow.visible,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              const Text('Disease'),
+              SizedBox(
+                // height: 50,
+                width: 190,
+                child: DropdownButton<Disease>(
+                  isExpanded: true,
+                  value: disease,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(
+                      color: Colors.deepPurple,
+                      overflow: TextOverflow.ellipsis),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (Disease? newValue) {
+                    setState(() {
+                      disease = newValue;
+                      diagnosis.add(Diagnosis(
+                          diseasesName: newValue!.name,
+                          diseasesId: newValue.id,
+                          diseasesCategoryId: newValue.diseasesCategoryId));
+                    });
+                  },
+                  items: <Disease>[...diseases]
+                      .map<DropdownMenuItem<Disease>>((Disease value) {
+                    return DropdownMenuItem<Disease>(
+                      value: value,
+                      child: Text(
+                        value.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            width: 200,
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
+            height: diagnosis.length * 40 + 50,
+            child: ListView.builder(
+                itemCount: diagnosis.length,
+                itemBuilder: (contex, item) {
+                  return ListTile(
+                      title: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: (() {
+                          setState(() {
+                            diagnosis.removeAt(item);
+                          });
+                        }),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.black45,
+                        ),
+                      ),
+                      Text(
+                        diagnosis[item].diseasesName,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ));
+                }),
+          ),
         ],
       ),
     );
+
     var rightsideScrollView = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Column(
@@ -116,13 +394,14 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                     width: 200,
                     child: TypeAheadField<Medicine>(
                       textFieldConfiguration: TextFieldConfiguration(
+                          controller: _medicineName,
                           autofocus: true,
                           style: DefaultTextStyle.of(context).style.copyWith(
                               fontStyle: FontStyle.italic,
                               color: Colors.black,
                               fontSize: 16),
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder())),
+                          decoration: const InputDecoration(
+                              border: OutlineInputBorder())),
                       suggestionsCallback: (pattern) async {
                         if (pattern.isEmpty) {
                           return [];
@@ -132,12 +411,13 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                       },
                       itemBuilder: (context, suggestion) {
                         return ListTile(
-                          title: Text(suggestion.brandName),
+                          title: Text(suggestion.brandName!),
                         );
                       },
                       onSuggestionSelected: (suggestion) {
                         setState(() {
-                          sometext = suggestion.brandName;
+                          medicine = suggestion;
+                          _medicineName.text = suggestion.brandName!;
                         });
                       },
                     ),
@@ -166,6 +446,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                         });
                       },
                       items: <String>[
+                        '_',
                         '1+1+1',
                         '1+0+1',
                         '0+0+1',
@@ -209,7 +490,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                           medicinetakingtime = newValue!;
                         });
                       },
-                      items: <String>['Before Meal', 'After Meal']
+                      items: <String>['_', 'Before Meal', 'After Meal']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -226,20 +507,67 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                height: 50,
                 width: 300,
-                child: const MultilineTextField(
-                  controller: null,
+                child: MultilineTextField(
+                  controller: _comment,
                   hintText: 'Comment',
-                  minLines: 1,
+                  minLines: 2,
                 ),
               ),
-              AddButton(),
+              Button(
+                icon: Icons.add,
+                text: 'add',
+                addData: () {
+                  setState(() {
+                    medicineForPrescription.add(MedicineForPrescription(
+                        medicineId: medicine!.id,
+                        medicineType: medicine!.medicineType,
+                        brandName: medicine!.brandName,
+                        comment: _comment.text,
+                        dose: medicineDose,
+                        time: medicinetakingtime));
+
+                    _comment.text = '';
+                    _medicineName.text = '';
+                  });
+                },
+              ),
             ],
           ),
-          const MultilineTextField(
-            controller: null,
-            hintText: 'Comment',
+          Container(
+            width: 500,
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
+            height: medicineForPrescription.length * 40 + 200,
+            child: ListView.builder(
+                itemCount: medicineForPrescription.length,
+                itemBuilder: (contex, item) {
+                  return ListTile(
+                      title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(medicineForPrescription[item]
+                              .medicineType
+                              .toString() +
+                          '.'),
+                      Text(medicineForPrescription[item].brandName.toString()),
+                      Text(medicineForPrescription[item].dose.toString()),
+                      Text(medicineForPrescription[item].time.toString()),
+                      Text(medicineForPrescription[item].comment.toString()),
+                      InkWell(
+                        onTap: (() {
+                          setState(() {
+                            medicineForPrescription.removeAt(item);
+                          });
+                        }),
+                        child: const Icon(Icons.delete),
+                      )
+                    ],
+                  ));
+                }),
+          ),
+          MultilineTextField(
+            controller: _advice,
+            hintText: 'Advice',
             minLines: 5,
           ),
           Column(
@@ -247,35 +575,59 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
             children: <Widget>[
               Row(
                 children: [
-                  Text(dateOfBirth != null
-                      ? dateOfBirth.toString()
+                  Text(nextVisit != null
+                      ? DateFormat('dd-MM-yyyy').format(nextVisit!)
                       : 'Pick a Date'),
                   TextButton(
                     onPressed: () => _selectDate(context),
                     child: const Text('Next Visit'),
-                  )
+                  ),
+                  InkWell(
+                    onTap: () => _selectDate(context),
+                    child: const Icon(
+                      Icons.calendar_today,
+                      color: Colors.blue,
+                      size: 36.0,
+                    ),
+                  ),
                 ],
               ),
               Row(
                 children: [
-                  Text('Telemedicine'),
+                  const Text('Telemedicine'),
                   Checkbox(
-                    checkColor: Color.fromARGB(255, 36, 71, 226),
-                    activeColor: Colors.red,
-                    value: primaryMember,
+                    checkColor: const Color.fromARGB(255, 36, 71, 226),
+                    activeColor: Colors.blue,
+                    value: isTelemedicine,
                     onChanged: (bool? value) {
                       setState(() {
-                        primaryMember = value!;
+                        isTelemedicine = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('Afternoon'),
+                  Checkbox(
+                    checkColor: const Color.fromARGB(255, 36, 71, 226),
+                    activeColor: Colors.blue,
+                    value: isAfternoon,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isAfternoon = value!;
                       });
                     },
                   )
                 ],
-              ),
+              )
             ],
           )
         ],
       ),
     );
+
     var _header = SizedBox(
       width: 700,
       child: Row(
@@ -302,6 +654,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
         ],
       ),
     );
+
     var virticalScroolView = SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
@@ -319,7 +672,18 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                 width: 700,
                 color: Colors.grey,
               ),
-              Text('Patient ID: '),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text('Patient ID: '),
+                  Text(patientId.toString()),
+                  const SizedBox(
+                    width: 25,
+                  ),
+                  const Text('Hospital ID: '),
+                  Text(hospitalId.toString()),
+                ],
+              ),
               Container(
                 height: 1,
                 width: 700,
@@ -345,6 +709,33 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
                   ),
                 ],
               ),
+              Container(
+                height: 1,
+                width: 700,
+                margin: const EdgeInsets.only(bottom: 10),
+                color: Colors.grey,
+              ),
+              SizedBox(
+                width: 700,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Button(
+                        addData: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icons.arrow_back,
+                        text: "Back"),
+                    Button(
+                        addData: () async {
+                          await _addPrescriptionToLocalDb();
+                        },
+                        icon: Icons.save,
+                        text: "Save"),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -360,42 +751,6 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
               Form(key: _formKey, child: virticalScroolView),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class AddButton extends StatelessWidget {
-  const AddButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => {},
-      child: Container(
-        width: 150,
-        height: 40,
-        // color: Colors.blueAccent,
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Icon(Icons.add, color: Colors.white),
-            Text(
-              "Add",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-              ),
-            )
-          ],
         ),
       ),
     );

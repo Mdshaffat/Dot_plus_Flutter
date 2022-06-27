@@ -7,14 +7,16 @@ class MultilineTextField extends StatelessWidget {
   final int? maxLines;
   final TextEditingController? controller;
   final String hintText;
+  final bool isKeyboardNumber;
 
-  const MultilineTextField({
-    Key? key,
-    required this.minLines,
-    this.maxLines,
-    required this.controller,
-    required this.hintText,
-  }) : super(key: key);
+  const MultilineTextField(
+      {Key? key,
+      required this.minLines,
+      this.maxLines,
+      required this.controller,
+      required this.hintText,
+      this.isKeyboardNumber = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,8 @@ class MultilineTextField extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
         controller: controller,
-        keyboardType: TextInputType.multiline,
+        keyboardType:
+            isKeyboardNumber ? TextInputType.number : TextInputType.multiline,
         minLines: minLines,
         maxLines: maxLines,
         style: const TextStyle(fontSize: 14.0),

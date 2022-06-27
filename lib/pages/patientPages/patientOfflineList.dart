@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Models/patientOfflineModel.dart';
 import '../../Models/response.dart';
 import '../../providers/db_provider.dart';
@@ -28,7 +26,6 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   late ScaffoldMessengerState scaffoldMessenger;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dbProvider = DBProvider.db;
     loadPatient();
@@ -40,7 +37,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
     scaffoldMessenger = ScaffoldMessenger.of(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         backgroundColor: Colors.blue,
         splashColor: Colors.red,
         onPressed: () {
@@ -52,78 +49,74 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: AppDrawer(),
-      body: SingleChildScrollView(
-          child: isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : DataTable(
-                  columns: const <DataColumn>[
-                      DataColumn(
-                        label: Text(
-                          'Name',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Mobile',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                      DataColumn(
-                        label: Text(
-                          'Action',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ],
-                  rows: patients.length > 0
-                      ? patients
-                          .map(
-                            (e) => DataRow(
-                              cells: <DataCell>[
-                                DataCell(Text(e.firstName.toString() +
-                                    " " +
-                                    e.lastName.toString())),
-                                DataCell(Text(e.mobileNumber.toString())),
-                                DataCell(
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.send,
-                                    ),
-                                    iconSize: 25,
-                                    color: Colors.blue,
-                                    splashColor: Colors.purple,
-                                    onPressed: () {
-                                      _showMyDialog(e.id);
-                                    },
-                                  ),
+      body: isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : DataTable(
+              columns: const <DataColumn>[
+                  DataColumn(
+                    label: Text(
+                      'Name',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Mobile',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Action',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ],
+              rows: patients.length > 0
+                  ? patients
+                      .map(
+                        (e) => DataRow(
+                          cells: <DataCell>[
+                            DataCell(Text(e.firstName.toString() +
+                                " " +
+                                e.lastName.toString())),
+                            DataCell(Text(e.mobileNumber.toString())),
+                            DataCell(
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.send,
                                 ),
-                              ],
+                                iconSize: 25,
+                                color: Colors.blue,
+                                splashColor: Colors.purple,
+                                onPressed: () {
+                                  _showMyDialog(e.id);
+                                },
+                              ),
                             ),
-                          )
-                          .toList()
-                      : <DataRow>[
-                          const DataRow(
-                            cells: <DataCell>[
-                              DataCell(Text('0')),
-                              DataCell(Text('No Data')),
-                              DataCell(Text('************')),
-                            ],
-                          ),
-                        ])),
+                          ],
+                        ),
+                      )
+                      .toList()
+                  : <DataRow>[
+                      const DataRow(
+                        cells: <DataCell>[
+                          DataCell(Text('0')),
+                          DataCell(Text('No Data')),
+                          DataCell(Text('************')),
+                        ],
+                      ),
+                    ]),
     );
   }
 
   loadPatient() async {
-    isLoading = true;
-    // Paginations? pagination;
-    // final response = await http.get(Uri.parse(PATIENTURI));
-
-    List<PatientOfflineModel> patientlist = [];
+    setState(() {
+      isLoading = true;
+    });
     patients = [];
-    // final response = await http.get(Uri.parse(DIVISIONURI));
 
     List<PatientOfflineModel> totalPatient = await dbProvider?.getAllPatient();
     if (totalPatient.isNotEmpty) {
@@ -133,7 +126,6 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
       });
     } else {
       setState(() {
-        List<PatientOfflineModel> patientlist = [];
         isLoading = false;
       });
     }
@@ -148,13 +140,10 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   sendPatientToOnline(int id) async {
     bool isOnline = await hasNetWork.hasNetwork();
     if (isOnline) {
-      isLoading = true;
-      List<PatientOfflineModel> patientlist = [];
-      patients = [];
-      // final response = await http.get(Uri.parse(DIVISIONURI));
-
+      setState(() {
+        isLoading = true;
+      });
       List<PatientOfflineModel> totalPatient = await dbProvider?.getPatient(id);
-
       if (totalPatient.isNotEmpty) {
         PatientOfflineModel patient = totalPatient[0];
         var data = jsonEncode(patient);
@@ -165,7 +154,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
           scaffoldMessenger
               .showSnackBar(const SnackBar(content: Text("Please Login")));
         } else {
-          if (token != null) {
+          try {
             final response = await http.post(Uri.parse(PATIENTURI),
                 headers: {
                   "Accept": "application/json",
@@ -179,6 +168,7 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
               var responseData = ResponseData.fromJson(resposne);
               if (responseData.message == "success") {
                 await deletePatient(id);
+                await _showDialogWithPatientId(responseData.data!);
               }
               if (resposne.isNotEmpty) {
                 scaffoldMessenger.showSnackBar(
@@ -187,26 +177,29 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
                 // Navigator.pushReplacementNamed(context, "/patientlist");
                 // setState(() {});
               } else {
-                print(" ${resposne['message']}");
+                scaffoldMessenger.showSnackBar(
+                    SnackBar(content: Text("${resposne['message']}")));
               }
             } else {
               scaffoldMessenger.showSnackBar(
                   SnackBar(content: Text("${response.statusCode}")));
             }
+            setState(() {
+              isLoading = false;
+            });
+          } catch (error) {
+            scaffoldMessenger
+                .showSnackBar(SnackBar(content: Text(error.toString())));
           }
-          setState(() {
-            isLoading = false;
-          });
         }
-      } else {
-        setState(() {
-          isLoading = false;
-        });
       }
     } else {
       scaffoldMessenger.showSnackBar(
           const SnackBar(content: Text(" Please check Your Connection !")));
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _showMyDialog(int id) async {
@@ -235,6 +228,26 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
               child: const Text('Send'),
               onPressed: () {
                 sendPatientToOnline(id);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showDialogWithPatientId(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Patient Id :' + id),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),

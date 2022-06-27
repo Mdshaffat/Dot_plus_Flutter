@@ -1,15 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hospital_app/pages/FAQ/faq.dart';
 import 'package:hospital_app/pages/Users/useList.dart';
 import 'package:hospital_app/pages/dataSyncPage/daraSync.dart';
 import 'package:hospital_app/pages/home.dart';
 import 'package:hospital_app/pages/login.dart';
 import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:hospital_app/pages/patientPages/patientOfflineList.dart';
+import 'package:hospital_app/pages/physicalstatpages/add_physical_stat.dart';
+import 'package:hospital_app/pages/physicalstatpages/physicalstat_list.dart';
+import 'package:hospital_app/pages/prescriptionpages/add_prescription.dart';
+import 'package:hospital_app/pages/prescriptionpages/prescriptionList.dart';
 import 'package:hospital_app/pages/prescriptionpages/prescription_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'pages/CallingInformation/calling_information.dart';
+import 'pages/PatientSearchPages/patient_search.dart';
 import 'pages/patientPages/patientList.dart';
+import 'pages/prescriptionpages/prescription_online_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -58,10 +65,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const PrescriptionPage(),
+      //  home: const PhysicalStatAdd(),
       routes: {
-        // '/': (context) => isLogedIn ? const PatientList() : const Login(),
-        '/home': (context) => Home(),
+        '/': (context) => isLogedIn ? const Home() : const Login(),
+        '/home': (context) => const Home(),
         '/datasync': (context) => const DataSync(),
         '/login': (context) => const Login(),
         '/patientofflinelist': (context) => const PatientOfflineList(),
@@ -69,6 +76,11 @@ class _MyAppState extends State<MyApp> {
         '/patientadd': (context) => const PatientAdd(),
         '/users': (context) => const UserList(),
         '/callinfo': (context) => const CallingInformation(),
+        '/prescription': (context) => const PrescriptionList(),
+        '/physicalstat': (context) => const PhysicalStatOfflineList(),
+        '/prescriptiononline': (context) => const PrescriptionOnline(),
+        '/patientsearch': (context) => const PatientSearch(),
+        '/faq': (context) => const FAQ(),
       },
     );
   }

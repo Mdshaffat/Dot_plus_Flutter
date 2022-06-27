@@ -5,12 +5,15 @@ import '../API/api.dart';
 class ResponseData {
   final String? message;
   final bool? isValid;
-  const ResponseData({this.message, this.isValid});
+  final String? data;
+  const ResponseData({this.message, this.isValid, this.data});
 
   factory ResponseData.fromJson(Map<String, dynamic> json) {
-    return ResponseData(message: json['message'], isValid: json['isValid']);
+    return ResponseData(
+        message: json['message'], isValid: json['isValid'], data: json['data']);
   }
-  Map<String, dynamic> toJson() => {"message": message, "isValid": isValid};
+  Map<String, dynamic> toJson() =>
+      {"message": message, "isValid": isValid, 'data': data};
 }
 
 class HasNetWork {

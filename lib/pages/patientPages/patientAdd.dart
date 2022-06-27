@@ -10,6 +10,7 @@ import 'package:hospital_app/Models/vaccine.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,55 +31,25 @@ class _PatientAddState extends State<PatientAdd> {
   List<District> _districts = [];
   List<Upazila> _upazilas = [];
   DBProvider? dbProvider;
-  @override
-  void initState() {
-    super.initState();
-    dbProvider = DBProvider.db;
-    fetchHospitals();
-    fetchDivision();
-    // fetchAllDistrict();
-    // fetchAllUpazila();
-    setState(() {});
-  }
 
-  final _formKey = GlobalKey<FormState>();
-  // late String email, password;
   NewVaccine vaccine = NewVaccine();
   bool isLoading = false;
+  final _formKey = GlobalKey<FormState>();
+  // late String email, password;
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  Hospital? hospitalValue;
-  int? hospitalDropdownValue;
-  int? branchDropdownValue;
   final TextEditingController _addressController = TextEditingController();
-  int? divisionDropdownValue;
-  int? districtDropdownValue;
-  int? upazilaDropdownValue;
   final TextEditingController _nidController = TextEditingController();
   final TextEditingController _mobilenumberController = TextEditingController();
-  String? genderDropdownValue;
   final TextEditingController _ageDayController = TextEditingController();
   final TextEditingController _ageMonthController = TextEditingController();
   final TextEditingController _ageYearController = TextEditingController();
-  DateTime? dateOfBirth;
-  String? meritalStatusValue;
-  String? bloodGroupValue;
-  int? covidVaccine;
-  int? vaccineBrand;
-  int? vaccineDose;
-  DateTime? firstDoseDate;
-  DateTime? secondDoseDate;
-  DateTime? bosterDoseDate;
   final TextEditingController _noteController = TextEditingController();
-  bool primaryMember = false;
   final TextEditingController _membershipRegistrationNumberController =
       TextEditingController();
-  bool isActive = true;
   final TextEditingController _bodyTemparatureController =
       TextEditingController();
   final TextEditingController _weightController = TextEditingController();
-  int? heightFeetValue;
-  int? heightInchValue;
   final TextEditingController _pulseRateController = TextEditingController();
   final TextEditingController _spo2Controller = TextEditingController();
   final TextEditingController _systolicController = TextEditingController();
@@ -91,8 +62,69 @@ class _PatientAddState extends State<PatientAdd> {
   final TextEditingController _cyanosisController = TextEditingController();
   final TextEditingController _rbsController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-  var myFormat = DateFormat('d-MM-yyyy');
   late ScaffoldMessengerState scaffoldMessenger;
+  Hospital? hospitalValue;
+  int? hospitalDropdownValue;
+  int? branchDropdownValue;
+  int? divisionDropdownValue;
+  int? districtDropdownValue;
+  int? upazilaDropdownValue;
+  String? genderDropdownValue;
+  bool isActive = true;
+  DateTime? dateOfBirth;
+  String? meritalStatusValue;
+  String? bloodGroupValue;
+  int? covidVaccine;
+  int? vaccineBrand;
+  int? vaccineDose;
+  DateTime? firstDoseDate;
+  DateTime? secondDoseDate;
+  DateTime? bosterDoseDate;
+  bool primaryMember = false;
+
+  int? heightFeetValue;
+  int? heightInchValue;
+  var myFormat = DateFormat('d-MM-yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    dbProvider = DBProvider.db;
+    fetchHospitals();
+    fetchDivision();
+    // fetchAllDistrict();
+    // fetchAllUpazila();
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _addressController.dispose();
+    _nidController.dispose();
+    _mobilenumberController.dispose();
+    _ageDayController.dispose();
+    _ageMonthController.dispose();
+    _ageYearController.dispose();
+    _noteController.dispose();
+    _membershipRegistrationNumberController.dispose();
+    _bodyTemparatureController.dispose();
+    _weightController.dispose();
+    _pulseRateController.dispose();
+    _spo2Controller.dispose();
+    _systolicController.dispose();
+    _diastolicController.dispose();
+    _appearanceController.dispose();
+    _anemiaController.dispose();
+    _jaundiceController.dispose();
+    _dehydrationController.dispose();
+    _edemaController.dispose();
+    _cyanosisController.dispose();
+    _rbsController.dispose();
+  }
+
 //
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -1714,21 +1746,24 @@ class _PatientAddState extends State<PatientAdd> {
       pulseRate: pulseRate,
       spO2: spo2,
     );
+    try {
+      var patientadd = await dbProvider?.createPatient(newPatient);
 
-    var patientadd = await dbProvider?.createPatient(newPatient);
-
-    if (patientadd > 0) {
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.pushReplacementNamed(context, "/patientofflinelist");
-    } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (patientadd > 0) {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushReplacementNamed(context, "/patientofflinelist");
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (error) {
       scaffoldMessenger
           .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
     }
+
     // }
     // catch(e)
     // {

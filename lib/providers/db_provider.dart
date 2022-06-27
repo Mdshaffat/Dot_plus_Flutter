@@ -1,11 +1,15 @@
 import 'dart:io';
+import 'package:hospital_app/Models/diseaseAndMedicine/diagnosis.dart';
 import 'package:hospital_app/Models/diseaseAndMedicine/disease.dart';
 import 'package:hospital_app/Models/diseaseAndMedicine/diseaseCategory.dart';
 import 'package:hospital_app/Models/diseaseAndMedicine/medicine.dart';
+import 'package:hospital_app/Models/diseaseAndMedicine/medicine_for_prescription.dart';
 import 'package:hospital_app/Models/district.dart';
 import 'package:hospital_app/Models/division.dart';
 import 'package:hospital_app/Models/hospital.dart';
 import 'package:hospital_app/Models/patientAdd.dart';
+import 'package:hospital_app/Models/physicalStatModel/physical_stat.dart';
+import 'package:hospital_app/Models/prescription_model/prescription_dto.dart';
 import 'package:hospital_app/Models/user.dart';
 import 'package:path/path.dart';
 
@@ -18,7 +22,7 @@ import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'xxtaxtrm.db';
+  static const _databaseName = 'newdatabase6.db';
   static const _databaseVersion = 4;
   static Database? _database;
   static final DBProvider db = DBProvider._();
@@ -137,15 +141,79 @@ class DBProvider {
           ''');
       await db.execute('''
         CREATE TABLE DiseaseCategory(
-                  id TEXT PRIMARY KEY,
+                  id INTEGER PRIMARY KEY,
                   name TEXT
                   )
           ''');
       await db.execute('''
         CREATE TABLE Disease(
-                  id TEXT PRIMARY KEY,
+                  id INTEGER PRIMARY KEY,
                   name TEXT,
                   diseasesCategoryId INTEGER
+                  )
+          ''');
+      // Prescription Table
+      await db.execute('''
+        CREATE TABLE Prescription(
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  patientId INTEGER,
+                  hospitalId INTEGER,
+                  branchId INTEGER,
+                  doctorsObservation TEXT,
+                  adviceTest TEXT,
+                  oh TEXT,
+                  systemicExamination TEXT,
+                  historyOfPastIllness TEXT,
+                  familyHistory TEXT,
+                  allergicHistory TEXT,
+                  nextVisit TEXT,
+                  isTelimedicine BOOLEAN,
+                  isAfternoon BOOLEAN,
+                  note TEXT
+                  )
+          ''');
+      //Diagnosis Table
+      await db.execute('''
+        CREATE TABLE Diagnosis(
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  diseasesName TEXT,
+                  diseasesId INTEGER,
+                  diseasesCategoryId INTEGER,
+                  prescriptionId INTEGER
+                  )
+          ''');
+      // Medicine For Prescription Table
+      await db.execute('''
+        CREATE TABLE MedicineForPrescription(
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  medicineId INTEGER,
+                  medicineType TEXT,
+                  brandName TEXT,
+                  dose TEXT,
+                  time TEXT,
+                  comment TEXT,
+                  prescriptionId INTEGER
+                  )
+          ''');
+      await db.execute('''
+        CREATE TABLE physicalStat(
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
+                  patientId INTEGER,
+                  heightFeet INTEGER,
+                  heightInches INTEGER,
+                  weight INTEGER,
+                  bodyTemparature TEXT,
+                  appearance TEXT,
+                  anemia TEXT,
+                  jaundice TEXT,
+                  dehydration TEXT,
+                  edema TEXT,
+                  cyanosis TEXT,
+                  rbsFbs TEXT,
+                  bloodPressureSystolic TEXT,
+                  bloodPressureDiastolic TEXT,
+                  pulseRate INTEGER,
+                  spO2 INTEGER
                   )
           ''');
     });
@@ -423,6 +491,7 @@ class DBProvider {
   //*************User_SECTION*************//
 
   createUser(User newuser) async {
+    await deleteAllUser();
     final db = await database;
     final res = await db.insert('User', newuser.toJson());
     return res;
@@ -518,8 +587,9 @@ class DBProvider {
     final db = await database;
     final res =
         await db.rawQuery("SELECT * FROM DiseaseCategory ORDER BY id ASC");
-    List<User> list =
-        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
+    List<DiseaseCategory> list = res.isNotEmpty
+        ? res.map((c) => DiseaseCategory.fromJson(c)).toList()
+        : [];
 
     return list;
   }
@@ -554,8 +624,8 @@ class DBProvider {
   Future getAllDisease() async {
     final db = await database;
     final res = await db.rawQuery("SELECT * FROM Disease ORDER BY id ASC");
-    List<User> list =
-        res.isNotEmpty ? res.map((c) => User.fromJson(c)).toList() : [];
+    List<Disease> list =
+        res.isNotEmpty ? res.map((c) => Disease.fromJson(c)).toList() : [];
 
     return list;
   }
@@ -579,4 +649,252 @@ class DBProvider {
   }
 
   //***************End Of User *************//
+
+  // *********************** PRESCRIPTION **********************//
+
+  createPrescription(PrescriptionDto newPrescription) async {
+    final db = await database;
+    final id = await db.insert('Prescription', newPrescription.toJson());
+    return id;
+  }
+
+  Future<int> deleteAllPrescription() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Prescription');
+
+    return res;
+  }
+
+  Future getAllPrescription() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Prescription");
+    List<PrescriptionDto> list = res.isNotEmpty
+        ? res.map((c) => PrescriptionDto.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future<int?> getPrescriptionCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Prescription"));
+    var count = res;
+
+    return count;
+  }
+
+  Future<int> deletePrescription(int id) async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Prescription WHERE id = $id');
+
+    return res;
+  }
+
+  Future getPrescription(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Prescription WHERE id = $id");
+    List<PrescriptionDto> list = res.isNotEmpty
+        ? res.map((c) => PrescriptionDto.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  //***************End Of PRESCRIPTION *************//
+
+  // *********************** Medicine for prescription **********************//
+
+  createMedicineForPrescription(newPrescription) async {
+    final db = await database;
+    final id = await db.insert('MedicineForPrescription', newPrescription);
+    return id;
+  }
+
+  Future getAllMedicineForPrescription() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM MedicineForPrescription");
+    List<MedicineForPrescription> list = res.isNotEmpty
+        ? res.map((c) => MedicineForPrescription.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future getMedicineForPrescription(int id) async {
+    final db = await database;
+    final res = await db
+        .rawQuery("SELECT * FROM MedicineForPrescription WHERE id = $id");
+    List<MedicineForPrescription> list = res.isNotEmpty
+        ? res.map((c) => MedicineForPrescription.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future getMedicineForPrescriptionByPrescriptionId(int prescriptionId) async {
+    final db = await database;
+    final res = await db.rawQuery(
+        "SELECT * FROM MedicineForPrescription WHERE prescriptionId = $prescriptionId");
+    List<MedicineForPrescription> list = res.isNotEmpty
+        ? res.map((c) => MedicineForPrescription.fromJson(c)).toList()
+        : [];
+
+    return list;
+  }
+
+  Future<int?> getMedicineForPrescriptionCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  MedicineForPrescription"));
+    var count = res;
+
+    return count;
+  }
+
+  Future<int> deleteMedicineForPrescription(int id) async {
+    final db = await database;
+    final res = await db
+        .rawDelete('DELETE FROM MedicineForPrescription WHERE id = $id');
+
+    return res;
+  }
+
+  Future<int> deleteAllMedicineForPrescription() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM MedicineForPrescription');
+
+    return res;
+  }
+
+  Future<int> deleteMedicineForPrescriptionByPrescriptionId(
+      int prescriptionId) async {
+    final db = await database;
+    final res = await db.rawDelete(
+        'DELETE FROM MedicineForPrescription WHERE prescriptionId = $prescriptionId');
+
+    return res;
+  }
+
+  //***************End Of MEDICINE FOR PRESCRIPTION *************//
+
+  // *********************** Diagnosis **********************//
+
+  createDiagnosis(newDiagnosis) async {
+    final db = await database;
+    final id = await db.insert('Diagnosis', newDiagnosis);
+    return id;
+  }
+
+  Future<int> deleteAllDiagnosis() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Diagnosis');
+
+    return res;
+  }
+
+  Future<int> deleteDiagnosisByPrescriptionId(int prescriptionId) async {
+    final db = await database;
+    final res = await db.rawDelete(
+        'DELETE FROM Diagnosis WHERE prescriptionId = $prescriptionId');
+
+    return res;
+  }
+
+  Future getAllDiagnosis() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Diagnosis");
+    List<Diagnosis> list =
+        res.isNotEmpty ? res.map((c) => Diagnosis.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future getDiagnosis(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Diagnosis WHERE id = $id");
+    List<Diagnosis> list =
+        res.isNotEmpty ? res.map((c) => Diagnosis.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future getDiagnosisForPrescription(int prescriptionId) async {
+    final db = await database;
+    final res = await db.rawQuery(
+        "SELECT * FROM Diagnosis WHERE prescriptionId = $prescriptionId");
+    List<Diagnosis> list =
+        res.isNotEmpty ? res.map((c) => Diagnosis.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<int?> getDiagnosisCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  Diagnosis"));
+    var count = res;
+
+    return count;
+  }
+
+  Future<int> deleteDiagnosis(int id) async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM Diagnosis WHERE id = $id');
+
+    return res;
+  }
+
+  //***************End Of Diagnosis *************//
+
+  // *********************** Diagnosis **********************//
+
+  createPhysicalStat(PhysicalStat newPhysicalStats) async {
+    final db = await database;
+    final id = await db.insert('physicalStat', newPhysicalStats.toJson());
+    return id;
+  }
+
+  Future<int> deleteAllPhysicalStat() async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM physicalStat');
+
+    return res;
+  }
+
+  Future<int> deletePhysicalStatById(int id) async {
+    final db = await database;
+    final res = await db.rawDelete('DELETE FROM physicalStat WHERE id = $id');
+
+    return res;
+  }
+
+  Future getAllPhysicalStat() async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM physicalStat");
+    List<PhysicalStat> list =
+        res.isNotEmpty ? res.map((c) => PhysicalStat.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  Future<int?> getPhysicalStatCount() async {
+    final db = await database;
+    final res = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM  PhysicalStat"));
+    var count = res;
+
+    return count;
+  }
+
+  Future getPhysicalStatById(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM PhysicalStat WHERE id = $id");
+    List<PhysicalStat> list =
+        res.isNotEmpty ? res.map((c) => PhysicalStat.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  //***************End Of Diagnosis *************//
 }

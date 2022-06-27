@@ -1,7 +1,7 @@
 const String ROOTURI = 'outreachhospitaltest.azurewebsites.net';
-// const String ROOT = "https://192.168.0.103:5001/api";
-const String ROOT = "https://dotplusapi.azurewebsites.net/api";
-//const String ROOT = "https://hospitalapitest.azurewebsites.net/api";
+const String ROOT = "https://192.168.0.106:5001/api";
+// const String ROOT = "https://dotplusapi.azurewebsites.net/api";
+// const String ROOT = "https://hospitalapitest.azurewebsites.net/api";
 const String LOGIN = "$ROOT/account/login";
 const String HOSPITALURI = "$ROOT/hospital/hospitallistsortbyname";
 const String DIVISIONURI = "$ROOT/upazilaanddistrict/division";
@@ -10,8 +10,20 @@ const String UPAZILAURI = "$ROOT/upazilaanddistrict/districtwiseupazila/";
 const String ALLDISTRICTURI = "$ROOT/upazilaanddistrict/district";
 const String ALLUPAZILAURI = "$ROOT/upazilaanddistrict/upazila";
 const String PATIENTURI = "$ROOT/patient";
+const String PATIENTSEARCHURI = "$ROOT/patient/patientSearch";
+
+const String PRESCRIPTIONURI = "$ROOT/prescription";
+const String PHYSICALSTATURI = "$ROOT/physicalState";
+const String PRESCRIPTIONADD = "$ROOT/prescription/postprescriptionapp";
+
 const String USERS = "$ROOT/userManagement/doctorlist";
 const String TELEMEDICINEURI = "$ROOT/telemedicine";
 const String MEDICINEURI = "$ROOT/medicine/medicinesync";
 const String DISEASECATEGORYURI = "$ROOT/diagnoses/diseasescategory";
 const String DISEASEURI = "$ROOT/diagnoses/diseases";
+
+//report
+
+const String PATIENTCOUNT = "$ROOT/homepagereport/usernameandtotalpatient";
+const String PRESCRIPTIONCOUNT =
+    "$ROOT/homepagereport/usernameandtotalprescription";

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hospital_app/pages/home.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -211,7 +212,8 @@ class _LoginState extends State<Login> {
             resposne['firstName'], resposne['lastName']);
 
         getdata();
-        Navigator.pushReplacementNamed(context, "/patientlist");
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: ((context) => const Home())));
       } else {
         print(" ${resposne['message']}");
       }
@@ -237,6 +239,7 @@ class _LoginState extends State<Login> {
     preferences.setString("token", token);
     preferences.setString("firstName", firstName);
     preferences.setString("lastName", lastName);
+    preferences.setString("lastLoginDate", DateTime.now().toIso8601String());
   }
 
   getdata() async {

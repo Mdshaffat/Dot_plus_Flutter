@@ -64,7 +64,7 @@ class _DataSyncState extends State<DataSync> {
             onPressed: () =>
                 Navigator.pushReplacementNamed(context, "/patientlist"),
           )),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -128,127 +128,189 @@ class _DataSyncState extends State<DataSync> {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllHospitals();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllHospitals();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      ErrorAlert(context: context);
+      //error method here
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadDivision() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllDivision();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllDivision();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method here
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadDistrict() async {
     setState(() {
       isLoading = true;
     });
-
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllDistrict();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllDistrict();
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      // error method here
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadUpazila() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllUpazila();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllUpazila();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method here
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadUser() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllUser();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllUser();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method here
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadDiseaseCategory() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllDiseaseCategory();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllDiseaseCategory();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method here
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadDisease() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllDisease();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllDisease();
-
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   _loadMedicine() async {
     setState(() {
       isLoading = true;
     });
+    try {
+      var apiProvider = ApiProvider();
+      await apiProvider.getAllMedicine();
 
-    var apiProvider = ApiProvider();
-    await apiProvider.getAllMedicine();
+      // wait for 2 seconds to simulate loading of data
+      await Future.delayed(const Duration(seconds: 2));
+      await _refreshCount();
+    } catch (error) {
+      //error method
+      ErrorAlert(context: context);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+}
 
-    // wait for 2 seconds to simulate loading of data
-    await Future.delayed(const Duration(seconds: 2));
-    await _refreshCount();
-    setState(() {
-      isLoading = false;
-    });
+class ErrorAlert extends StatelessWidget {
+  const ErrorAlert({
+    Key? key,
+    required this.context,
+  }) : super(key: key);
+
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Error to Download'),
+      actions: <Widget>[
+        TextButton(
+          child: const Text('Cancel'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
   }
 }
