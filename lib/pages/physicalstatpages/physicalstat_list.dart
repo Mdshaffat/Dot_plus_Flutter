@@ -5,6 +5,7 @@ import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
 import 'package:hospital_app/Models/physicalStatModel/physical_stat.dart';
 import 'package:hospital_app/pages/physicalstatpages/add_physical_stat.dart';
+import 'package:hospital_app/pages/physicalstatpages/physical_stat_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -83,16 +84,37 @@ class _PhysicalStatOfflineListState extends State<PhysicalStatOfflineList> {
                               cells: <DataCell>[
                                 DataCell(Text(e.patientId.toString())),
                                 DataCell(
-                                  IconButton(
-                                    icon: const Icon(
-                                      Icons.send,
-                                    ),
-                                    iconSize: 25,
-                                    color: Colors.blue,
-                                    splashColor: Colors.purple,
-                                    onPressed: () {
-                                      _showMyDialog(e.id!);
-                                    },
+                                  Row(
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.info,
+                                        ),
+                                        iconSize: 25,
+                                        color: Colors.blue,
+                                        splashColor: Colors.purple,
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PhysicalSatDetails(
+                                                        physicalStat: e,
+                                                      )));
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.send,
+                                        ),
+                                        iconSize: 25,
+                                        color: Colors.blue,
+                                        splashColor: Colors.purple,
+                                        onPressed: () {
+                                          _showMyDialog(e.id!);
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

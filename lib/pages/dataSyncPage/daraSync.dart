@@ -61,8 +61,7 @@ class _DataSyncState extends State<DataSync> {
           automaticallyImplyLeading: true,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, "/patientlist"),
+            onPressed: () => Navigator.pushReplacementNamed(context, "/home"),
           )),
       drawer: AppDrawer(),
       body: isLoading

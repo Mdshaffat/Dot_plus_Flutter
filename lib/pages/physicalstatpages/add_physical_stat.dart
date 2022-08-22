@@ -36,26 +36,8 @@ class _PhysicalStatAddState extends State<PhysicalStatAdd> {
   String? edema;
   String? cyanosis;
 
-  List<int> heightf = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-  ];
-  List<int> heightin = [
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    7,
-    8,
-  ];
+  List<int> heightf = [1, 2, 3, 4, 5, 6, 7, 8];
+  List<int> heightin = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   List<String> isPositive = ['+', '-'];
   bool isLoading = false;
@@ -116,6 +98,8 @@ class _PhysicalStatAddState extends State<PhysicalStatAdd> {
       });
       Navigator.pushReplacementNamed(context, "/physicalstat");
     } else {
+      scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text("Please Input Patient Id")));
       setState(() {
         isLoading = false;
       });

@@ -122,9 +122,6 @@ class _LoginState extends State<Login> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    if (isLoading) {
-                                      return;
-                                    }
                                     if (_emailController.text.isEmpty ||
                                         _passwordController.text.isEmpty) {
                                       scaffoldMessenger.showSnackBar(
@@ -135,9 +132,6 @@ class _LoginState extends State<Login> {
                                     }
                                     login(_emailController.text,
                                         _passwordController.text);
-                                    setState(() {
-                                      isLoading = true;
-                                    });
                                     //Navigator.pushReplacementNamed(context, "/home");
                                   },
                                   child: Container(
@@ -193,36 +187,45 @@ class _LoginState extends State<Login> {
   }
 
   login(email, password) async {
-    var data = jsonEncode({'email': email, 'password': password});
-    print(data.toString());
-    final response = await http.post(Uri.parse(LOGIN),
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json"
-        },
-        body: data,
-        encoding: Encoding.getByName("utf-8"));
     setState(() {
-      isLoading = false;
+      isLoading = true;
     });
-    if (response.statusCode == 200) {
-      Map<String, dynamic> resposne = jsonDecode(response.body);
-      if (resposne.isNotEmpty) {
-        savePref(resposne['userId'], resposne['email'], resposne['token'],
-            resposne['firstName'], resposne['lastName']);
-
-        getdata();
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: ((context) => const Home())));
-      } else {
-        print(" ${resposne['message']}");
+    try {
+      var data = jsonEncode({'email': email, 'password': password});
+      final response = await http.post(Uri.parse(LOGIN),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json"
+          },
+          body: data,
+          encoding: Encoding.getByName("utf-8"));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map<String, dynamic> resposne = jsonDecode(response.body);
+        if (resposne.isNotEmpty) {
+          savePref(resposne['userId'], resposne['email'], resposne['token'],
+              resposne['firstName'], resposne['lastName']);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: ((context) => const Home())));
+        } else {
+          scaffoldMessenger.showSnackBar(const SnackBar(
+              content: Text(
+                  "Something wrong!! please contact with responsible person.")));
+        }
       }
+      if (response.statusCode > 400) {
+        Map<String, dynamic> resposne = jsonDecode(response.body);
+        if (resposne['title'] == 'Unauthorized') {
+          scaffoldMessenger.showSnackBar(
+              const SnackBar(content: Text("Email or Password is incorrect!")));
+        }
+      }
+    } catch (value) {
       scaffoldMessenger
-          .showSnackBar(SnackBar(content: Text("${resposne['message']}")));
-    } else {
-      scaffoldMessenger
-          .showSnackBar(const SnackBar(content: Text("{response.statusCode}")));
-      print(response.statusCode);
+          .showSnackBar(const SnackBar(content: Text("Error to login!")));
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -240,11 +243,5 @@ class _LoginState extends State<Login> {
     preferences.setString("firstName", firstName);
     preferences.setString("lastName", lastName);
     preferences.setString("lastLoginDate", DateTime.now().toIso8601String());
-  }
-
-  getdata() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String? firstname = preferences.getString("firstName");
-    final String? lastname = preferences.getString("lastName");
   }
 }

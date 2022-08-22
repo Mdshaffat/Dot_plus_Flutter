@@ -240,7 +240,17 @@ class DBProvider {
   //Get All Hospital
   Future getAllHospital() async {
     final db = await database;
-    final res = await db.rawQuery("SELECT * FROM Hospital");
+    final res = await db.rawQuery("SELECT * FROM Hospital ORDER BY name ASC");
+    List<Hospital> list =
+        res.isNotEmpty ? res.map((c) => Hospital.fromJson(c)).toList() : [];
+
+    return list;
+  }
+
+  //Get All Hospital
+  Future getHospitalById(int id) async {
+    final db = await database;
+    final res = await db.rawQuery("SELECT * FROM Hospital WHERE id = $id");
     List<Hospital> list =
         res.isNotEmpty ? res.map((c) => Hospital.fromJson(c)).toList() : [];
 
@@ -379,6 +389,13 @@ class DBProvider {
   createPatient(PatientAddModel newPatiet) async {
     final db = await database;
     final res = await db.insert('Patient', newPatiet.toJson());
+    return res;
+  }
+
+  updatePatient(PatientOfflineModel patietUpdate) async {
+    final db = await database;
+    final res = await db.update('Patient', patietUpdate.toJson(),
+        where: 'id = ?', whereArgs: [patietUpdate.id]);
     return res;
   }
 
@@ -656,6 +673,13 @@ class DBProvider {
     final db = await database;
     final id = await db.insert('Prescription', newPrescription.toJson());
     return id;
+  }
+
+  updatePrescription(PrescriptionDto prescription) async {
+    final db = await database;
+    final res = await db.update('Prescription', prescription.toJson(),
+        where: 'id = ?', whereArgs: [prescription.id]);
+    return res;
   }
 
   Future<int> deleteAllPrescription() async {

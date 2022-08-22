@@ -188,8 +188,8 @@ class _PatientAddState extends State<PatientAdd> {
             automaticallyImplyLeading: true,
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, "/patientlist"),
+              onPressed: () => Navigator.pushReplacementNamed(
+                  context, "/patientofflinelist"),
             )),
         key: _scaffoldKey,
         body: SingleChildScrollView(
@@ -874,7 +874,6 @@ class _PatientAddState extends State<PatientAdd> {
                                         left: 0, right: 0),
                                     child: TextFormField(
                                       controller: _bodyTemparatureController,
-                                      keyboardType: TextInputType.number,
                                       maxLength: 3,
                                       decoration: const InputDecoration(
                                         enabledBorder: UnderlineInputBorder(
@@ -1444,47 +1443,6 @@ class _PatientAddState extends State<PatientAdd> {
     }
   }
 
-//all district
-  fetchAllDistrict() async {
-    List<District> district = [];
-    final response = await http.get(Uri.parse(ALLDISTRICTURI));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        district.add(District.fromJson(item));
-      }
-      _districts = district;
-      setState(() {});
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
-
-  // All Upazila
-  fetchAllUpazila() async {
-    List<Upazila> upazila = [];
-    final response = await http.get(Uri.parse(ALLUPAZILAURI));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      var jsonresponse = jsonDecode(response.body);
-      for (var item in jsonresponse) {
-        upazila.add(Upazila.fromJson(item));
-      }
-      _upazilas = upazila;
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-  }
-
   fetchDistrict(id) async {
     districtDropdownValue = null;
     upazilaDropdownValue = null;
@@ -1517,139 +1475,6 @@ class _PatientAddState extends State<PatientAdd> {
     } else {
       _upazilas = [];
       // throw Exception('Failed to load Upazila');
-    }
-  }
-
-  addPatient(
-    firstName,
-    lastName,
-    hospitalId,
-    branchId,
-    address,
-    divisionId,
-    districtId,
-    upazilaId,
-    nid,
-    mobileNumber,
-    gender,
-    day,
-    month,
-    year,
-    dob,
-    maritalStatus,
-    bloodGroup,
-    covidVaccine,
-    vaccineBrand,
-    vaccineDose,
-    firstDoseDate,
-    secondDoseDate,
-    bosterDoseDate,
-    note,
-    primaryMember,
-    membershipRegistrationNumber,
-    isActive,
-    bodyTemparature,
-    weight,
-    heightFeet,
-    heightInch,
-    pulseRate,
-    spo2,
-    systolic,
-    diastolic,
-    appearance,
-    anemia,
-    jaundice,
-    dehydration,
-    edema,
-    cyanosis,
-    rbsfbs,
-  ) async {
-    var data = jsonEncode({
-      'hospitalId': hospitalId,
-      'branchId': branchId,
-      'firstName': firstName,
-      'lastName': lastName,
-      'day': day,
-      'month': month,
-      'year': year,
-      'mobileNumber': mobileNumber,
-      'doB': dob,
-      'gender': gender,
-      'maritalStatus': maritalStatus,
-      'primaryMember': primaryMember,
-      'membershipRegistrationNumber': membershipRegistrationNumber,
-      'address': address,
-      'divisionId': divisionId,
-      'upazilaId': upazilaId,
-      'districtId': districtId,
-      'nid': nid,
-      'bloodGroup': bloodGroup,
-      'isActive': isActive,
-      'note': note,
-      'covidvaccine': covidVaccine,
-      'vaccineBrand': vaccineBrand,
-      'vaccineDose': vaccineDose,
-      'firstDoseDate': firstDoseDate,
-      'secondDoseDate': secondDoseDate,
-      'bosterDoseDate': bosterDoseDate,
-      'heightFeet': heightFeet,
-      'heightInches': heightInch,
-      'weight': weight,
-      'bodyTemparature': bodyTemparature,
-      'appearance': appearance,
-      'anemia': anemia,
-      'jaundice': jaundice,
-      'dehydration': dehydration,
-      'edema': edema,
-      'cyanosis': cyanosis,
-      'rbsFbs': rbsfbs,
-      'bloodPressureSystolic': systolic,
-      'bloodPressureDiastolic': diastolic,
-      'pulseRate': pulseRate,
-      'spO2': spo2,
-    });
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    final String? token = preferences.getString("token");
-
-    if (token != null) {
-      final response = await http.post(Uri.parse(PATIENTURI),
-          headers: {
-            "Accept": "application/json",
-            "content-type": "application/json",
-            "Authorization": 'Bearer $token',
-          },
-          body: data,
-          encoding: Encoding.getByName("utf-8"));
-      setState(() {
-        isLoading = false;
-      });
-      if (response.statusCode == 200) {
-        Map<String, dynamic> resposne = jsonDecode(response.body);
-        if (resposne.isNotEmpty) {
-          // savePref(resposne['userId'], resposne['email'], resposne['token'],
-          //     resposne['firstName'], resposne['lastName']);
-
-          // getdata();
-          scaffoldMessenger
-              .showSnackBar(SnackBar(content: Text("${resposne['message']}")));
-          Navigator.pushReplacementNamed(context, "/patientlist");
-        } else {
-          print(" ${resposne['message']}");
-          setState(() {
-            isLoading = false;
-          });
-        }
-        scaffoldMessenger
-            .showSnackBar(SnackBar(content: Text("${resposne['message']}")));
-        setState(() {
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        print(response.statusCode);
-      }
     }
   }
 
@@ -1763,13 +1588,6 @@ class _PatientAddState extends State<PatientAdd> {
       scaffoldMessenger
           .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
     }
-
-    // }
-    // catch(e)
-    // {
-    //   scaffoldMessenger
-    //       .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
-    // }
   }
 
   savePref(

@@ -69,19 +69,28 @@ class _PatientSearchState extends State<PatientSearch> {
                   },
                   itemBuilder: (context, suggestion) {
                     return ListTile(
-                      title: Text(suggestion.id.toString() +
-                              ' | ' +
-                              suggestion.firstName! ??
-                          '' + suggestion.lastName! ??
-                          '' + ' | ' + suggestion.mobileNumber! ??
-                          ''),
+                      title: Row(
+                        children: [
+                          Text(suggestion.id.toString()),
+                          const Text('|'),
+                          Text((suggestion.firstName != null)
+                              ? suggestion.firstName!
+                              : ''),
+                          Text((suggestion.lastName != null)
+                              ? suggestion.lastName!
+                              : ''),
+                          const Text('|'),
+                          Text((suggestion.mobileNumber != null)
+                              ? suggestion.mobileNumber!
+                              : ''),
+                        ],
+                      ),
                     );
                   },
                   onSuggestionSelected: (suggestion) {
                     setState(() {
-                      _patientController.text = suggestion.firstName! ??
-                          '' + suggestion.lastName! ??
-                          '';
+                      _patientController.text =
+                          suggestion.firstName! + '' + suggestion.lastName!;
                     });
                   },
                 ),

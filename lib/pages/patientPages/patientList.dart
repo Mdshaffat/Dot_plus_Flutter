@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
+import 'package:hospital_app/pages/patientPages/patient_online_details.dart';
+import 'package:hospital_app/pages/patientPages/patient_online_edit.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Models/response.dart';
@@ -42,41 +44,66 @@ class _PatientListState extends State<PatientList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        splashColor: Colors.red,
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/patientadd");
-        },
-      ),
       appBar: AppBar(
         title: const Text("Patient List"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Edit Patient Online',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => PatientOnlineEdit()),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.info),
+            tooltip: 'View Patient Online',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => PatientOnlineDetails()),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: AppDrawer(),
       body: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SingleChildScrollView(
           child: DataTable(
               columns: const <DataColumn>[
-            DataColumn(
-              label: Text(
-                'ID',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'NAME',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-            DataColumn(
-              label: Text(
-                'Mobile',
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-          ],
+                DataColumn(
+                  label: Text(
+                    'ID',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'NAME',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Mobile',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+                DataColumn(
+                  label: Text(
+                    'Action',
+                    style: TextStyle(fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ],
               rows: paginations != null
                   ? paginations!.data
                       .map(
@@ -87,6 +114,23 @@ class _PatientListState extends State<PatientList> {
                                 " " +
                                 e.lastName.toString())),
                             DataCell(Text(e.mobileNumber.toString())),
+                            DataCell(
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Icon(Icons.info),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: Icon(Icons.edit),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       )
@@ -96,10 +140,13 @@ class _PatientListState extends State<PatientList> {
                         cells: <DataCell>[
                           DataCell(Text('0')),
                           DataCell(Text('Offline')),
-                          DataCell(Text('************')),
+                          DataCell(Text('****')),
+                          DataCell(Text('******')),
                         ],
                       ),
-                    ])),
+                    ]),
+        ),
+      ),
     );
   }
 

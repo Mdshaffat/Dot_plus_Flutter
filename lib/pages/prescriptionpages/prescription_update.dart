@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:hospital_app/Models/diseaseAndMedicine/diagnosis.dart';
@@ -9,31 +7,22 @@ import 'package:hospital_app/Models/prescription_model/prescription_dto.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../API/api.dart';
 import '../../Models/diseaseAndMedicine/disease.dart';
 import '../../Models/diseaseAndMedicine/diseaseCategory.dart';
 import '../../providers/db_provider.dart';
 import '../../widgets/RoundedButton.dart';
 import '../../widgets/multiline_text_field.dart';
 
-import 'package:http/http.dart' as http;
-
-class PrescriptionPage extends StatefulWidget {
-  final int patientId;
-  final int hospitalId;
-  final int branchId;
-  const PrescriptionPage(
-      {Key? key,
-      required this.patientId,
-      required this.hospitalId,
-      required this.branchId})
+class PrescriptionUpdatePage extends StatefulWidget {
+  final PrescriptionDto prescription;
+  const PrescriptionUpdatePage({Key? key, required this.prescription})
       : super(key: key);
 
   @override
-  State<PrescriptionPage> createState() => _PrescriptionPageState();
+  State<PrescriptionUpdatePage> createState() => _PrescriptionUpdatePageState();
 }
 
-class _PrescriptionPageState extends State<PrescriptionPage> {
+class _PrescriptionUpdatePageState extends State<PrescriptionUpdatePage> {
   //TextEditingController
   //* CC */
   final TextEditingController _cc =
@@ -87,27 +76,42 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
   @override
   initState() {
     super.initState();
-    patientId = widget.patientId;
-    hospitalId = widget.hospitalId;
-    branchId = widget.branchId;
     dbProvider = DBProvider.db;
-    getdata();
+    getDoctorsInfo();
+    getDiagnosis();
+    populetData();
     _getDisease();
   }
 
-  @override
-  void dispose() {
-    _cc.dispose();
-    _systemicExamination.dispose();
-    _obgynHistory.dispose();
-    _historyofPastIllness.dispose();
-    _familyHistory.dispose();
-    _allergicHistory.dispose();
-    _investigation.dispose();
-    _medicineName.dispose();
-    _comment.dispose();
-    _advice.dispose();
-    super.dispose();
+  populetData() {
+    _cc.text =
+        widget.prescription.doctorsObservation ?? ''; // doctors observation
+    _systemicExamination.text = widget.prescription.systemicExamination ?? '';
+    _obgynHistory.text = widget.prescription.oh ?? ''; //oh
+    _historyofPastIllness.text = widget.prescription.historyOfPastIllness ?? '';
+    _familyHistory.text = widget.prescription.familyHistory ?? '';
+    _allergicHistory.text = widget.prescription.allergicHistory ?? '';
+    _investigation.text = widget.prescription.adviceTest ?? '';
+    //DateTime
+    nextVisit = (widget.prescription.nextVisit == null ||
+            widget.prescription.nextVisit == 'null')
+        ? null
+        : DateTime.parse(widget.prescription.nextVisit.toString());
+    //checkbox
+    isTelemedicine = widget.prescription.isTelimedicine == 1 ? true : false;
+    isAfternoon = widget.prescription.isAfternoon == 1 ? true : false;
+  }
+
+  getDiagnosis() async {
+    List<MedicineForPrescription> totalMedicinePrescription = await dbProvider
+        ?.getMedicineForPrescriptionByPrescriptionId(widget.prescription.id!);
+    List<Diagnosis> diagnosisForPrescription =
+        await dbProvider?.getDiagnosisForPrescription(widget.prescription.id!);
+
+    setState(() {
+      medicineForPrescription = totalMedicinePrescription;
+      diagnosis = diagnosisForPrescription;
+    });
   }
 
   _getDiseaseCategoryAndDisease() async {
@@ -132,7 +136,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
     });
   }
 
-  getdata() async {
+  getDoctorsInfo() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       doctorfirstName = preferences.getString("firstName");
@@ -161,9 +165,10 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
       isLoading = true;
     });
     PrescriptionDto prescription = PrescriptionDto(
-        patientId: widget.patientId,
-        hospitalId: widget.hospitalId,
-        branchId: widget.branchId,
+        id: widget.prescription.id,
+        patientId: widget.prescription.patientId,
+        hospitalId: widget.prescription.hospitalId,
+        branchId: widget.prescription.branchId,
         adviceTest: _investigation.text,
         allergicHistory: _allergicHistory.text,
         doctorsObservation: _cc.text,
@@ -176,9 +181,15 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
         oh: _obgynHistory.text,
         systemicExamination: _systemicExamination.text);
 
-    int prescriptionId = await dbProvider?.createPrescription(prescription);
-    print(prescriptionId);
+    int prescriptionId = await dbProvider?.updatePrescription(prescription);
     if (prescriptionId > 0) {
+      // Delete Previous Medicine And Diagnosis
+      await dbProvider
+          ?.deleteMedicineForPrescriptionByPrescriptionId(prescription.id!);
+      await dbProvider?.deleteDiagnosisByPrescriptionId(prescription.id!);
+
+      // Diagnosis Section
+
       for (var item in diagnosis) {
         Map<String, dynamic> data = {
           'diseasesName': item.diseasesName,
@@ -187,9 +198,10 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
           'prescriptionId': prescriptionId
         };
 
-        int did = await dbProvider!.createDiagnosis(data);
-        print(did);
+        await dbProvider!.createDiagnosis(data);
       }
+
+      // Medicine Section
 
       for (var item in medicineForPrescription) {
         Map<String, dynamic> medicinedata = {
@@ -201,10 +213,7 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
           'time': item.time,
           'prescriptionId': prescriptionId
         };
-
-        int mfid =
-            await dbProvider!.createMedicineForPrescription(medicinedata);
-        print(mfid);
+        await dbProvider!.createMedicineForPrescription(medicinedata);
       }
 
       setState(() {
@@ -218,6 +227,21 @@ class _PrescriptionPageState extends State<PrescriptionPage> {
       scaffoldMessenger
           .showSnackBar(const SnackBar(content: Text("Something wrong!!!")));
     }
+  }
+
+  @override
+  void dispose() {
+    _cc.dispose();
+    _systemicExamination.dispose();
+    _obgynHistory.dispose();
+    _historyofPastIllness.dispose();
+    _familyHistory.dispose();
+    _allergicHistory.dispose();
+    _investigation.dispose();
+    _medicineName.dispose();
+    _comment.dispose();
+    _advice.dispose();
+    super.dispose();
   }
 
   @override

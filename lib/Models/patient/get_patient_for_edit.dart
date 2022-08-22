@@ -1,33 +1,28 @@
-import 'dart:convert';
-
-PatientOfflineModel patientOfflineModelFromJson(String str) =>
-    PatientOfflineModel.fromJson(json.decode(str));
-
-String patientOfflineModelToJson(PatientOfflineModel data) =>
-    json.encode(data.toJson());
-
-class PatientOfflineModel {
-  PatientOfflineModel({
+class GetPatientForEdit {
+  GetPatientForEdit({
     required this.id,
     required this.hospitalId,
-    required this.branchId,
+    required this.hospitalName,
     this.firstName,
     this.lastName,
-    this.day,
-    this.month,
-    this.year,
-    this.mobileNumber,
     this.doB,
+    this.age,
+    this.mobileNumber,
     this.gender,
     this.maritalStatus,
     this.primaryMember,
     this.membershipRegistrationNumber,
     this.address,
     this.divisionId,
+    this.division,
     this.upazilaId,
+    this.upazila,
     this.districtId,
+    this.district,
     this.nid,
     this.bloodGroup,
+    this.branchId,
+    this.branchName,
     this.isActive,
     this.note,
     this.covidvaccine,
@@ -36,44 +31,36 @@ class PatientOfflineModel {
     this.firstDoseDate,
     this.secondDoseDate,
     this.bosterDoseDate,
-    this.heightFeet,
-    this.heightInches,
-    this.weight,
-    this.bodyTemparature,
-    this.appearance,
-    this.anemia,
-    this.jaundice,
-    this.dehydration,
-    this.edema,
-    this.cyanosis,
-    this.rbsFbs,
-    this.bloodPressureSystolic,
-    this.bloodPressureDiastolic,
-    this.pulseRate,
-    this.spO2,
+    this.createdOn,
+    this.createdBy,
+    this.updatedOn,
+    this.updatedBy,
   });
 
   int id;
   int hospitalId;
-  int branchId;
+  String hospitalName;
   String? firstName;
   String? lastName;
-  int? day;
-  int? month;
-  int? year;
-  String? mobileNumber;
   String? doB;
+  String? age;
+  String? mobileNumber;
   String? gender;
   String? maritalStatus;
-  int? primaryMember;
+  bool? primaryMember;
   String? membershipRegistrationNumber;
   String? address;
   int? divisionId;
+  String? division;
   int? upazilaId;
+  String? upazila;
   int? districtId;
+  String? district;
   String? nid;
   String? bloodGroup;
-  int? isActive;
+  int? branchId;
+  String? branchName;
+  bool? isActive;
   String? note;
   String? covidvaccine;
   String? vaccineBrand;
@@ -81,44 +68,36 @@ class PatientOfflineModel {
   String? firstDoseDate;
   String? secondDoseDate;
   String? bosterDoseDate;
-  int? heightFeet;
-  int? heightInches;
-  int? weight;
-  String? bodyTemparature;
-  String? appearance;
-  String? anemia;
-  String? jaundice;
-  String? dehydration;
-  String? edema;
-  String? cyanosis;
-  String? rbsFbs;
-  String? bloodPressureSystolic;
-  String? bloodPressureDiastolic;
-  int? pulseRate;
-  int? spO2;
+  String? createdOn;
+  String? createdBy;
+  String? updatedOn;
+  String? updatedBy;
 
-  factory PatientOfflineModel.fromJson(Map<String, dynamic> json) =>
-      PatientOfflineModel(
+  factory GetPatientForEdit.fromJson(Map<String, dynamic> json) =>
+      GetPatientForEdit(
         id: json["id"],
         hospitalId: json["hospitalId"],
-        branchId: json["branchId"],
+        hospitalName: json["hospitalName"],
         firstName: json["firstName"],
         lastName: json["lastName"],
-        day: json["day"],
-        month: json["month"],
-        year: json["year"],
-        mobileNumber: json["mobileNumber"],
         doB: json["doB"],
+        age: json["age"],
+        mobileNumber: json["mobileNumber"],
         gender: json["gender"],
         maritalStatus: json["maritalStatus"],
         primaryMember: json["primaryMember"],
         membershipRegistrationNumber: json["membershipRegistrationNumber"],
         address: json["address"],
         divisionId: json["divisionId"],
+        division: json["division"],
         upazilaId: json["upazilaId"],
+        upazila: json["upazila"],
         districtId: json["districtId"],
+        district: json["district"],
         nid: json["nid"],
         bloodGroup: json["bloodGroup"],
+        branchId: json["branchId"],
+        branchName: json["branchName"],
         isActive: json["isActive"],
         note: json["note"],
         covidvaccine: json["covidvaccine"],
@@ -127,44 +106,36 @@ class PatientOfflineModel {
         firstDoseDate: json["firstDoseDate"],
         secondDoseDate: json["secondDoseDate"],
         bosterDoseDate: json["bosterDoseDate"],
-        heightFeet: json["heightFeet"],
-        heightInches: json["heightInches"],
-        weight: json["weight"],
-        bodyTemparature: json["bodyTemparature"],
-        appearance: json["appearance"],
-        anemia: json["anemia"],
-        jaundice: json["jaundice"],
-        dehydration: json["dehydration"],
-        edema: json["edema"],
-        cyanosis: json["cyanosis"],
-        rbsFbs: json["rbsFbs"],
-        bloodPressureSystolic: json["bloodPressureSystolic"],
-        bloodPressureDiastolic: json["bloodPressureDiastolic"],
-        pulseRate: json["pulseRate"],
-        spO2: json["spO2"],
+        createdOn: json["createdOn"],
+        createdBy: json["createdBy"],
+        updatedOn: json["updatedOn"],
+        updatedBy: json["updatedBy"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "hospitalId": hospitalId,
-        "branchId": branchId,
+        "hospitalName": hospitalName,
         "firstName": firstName,
         "lastName": lastName,
-        "day": day,
-        "month": month,
-        "year": year,
-        "mobileNumber": mobileNumber,
         "doB": doB,
+        "age": age,
+        "mobileNumber": mobileNumber,
         "gender": gender,
         "maritalStatus": maritalStatus,
         "primaryMember": primaryMember,
         "membershipRegistrationNumber": membershipRegistrationNumber,
         "address": address,
         "divisionId": divisionId,
+        "division": division,
         "upazilaId": upazilaId,
+        "upazila": upazila,
         "districtId": districtId,
+        "district": district,
         "nid": nid,
         "bloodGroup": bloodGroup,
+        "branchId": branchId,
+        "branchName": branchName,
         "isActive": isActive,
         "note": note,
         "covidvaccine": covidvaccine,
@@ -173,20 +144,9 @@ class PatientOfflineModel {
         "firstDoseDate": firstDoseDate,
         "secondDoseDate": secondDoseDate,
         "bosterDoseDate": bosterDoseDate,
-        "heightFeet": heightFeet,
-        "heightInches": heightInches,
-        "weight": weight,
-        "bodyTemparature": bodyTemparature,
-        "appearance": appearance,
-        "anemia": anemia,
-        "jaundice": jaundice,
-        "dehydration": dehydration,
-        "edema": edema,
-        "cyanosis": cyanosis,
-        "rbsFbs": rbsFbs,
-        "bloodPressureSystolic": bloodPressureSystolic,
-        "bloodPressureDiastolic": bloodPressureDiastolic,
-        "pulseRate": pulseRate,
-        "spO2": spO2,
+        "createdOn": createdOn,
+        "createdBy": createdBy,
+        "updatedOn": updatedOn,
+        "updatedBy": updatedBy,
       };
 }

@@ -2,11 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
+import 'package:hospital_app/pages/prescriptionpages/prescription_view.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Models/prescription_model/prescription.dart';
 import '../../Models/response.dart';
 import '../../utils/app_drawer.dart';
+import '../patientPages/patient_online_details.dart';
+import '../patientPages/patient_online_edit.dart';
 import 'add_prescription.dart';
 
 class PrescriptionOnline extends StatefulWidget {
@@ -43,19 +46,22 @@ class _PrescriptionOnlineState extends State<PrescriptionOnline> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        splashColor: Colors.red,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: ((context) => const AddPrescription())));
-        },
-      ),
       appBar: AppBar(
         title: const Text("Prescription List"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info),
+            tooltip: 'View Prescription Online',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const PrescriptionOnlineView()),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       drawer: AppDrawer(),

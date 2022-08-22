@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
+import 'package:hospital_app/pages/patientPages/patient_details.dart';
+import 'package:hospital_app/pages/patientPages/patient_offline_edit.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/patientOfflineModel.dart';
@@ -36,80 +38,115 @@ class _PatientOfflineListState extends State<PatientOfflineList> {
   Widget build(BuildContext context) {
     scaffoldMessenger = ScaffoldMessenger.of(context);
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-        splashColor: Colors.red,
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, "/patientadd");
-        },
-      ),
-      appBar: AppBar(
-        title: const Text("Patient Offline List"),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      drawer: AppDrawer(),
-      body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : DataTable(
-              columns: const <DataColumn>[
-                  DataColumn(
-                    label: Text(
-                      'Name',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Mobile',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Action',
-                      style: TextStyle(fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                ],
-              rows: patients.length > 0
-                  ? patients
-                      .map(
-                        (e) => DataRow(
-                          cells: <DataCell>[
-                            DataCell(Text(e.firstName.toString() +
-                                " " +
-                                e.lastName.toString())),
-                            DataCell(Text(e.mobileNumber.toString())),
-                            DataCell(
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.send,
-                                ),
-                                iconSize: 25,
-                                color: Colors.blue,
-                                splashColor: Colors.purple,
-                                onPressed: () {
-                                  _showMyDialog(e.id);
-                                },
-                              ),
-                            ),
-                          ],
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.blue,
+          splashColor: Colors.red,
+          onPressed: () {
+            Navigator.pushReplacementNamed(context, "/patientadd");
+          },
+        ),
+        appBar: AppBar(
+          title: const Text("Patient Offline List"),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        drawer: AppDrawer(),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : DataTable(
+                    columns: const <DataColumn>[
+                        DataColumn(
+                          label: Text(
+                            'Name',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
                         ),
-                      )
-                      .toList()
-                  : <DataRow>[
-                      const DataRow(
-                        cells: <DataCell>[
-                          DataCell(Text('0')),
-                          DataCell(Text('No Data')),
-                          DataCell(Text('************')),
-                        ],
-                      ),
-                    ]),
-    );
+                        DataColumn(
+                          label: Text(
+                            'Mobile',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Action',
+                            style: TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        ),
+                      ],
+                    rows: patients.length > 0
+                        ? patients
+                            .map(
+                              (e) => DataRow(
+                                cells: <DataCell>[
+                                  DataCell(Text(e.firstName.toString() +
+                                      " " +
+                                      e.lastName.toString())),
+                                  DataCell(Text(e.mobileNumber.toString())),
+                                  DataCell(Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PatientDetails(
+                                                      patient: e,
+                                                    )),
+                                          );
+                                        },
+                                        child: Icon(Icons.info),
+                                      ),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PatientOfflineEdit(
+                                                      patientOfflineModel: e,
+                                                    )),
+                                          );
+                                        },
+                                        child: Icon(Icons.edit),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.send,
+                                        ),
+                                        iconSize: 25,
+                                        //color: Colors.blue,
+                                        splashColor: Colors.purple,
+                                        onPressed: () {
+                                          _showMyDialog(e.id);
+                                        },
+                                      ),
+                                    ],
+                                  )),
+                                ],
+                              ),
+                            )
+                            .toList()
+                        : <DataRow>[
+                            const DataRow(
+                              cells: <DataCell>[
+                                DataCell(Text('0')),
+                                DataCell(Text('No Data')),
+                                DataCell(Text('************')),
+                              ],
+                            ),
+                          ]),
+          ),
+        ));
   }
 
   loadPatient() async {
