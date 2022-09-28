@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../API/api.dart';
 import '../../Models/patient/get_patient.dart';
@@ -122,655 +123,682 @@ class _PatientOnlineDetailsState extends State<PatientOnlineDetails> {
                     ),
 
                     // patient Information
+                    // QR Code\
 
                     const SizedBox(
                       height: 40,
                     ),
                     if (patientId != null)
-                      Table(
-                        border: TableBorder.all(),
-                        columnWidths: const <int, TableColumnWidth>{
-                          0: FixedColumnWidth(200),
-                          1: FixedColumnWidth(300),
-                        },
-                        defaultVerticalAlignment:
-                            TableCellVerticalAlignment.middle,
+                      Column(
                         children: [
-                          TableRow(
+                          Table(
+                            border: TableBorder.all(),
+                            columnWidths: const <int, TableColumnWidth>{
+                              0: FixedColumnWidth(200),
+                              1: FixedColumnWidth(300),
+                            },
+                            defaultVerticalAlignment:
+                                TableCellVerticalAlignment.middle,
                             children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Id :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.id.toString()),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Id :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Hospital Id :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.hospitalId.toString()),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.id.toString()),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Branch Id :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.branchId.toString()),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Hospital Id :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Name :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.firstName ?? ''),
-                                      Text(patient.lastName ?? ''),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.hospitalId.toString()),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Mobile Number :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.mobileNumber ?? ''),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Branch Id :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Gender :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.gender ?? ''),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.branchId.toString()),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Matiral Status :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.maritalStatus ?? ''),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Name :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Primary Member :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.primaryMember == 1
-                                          ? "Yes"
-                                          : "No"),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.firstName ?? ''),
+                                          Text(patient.lastName ?? ''),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Mem. Reg. No :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient
-                                              .membershipRegistrationNumber ??
-                                          " "),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Mobile Number :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Address :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.address ?? " "),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.mobileNumber ?? ''),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("NID :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.nid ?? " "),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Gender :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Blood Group :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.bloodGroup ?? " "),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.gender ?? ''),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Note :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(patient.note ?? " "),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Matiral Status :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Height :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.heightFeet.toString() +
-                                          " feet " +
-                                          physicalStat.heightInches.toString() +
-                                          " inch "),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.maritalStatus ?? ''),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Weight :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.weight.toString()),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Primary Member :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Body Temp :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.bodyTemparature ?? " "),
-                                    ],
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.primaryMember == 1
+                                              ? "Yes"
+                                              : "No"),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Appearance :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.appearance ?? " "),
-                                    ],
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Mem. Reg. No :"),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Anemia :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.anemia ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Jaundice :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.jaundice ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Dehydration :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.dehydration ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Edema :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.edema ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Cyanosis :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.cyanosis ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("RBS/FBS :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.rbsFbs ?? " "),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Blood Pressure :"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.bloodPressureSystolic ??
-                                          " "),
-                                      Text(
-                                          physicalStat.bloodPressureDiastolic ??
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient
+                                                  .membershipRegistrationNumber ??
                                               " "),
-                                    ],
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Address :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.address ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("NID :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.nid ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Blood Group :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.bloodGroup ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Note :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.note ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Height :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.heightFeet
+                                                  .toString() +
+                                              " feet " +
+                                              physicalStat.heightInches
+                                                  .toString() +
+                                              " inch "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Weight :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.weight.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Body Temp :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.bodyTemparature ??
+                                              " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Appearance :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.appearance ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Anemia :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.anemia ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Jaundice :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.jaundice ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Dehydration :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.dehydration ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Edema :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.edema ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Cyanosis :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.cyanosis ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("RBS/FBS :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.rbsFbs ?? " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Blood Pressure :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat
+                                                  .bloodPressureSystolic ??
+                                              " "),
+                                          Text(physicalStat
+                                                  .bloodPressureDiastolic ??
+                                              " "),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Pulse Rate:"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.pulseRate
+                                              .toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("SPO2:"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(physicalStat.spO2.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("Pulse Rate:"),
+                          QrImage(
+                            data:
+                                '{"id": ${patient.id}, "firstname": "${patient.firstName}" ,"lastname": "${patient.lastName}" , "mobileNumber": "${patient.mobileNumber ?? "not found"}" }',
+                            version: QrVersions.auto,
+                            size: 320,
+                            gapless: false,
+                            embeddedImage:
+                                const AssetImage('assets/images/logo.png'),
+                            errorStateBuilder: (cxt, err) {
+                              return const Center(
+                                child: Text(
+                                  "Uh oh! Something went wrong...",
+                                  textAlign: TextAlign.center,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.pulseRate.toString()),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          TableRow(
-                            children: [
-                              const SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text("SPO2:"),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                                width: 100,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    children: [
-                                      Text(physicalStat.spO2.toString()),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ],
                       ),

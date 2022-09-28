@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hospital_app/Models/patientOfflineModel.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class PatientDetails extends StatelessWidget {
   final PatientOfflineModel patient;

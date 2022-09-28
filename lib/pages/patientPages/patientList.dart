@@ -5,6 +5,7 @@ import 'package:hospital_app/API/api.dart';
 import 'package:hospital_app/Models/patient.dart';
 import 'package:hospital_app/pages/patientPages/patient_online_details.dart';
 import 'package:hospital_app/pages/patientPages/patient_online_edit.dart';
+import 'package:hospital_app/pages/QR%20code%20scanner/scan_qr_code.dart';
 import 'package:http/http.dart' as http;
 
 import '../../Models/response.dart';
@@ -67,6 +68,21 @@ class _PatientListState extends State<PatientList> {
                 context,
                 MaterialPageRoute(
                   builder: ((context) => PatientOnlineDetails()),
+                ),
+              );
+            },
+          ),
+
+          // QR Code Scan
+
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            tooltip: 'Scan',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => const ScanQRCode()),
                 ),
               );
             },
