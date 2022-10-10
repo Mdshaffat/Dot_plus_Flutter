@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Models/response.dart';
 import '../../providers/db_provider.dart';
 import '../../utils/app_drawer.dart';
+import '../patientPages/PatientEditPhysicalStatAndPrescriptionAdd/add_prescription.dart';
 
 class PhysicalStatOfflineList extends StatefulWidget {
   const PhysicalStatOfflineList({Key? key}) : super(key: key);
@@ -196,6 +197,7 @@ class _PhysicalStatOfflineListState extends State<PhysicalStatOfflineList> {
               var responseData = ResponseData.fromJson(resposne);
               if (responseData.message == "success") {
                 await deletePhysicalStat(id);
+                _goToPrescription(responseData.data.toString());
               }
               if (resposne.isNotEmpty) {
                 scaffoldMessenger.showSnackBar(
@@ -247,6 +249,39 @@ class _PhysicalStatOfflineListState extends State<PhysicalStatOfflineList> {
               child: const Text('Send'),
               onPressed: () {
                 sendPhysicalStatOnline(id);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  //*  */
+  Future<void> _goToPrescription(String id) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Patient Id :' + id),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Create Prescription'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddPrescriptionFromQRDetails(
+                            patientID: id,
+                          )),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),

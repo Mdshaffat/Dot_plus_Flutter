@@ -72,10 +72,11 @@ class _ScanQRCodeState extends State<ScanQRCode> {
             child: Center(
               child: (result != null)
                   ? TextButton(
+                      style: ButtonStyle(),
                       onPressed: () {
                         _navigateToPatientHistory();
                       },
-                      child: Text('Data: ${result!.code}'),
+                      child: Text('View Patient Info'),
                     )
                   : const Text('Scanning.....'),
             ),
