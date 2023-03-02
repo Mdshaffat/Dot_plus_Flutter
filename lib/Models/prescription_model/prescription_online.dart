@@ -90,7 +90,7 @@ class PrescriptionOnline {
         patientFirstName: json["patientFirstName"],
         patientLastName: json["patientLastName"],
         patientBloodGroup: json["patientBloodGroup"],
-        patientDob: DateTime?.tryParse(json["patientDob"]),
+        patientDob: DateTime.tryParse(json["patientDob"]),
         patientAge: json["patientAge"],
         patientMobile: json["patientMobile"],
         patientGender: json["patientGender"],
@@ -125,15 +125,15 @@ class PrescriptionOnline {
         allergicHistory: json["allergicHistory"],
         nextVisit: (json["nextVisit"] == null || json["nextVisit"] == 'null')
             ? null
-            : DateTime?.tryParse(json["nextVisit"]),
+            : DateTime.tryParse(json["nextVisit"]),
         covidvaccine: json["covidvaccine"],
         vaccineBrand: json["vaccineBrand"],
         vaccineDose: json["vaccineDose"],
         note: json["note"],
         isTelimedicine: json["isTelimedicine"],
         isAfternoon: json["isAfternoon"],
-        createdOn: DateTime?.tryParse(json["createdOn"]),
-        updatedOn: DateTime?.tryParse(json["updatedOn"]),
+        createdOn: DateTime.tryParse(json["createdOn"]),
+        updatedOn: DateTime.tryParse(json["updatedOn"]),
       );
 
   Map<String?, dynamic> toJson() => {
@@ -218,7 +218,7 @@ class Diagnosis {
         diseasesId: json["diseasesId"],
         diseases: Diseases.fromJson(json["diseases"]),
         updatedBy: json["updatedBy"],
-        updatedAt: DateTime?.tryParse(json["updatedAt"]),
+        updatedAt: DateTime.tryParse(json["updatedAt"]),
       );
 
   Map<String?, dynamic> toJson() => {

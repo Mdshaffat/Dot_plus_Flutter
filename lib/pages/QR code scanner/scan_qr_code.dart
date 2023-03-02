@@ -18,8 +18,15 @@ class _ScanQRCodeState extends State<ScanQRCode> {
   Barcode? result;
   QRViewController? controller;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
+    controller.resumeCamera();
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
@@ -58,6 +65,8 @@ class _ScanQRCodeState extends State<ScanQRCode> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: Text(""),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -65,6 +74,12 @@ class _ScanQRCodeState extends State<ScanQRCode> {
             child: QRView(
               key: qrKey,
               onQRViewCreated: _onQRViewCreated,
+              overlay: QrScannerOverlayShape(
+                borderColor: Colors.red,
+                borderRadius: 10,
+                borderLength: 30,
+                borderWidth: 10,
+              ),
             ),
           ),
           Expanded(

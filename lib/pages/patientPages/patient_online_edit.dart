@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hospital_app/Models/patient/get_patient_for_edit.dart';
+import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -28,6 +29,11 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
   int? id;
   int? patientId;
   final _formKey = GlobalKey<FormState>();
+
+  List<SmokingHabit> _smokinghabit = [
+    SmokingHabit(id: '1', name: 'Smoker'),
+    SmokingHabit(id: '0', name: 'Non Smoker')
+  ];
   //
   List<Hospital> _hospitals = [];
   List<Division> _divisions = [];
@@ -55,6 +61,7 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
   int? districtDropdownValue;
   int? upazilaDropdownValue;
   String? genderDropdownValue;
+  String? tobacoHabitDropdown;
   bool isActive = true;
   DateTime? dateOfBirth;
   String? meritalStatusValue;
@@ -139,7 +146,7 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
     }
 
     var patientPatch = patient;
-    if (patientPatch.divisionId != null) {
+    if (patientPatch.divisionId != null || patientPatch.divisionId != 0) {
       await fetchDistrict(patientPatch.divisionId);
       await fetchUpazila(patientPatch.districtId);
     }
@@ -163,9 +170,17 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
     hospitalDropdownValue = patientPatch.hospitalId;
     hospitalValue = newHospital;
     branchDropdownValue = patientPatch.branchId;
-    divisionDropdownValue = patientPatch.divisionId;
-    districtDropdownValue = patientPatch.districtId;
-    upazilaDropdownValue = patientPatch.upazilaId;
+    if (patientPatch.divisionId != null && patientPatch.divisionId != 0) {
+      divisionDropdownValue = patientPatch.divisionId;
+
+      if (patientPatch.districtId != null && patientPatch.districtId != 0) {
+        districtDropdownValue = patientPatch.districtId;
+      }
+      if (patientPatch.upazilaId != null && patientPatch.upazilaId != 0) {
+        upazilaDropdownValue = patientPatch.upazilaId;
+      }
+    }
+    tobacoHabitDropdown = patientPatch.tobacoHabit;
     //genderDropdownValue = patientPatch.gender;
     isActive = patientPatch.isActive ?? false;
     dateOfBirth = patientPatch.doB == null
@@ -342,6 +357,7 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
         'doB': dateOfBirth.toString(),
         'gender': genderDropdownValue,
         'maritalStatus': meritalStatusValue,
+        'tobacoHabit': tobacoHabitDropdown,
         'primaryMember': primaryMember,
         'membershipRegistrationNumber':
             _membershipRegistrationNumberController.text,
@@ -356,9 +372,12 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
         'covidvaccine': covidVaccine,
         'vaccineBrand': vaccineBrand,
         'vaccineDose': vaccineDose,
-        'firstDoseDate': firstDoseDate.toString(),
-        'secondDoseDate': secondDoseDate.toString(),
-        'bosterDoseDate': bosterDoseDate.toString(),
+        'firstDoseDate':
+            firstDoseDate != null ? firstDoseDate.toString() : firstDoseDate,
+        'secondDoseDate':
+            secondDoseDate != null ? secondDoseDate.toString() : secondDoseDate,
+        'bosterDoseDate':
+            bosterDoseDate != null ? bosterDoseDate.toString() : bosterDoseDate,
       });
       SharedPreferences preferences = await SharedPreferences.getInstance();
       final String? token = preferences.getString("token");
@@ -887,10 +906,53 @@ class _PatientOnlineEditState extends State<PatientOnlineEdit> {
                                                   fontSize: 15),
                                             ),
                                           ),
-                                          const SizedBox(
-                                            height: 30,
+
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 150,
+                                                height: 50,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5.0,
+                                                          right: 5.0),
+                                                  child: DropdownButton(
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Colors.deepPurple),
+                                                    underline: Container(
+                                                      height: 2,
+                                                      color: Colors
+                                                          .deepPurpleAccent,
+                                                    ),
+                                                    onChanged:
+                                                        (String? newValue) {
+                                                      setState(() {
+                                                        tobacoHabitDropdown =
+                                                            newValue!;
+                                                      });
+                                                    },
+                                                    items: _smokinghabit
+                                                        .map((item) {
+                                                      return DropdownMenuItem(
+                                                        child: Text(item.name),
+                                                        value: item.id,
+                                                      );
+                                                    }).toList(),
+                                                    value: tobacoHabitDropdown,
+                                                    hint: const Text(
+                                                        "Smoking Habit"),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          // Date Of Birth
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
                                           Row(
                                             children: [
                                               Column(

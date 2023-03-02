@@ -10,6 +10,7 @@ class GetPatientForEdit {
     this.mobileNumber,
     this.gender,
     this.maritalStatus,
+    this.tobacoHabit,
     this.primaryMember,
     this.membershipRegistrationNumber,
     this.address,
@@ -47,6 +48,7 @@ class GetPatientForEdit {
   String? mobileNumber;
   String? gender;
   String? maritalStatus;
+  String? tobacoHabit;
   bool? primaryMember;
   String? membershipRegistrationNumber;
   String? address;
@@ -85,6 +87,7 @@ class GetPatientForEdit {
         mobileNumber: json["mobileNumber"],
         gender: json["gender"],
         maritalStatus: json["maritalStatus"],
+        tobacoHabit: json["tobacoHabit"],
         primaryMember: json["primaryMember"],
         membershipRegistrationNumber: json["membershipRegistrationNumber"],
         address: json["address"],
@@ -123,6 +126,7 @@ class GetPatientForEdit {
         "mobileNumber": mobileNumber,
         "gender": gender,
         "maritalStatus": maritalStatus,
+        "tobacoHabit": tobacoHabit,
         "primaryMember": primaryMember,
         "membershipRegistrationNumber": membershipRegistrationNumber,
         "address": address,

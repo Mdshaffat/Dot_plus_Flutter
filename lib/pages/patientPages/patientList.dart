@@ -10,6 +10,9 @@ import 'package:http/http.dart' as http;
 
 import '../../Models/response.dart';
 import '../../utils/app_drawer.dart';
+import 'Online/patientDetails.dart';
+import 'Online/patientEdit.dart';
+import 'Online/patienthistoryfrontpage.dart';
 
 class PatientList extends StatefulWidget {
   const PatientList({Key? key}) : super(key: key);
@@ -72,9 +75,21 @@ class _PatientListState extends State<PatientList> {
               );
             },
           ),
+          // history
+          IconButton(
+            icon: const Icon(Icons.history),
+            tooltip: 'View Patient History',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: ((context) => PatientHistoryFrontPage()),
+                ),
+              );
+            },
+          ),
 
           // QR Code Scan
-
           IconButton(
             icon: const Icon(Icons.qr_code),
             tooltip: 'Scan',
@@ -134,14 +149,28 @@ class _PatientListState extends State<PatientList> {
                               Row(
                                 children: [
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  PatientOnlineDetailsFromTable(
+                                                      patientId: e.id))));
+                                    },
                                     child: Icon(Icons.info),
                                   ),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  PatientOnlineEditFromTable(
+                                                      id: e.id))));
+                                    },
                                     child: Icon(Icons.edit),
                                   )
                                 ],

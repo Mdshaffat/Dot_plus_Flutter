@@ -5,6 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import '../../API/api.dart';
 import '../../Models/patient/get_patient.dart';
 import '../../widgets/RoundedButton.dart';
+import 'patient_card.dart';
 
 class PatientOnlineDetails extends StatefulWidget {
   const PatientOnlineDetails({Key? key}) : super(key: key);
@@ -303,6 +304,32 @@ class _PatientOnlineDetailsState extends State<PatientOnlineDetails> {
                                       child: Row(
                                         children: [
                                           Text(patient.maritalStatus ?? ''),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              TableRow(
+                                children: [
+                                  const SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text("Smoking Habit :"),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    width: 100,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Text(patient.tobacoHabit == '1'
+                                              ? 'Smoker'
+                                              : 'Non Smoker'),
                                         ],
                                       ),
                                     ),
@@ -783,23 +810,45 @@ class _PatientOnlineDetailsState extends State<PatientOnlineDetails> {
                               ),
                             ],
                           ),
-                          QrImage(
-                            data:
-                                '{"id": ${patient.id}, "firstname": "${patient.firstName}" ,"lastname": "${patient.lastName}" , "mobileNumber": "${patient.mobileNumber ?? "not found"}" }',
-                            version: QrVersions.auto,
-                            size: 320,
-                            gapless: false,
-                            embeddedImage:
-                                const AssetImage('assets/images/logo.png'),
-                            errorStateBuilder: (cxt, err) {
-                              return const Center(
-                                child: Text(
-                                  "Uh oh! Something went wrong...",
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            },
+                          SizedBox(
+                            height: 30,
+                            width: 100,
                           ),
+                          Button(
+                              addData: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => PatientCard(
+                                          data:
+                                              '{"id": ${patient.id}, "firstname": "${patient.firstName}" ,"lastname": "${patient.lastName}" , "mobileNumber": "${patient.mobileNumber ?? "not found"}" }',
+                                        )),
+                                  ),
+                                );
+                              },
+                              icon: Icons.print,
+                              text: "Print PatientID"),
+                          SizedBox(
+                            height: 30,
+                            width: 100,
+                          ),
+                          // QrImage(
+                          //   data:
+                          //       '{"id": ${patient.id}, "firstname": "${patient.firstName}" ,"lastname": "${patient.lastName}" , "mobileNumber": "${patient.mobileNumber ?? "not found"}" }',
+                          //   version: QrVersions.auto,
+                          //   size: 320,
+                          //   gapless: false,
+                          //   embeddedImage:
+                          //       const AssetImage('assets/images/logo.png'),
+                          //   errorStateBuilder: (cxt, err) {
+                          //     return const Center(
+                          //       child: Text(
+                          //         "Uh oh! Something went wrong...",
+                          //         textAlign: TextAlign.center,
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                         ],
                       ),
                   ],

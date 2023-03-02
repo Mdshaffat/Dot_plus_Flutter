@@ -20,6 +20,7 @@ class PatientOfflineModel {
     this.doB,
     this.gender,
     this.maritalStatus,
+    this.tobacoHabit,
     this.primaryMember,
     this.membershipRegistrationNumber,
     this.address,
@@ -65,6 +66,7 @@ class PatientOfflineModel {
   String? doB;
   String? gender;
   String? maritalStatus;
+  String? tobacoHabit;
   int? primaryMember;
   String? membershipRegistrationNumber;
   String? address;
@@ -111,6 +113,7 @@ class PatientOfflineModel {
         doB: json["doB"],
         gender: json["gender"],
         maritalStatus: json["maritalStatus"],
+        tobacoHabit: json["tobacoHabit"],
         primaryMember: json["primaryMember"],
         membershipRegistrationNumber: json["membershipRegistrationNumber"],
         address: json["address"],
@@ -157,6 +160,7 @@ class PatientOfflineModel {
         "doB": doB,
         "gender": gender,
         "maritalStatus": maritalStatus,
+        "tobacoHabit": tobacoHabit,
         "primaryMember": primaryMember,
         "membershipRegistrationNumber": membershipRegistrationNumber,
         "address": address,

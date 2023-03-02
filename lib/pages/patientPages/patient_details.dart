@@ -249,6 +249,32 @@ class PatientDetails extends StatelessWidget {
                       width: 100,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
+                        child: Text("Smoking Habit :"),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      width: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Text(patient.tobacoHabit == '1'
+                                ? 'Smoker'
+                                : 'Non Smoker'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                TableRow(
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                      width: 100,
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
                         child: Text("Primary Member :"),
                       ),
                     ),

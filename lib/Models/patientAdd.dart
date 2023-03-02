@@ -19,6 +19,7 @@ class PatientAddModel {
     this.doB,
     this.gender,
     this.maritalStatus,
+    this.tobacoHabit,
     this.primaryMember,
     this.membershipRegistrationNumber,
     this.address,
@@ -63,6 +64,7 @@ class PatientAddModel {
   String? doB;
   String? gender;
   String? maritalStatus;
+  String? tobacoHabit;
   bool? primaryMember;
   String? membershipRegistrationNumber;
   String? address;
@@ -108,6 +110,7 @@ class PatientAddModel {
         doB: json["doB"],
         gender: json["gender"],
         maritalStatus: json["maritalStatus"],
+        tobacoHabit: json["tobacoHabit"],
         primaryMember: json["primaryMember"],
         membershipRegistrationNumber: json["membershipRegistrationNumber"],
         address: json["address"],
@@ -153,6 +156,7 @@ class PatientAddModel {
         "doB": doB,
         "gender": gender,
         "maritalStatus": maritalStatus,
+        "tobacoHabit": tobacoHabit,
         "primaryMember": primaryMember,
         "membershipRegistrationNumber": membershipRegistrationNumber,
         "address": address,

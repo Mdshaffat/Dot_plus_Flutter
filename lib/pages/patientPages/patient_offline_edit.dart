@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hospital_app/Models/patientOfflineModel.dart';
+import 'package:hospital_app/pages/patientPages/patientAdd.dart';
 import 'package:intl/intl.dart';
 
 import '../../Models/district.dart';
@@ -29,6 +30,11 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
   List<District> _districts = [];
   List<Upazila> _upazilas = [];
   DBProvider? dbProvider;
+
+  List<SmokingHabit> _smokinghabit = [
+    SmokingHabit(id: '1', name: 'Smoker'),
+    SmokingHabit(id: '0', name: 'Non Smoker')
+  ];
 
   NewVaccine vaccine = NewVaccine();
   bool isLoading = false;
@@ -70,6 +76,7 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
   bool isActive = true;
   DateTime? dateOfBirth;
   String? meritalStatusValue;
+  String? smokingDropdownValue;
   String? bloodGroupValue;
   int? covidVaccine;
   int? vaccineBrand;
@@ -178,6 +185,7 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
         ? null
         : DateTime.parse(patientPatch.doB.toString());
     meritalStatusValue = patientPatch.maritalStatus;
+    smokingDropdownValue = patientPatch.tobacoHabit;
     bloodGroupValue = patientPatch.bloodGroup;
     covidVaccine = (patientPatch.covidvaccine == null ||
             patientPatch.covidvaccine == 'null')
@@ -349,6 +357,7 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
     year,
     dob,
     maritalStatus,
+    smokingHabit,
     bloodGroup,
     covidVaccine,
     vaccineBrand,
@@ -390,6 +399,7 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
         // != null ? DateTime.parse(dob) : null,
         gender: gender,
         maritalStatus: maritalStatus,
+        tobacoHabit: smokingHabit,
         primaryMember: primaryMember,
         membershipRegistrationNumber: membershipRegistrationNumber,
         address: address,
@@ -773,8 +783,42 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
                                         color: Colors.black54, fontSize: 15),
                                   ),
                                 ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 150,
+                                      height: 50,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 5.0, right: 5.0),
+                                        child: DropdownButton(
+                                          style: const TextStyle(
+                                              color: Colors.deepPurple),
+                                          underline: Container(
+                                            height: 2,
+                                            color: Colors.deepPurpleAccent,
+                                          ),
+                                          onChanged: (String? newValue) {
+                                            setState(() {
+                                              smokingDropdownValue = newValue!;
+                                            });
+                                          },
+                                          items: _smokinghabit.map((item) {
+                                            return DropdownMenuItem(
+                                              child: Text(item.name),
+                                              value: item.id,
+                                            );
+                                          }).toList(),
+                                          value: smokingDropdownValue,
+                                          hint: const Text("Smoking Name"),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 const SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
                                 // Date Of Birth
                                 Row(
@@ -1654,6 +1698,7 @@ class _PatientOfflineEditState extends State<PatientOfflineEdit> {
                                                   ? null
                                                   : dateOfBirth!.toString(),
                                               meritalStatusValue,
+                                              smokingDropdownValue,
                                               bloodGroupValue,
                                               covidVaccine.toString(),
                                               vaccineBrand.toString(),

@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: PrescriptionOnlineView(),
+      //home: PatientCard(data: "",),
       routes: {
         '/': (context) => isLogedIn ? const Home() : const Login(),
         '/home': (context) => const Home(),

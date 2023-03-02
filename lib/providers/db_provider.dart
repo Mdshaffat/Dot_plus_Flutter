@@ -22,7 +22,7 @@ import '../Models/patientOfflineModel.dart';
 import '../Models/upazila.dart';
 
 class DBProvider {
-  static const _databaseName = 'newdatabase6.db';
+  static const _databaseName = 'newdatabase8.db';
   static const _databaseVersion = 4;
   static Database? _database;
   static final DBProvider db = DBProvider._();
@@ -78,6 +78,7 @@ class DBProvider {
                   doB DATETIME,
                   gender TEXT,
                   maritalStatus TEXT,
+                  tobacoHabit TEXT,
                   primaryMember BOOLEAN,
                   membershipRegistrationNumber TEXT,
                   address TEXT,

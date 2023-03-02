@@ -18,6 +18,12 @@ import '../../API/api.dart';
 import '../../Models/division.dart';
 import '../../providers/db_provider.dart';
 
+class SmokingHabit {
+  String name;
+  String id;
+  SmokingHabit({required this.id, required this.name});
+}
+
 class PatientAdd extends StatefulWidget {
   const PatientAdd({Key? key}) : super(key: key);
 
@@ -31,6 +37,10 @@ class _PatientAddState extends State<PatientAdd> {
   List<District> _districts = [];
   List<Upazila> _upazilas = [];
   DBProvider? dbProvider;
+  List<SmokingHabit> _smokinghabit = [
+    SmokingHabit(id: '1', name: 'Smoker'),
+    SmokingHabit(id: '0', name: 'Non Smoker')
+  ];
 
   NewVaccine vaccine = NewVaccine();
   bool isLoading = false;
@@ -70,6 +80,7 @@ class _PatientAddState extends State<PatientAdd> {
   int? districtDropdownValue;
   int? upazilaDropdownValue;
   String? genderDropdownValue;
+  String? smokingDropdownValue;
   bool isActive = true;
   DateTime? dateOfBirth;
   String? meritalStatusValue;
@@ -437,8 +448,43 @@ class _PatientAddState extends State<PatientAdd> {
                                     color: Colors.black54, fontSize: 15),
                               ),
                             ),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: 150,
+                                  height: 50,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: DropdownButton(
+                                      style: const TextStyle(
+                                          color: Colors.deepPurple),
+                                      underline: Container(
+                                        height: 2,
+                                        color: Colors.deepPurpleAccent,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          smokingDropdownValue = newValue!;
+                                        });
+                                      },
+                                      items: _smokinghabit.map((item) {
+                                        return DropdownMenuItem(
+                                          child: Text(item.name),
+                                          value: item.id,
+                                        );
+                                      }).toList(),
+                                      value: smokingDropdownValue,
+                                      hint: const Text("Smoking Habit"),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             const SizedBox(
-                              height: 30,
+                              height: 10,
                             ),
                             // Date Of Birth
                             Row(
@@ -1280,6 +1326,7 @@ class _PatientAddState extends State<PatientAdd> {
                                           upazilaDropdownValue,
                                           _nidController.text,
                                           _mobilenumberController.text,
+                                          smokingDropdownValue,
                                           genderDropdownValue,
                                           (_ageDayController.text != null &&
                                                   _ageDayController.text != "")
@@ -1489,6 +1536,7 @@ class _PatientAddState extends State<PatientAdd> {
     upazilaId,
     nid,
     mobileNumber,
+    smokingHabit,
     gender,
     day,
     month,
@@ -1536,6 +1584,7 @@ class _PatientAddState extends State<PatientAdd> {
       // != null ? DateTime.parse(dob) : null,
       gender: gender,
       maritalStatus: maritalStatus,
+      tobacoHabit: smokingHabit,
       primaryMember: primaryMember,
       membershipRegistrationNumber: membershipRegistrationNumber,
       address: address,

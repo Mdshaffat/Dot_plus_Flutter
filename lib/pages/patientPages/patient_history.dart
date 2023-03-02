@@ -55,42 +55,38 @@ class _PatientHistoryState extends State<PatientHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => PatientOnlineEditFromQRDetails(
-                                patientID: widget.patientQRInfo.id.toString(),
-                              ))));
-                },
-                icon: const Icon(Icons.edit),
-                tooltip: 'Edit Patient Info',
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: ((context) => PhysicalStatAddFromQRDetails(
-                                patientid: widget.patientQRInfo.id,
-                              ))));
-                },
-                icon: const Icon(Icons.add),
-                tooltip: 'Add Physical Stat',
-              ),
-            ],
-          )
-        ],
-      ),
-      body: MaterialApp(
-        home: DefaultTabController(
+    return SafeArea(
+      child: Scaffold(
+        bottomNavigationBar: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => PatientOnlineEditFromQRDetails(
+                              patientID: widget.patientQRInfo.id.toString(),
+                            ))));
+              },
+              icon: const Icon(Icons.edit),
+              tooltip: 'Edit Patient Info',
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) => PhysicalStatAddFromQRDetails(
+                              patientid: widget.patientQRInfo.id,
+                            ))));
+              },
+              icon: const Icon(Icons.add),
+              tooltip: 'Add Physical Stat',
+            ),
+          ],
+        ),
+        body: DefaultTabController(
           length: 3,
           child: Scaffold(
             appBar: AppBar(
@@ -113,384 +109,390 @@ class _PatientHistoryState extends State<PatientHistory> {
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Column(
-                                children: [
-                                  Table(
-                                    border: TableBorder.all(),
-                                    columnWidths: const <int, TableColumnWidth>{
-                                      0: FixedColumnWidth(200),
-                                      1: FixedColumnWidth(300),
-                                    },
-                                    defaultVerticalAlignment:
-                                        TableCellVerticalAlignment.middle,
-                                    children: [
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Id :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                      .patient.id
-                                                      .toString()),
-                                                ],
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              children: [
+                                Column(
+                                  children: [
+                                    Table(
+                                      border: TableBorder.all(),
+                                      columnWidths: const <int,
+                                          TableColumnWidth>{
+                                        0: FixedColumnWidth(200),
+                                        1: FixedColumnWidth(300),
+                                      },
+                                      defaultVerticalAlignment:
+                                          TableCellVerticalAlignment.middle,
+                                      children: [
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Id :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Hospital Id :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                      .patient.hospitalId
-                                                      .toString()),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                        .patient.id
+                                                        .toString()),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Branch Id :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                      .patient.branchId
-                                                      .toString()),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Hospital Id :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Name :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.firstName ??
-                                                      ''),
-                                                  Text(patientHistoryModel!
-                                                          .patient.lastName ??
-                                                      ''),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                        .patient.hospitalId
+                                                        .toString()),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Mobile Number :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient
-                                                          .mobileNumber ??
-                                                      ''),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Branch Id :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Gender :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.gender ??
-                                                      ''),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                        .patient.branchId
+                                                        .toString()),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Matiral Status :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient
-                                                          .maritalStatus ??
-                                                      ''),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Name :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Primary Member :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                              .patient
-                                                              .primaryMember ==
-                                                          1
-                                                      ? "Yes"
-                                                      : "No"),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient
+                                                            .firstName ??
+                                                        ''),
+                                                    Text(patientHistoryModel!
+                                                            .patient.lastName ??
+                                                        ''),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Mem. Reg. No :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient
-                                                          .membershipRegistrationNumber ??
-                                                      " "),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Mobile Number :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Address :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.address ??
-                                                      " "),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient
+                                                            .mobileNumber ??
+                                                        ''),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("NID :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.nid ??
-                                                      " "),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Gender :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Blood Group :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.bloodGroup ??
-                                                      " "),
-                                                ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient.gender ??
+                                                        ''),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      TableRow(
-                                        children: [
-                                          const SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text("Note :"),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 30,
-                                            width: 100,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                children: [
-                                                  Text(patientHistoryModel!
-                                                          .patient.note ??
-                                                      " "),
-                                                ],
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Matiral Status :"),
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient
+                                                            .maritalStatus ??
+                                                        ''),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Primary Member :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                                .patient
+                                                                .primaryMember ==
+                                                            1
+                                                        ? "Yes"
+                                                        : "No"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Mem. Reg. No :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient
+                                                            .membershipRegistrationNumber ??
+                                                        " "),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Address :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient.address ??
+                                                        " "),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("NID :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient.nid ??
+                                                        " "),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Blood Group :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient
+                                                            .bloodGroup ??
+                                                        " "),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        TableRow(
+                                          children: [
+                                            const SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text("Note :"),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 30,
+                                              width: 100,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(patientHistoryModel!
+                                                            .patient.note ??
+                                                        " "),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
